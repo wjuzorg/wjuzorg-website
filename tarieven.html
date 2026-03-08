@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>WJU Zorg - Tarieven</title>
+
+<style>
+
+:root{
+--wju-red:#c40000;
+--text:#222;
+--bg:#f3f3f3;
+--card:#f7f7f7;
+--border:#d8d8d8;
+}
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+/* HEADER */
+
+.topbar{
+background:var(--wju-red);
+color:white;
+padding:32px 36px 24px;
+}
+
+.topbar-inner{
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.branding h1{
+margin:0;
+font-size:58px;
+font-weight:800;
+}
+
+.branding p{
+margin:8px 0 0;
+font-size:22px;
+font-weight:700;
+}
+
+.logo-box{
+background:white;
+padding:10px 14px;
+border-radius:14px;
+}
+
+.logo-box img{
+max-width:110px;
+}
+
+/* TOEGANKELIJKHEID */
+
+.accessibility-bar{
+background:var(--wju-red);
+padding:0 36px 26px;
+}
+
+.accessibility-inner{
+max-width:1200px;
+margin:auto;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.access-btn{
+background:transparent;
+color:white;
+border:1px solid rgba(255,255,255,0.5);
+border-radius:999px;
+padding:12px 18px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+}
+
+/* NAVIGATIE */
+
+.top-nav{
+max-width:1040px;
+margin:22px auto;
+padding:0 20px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+}
+
+.top-nav a{
+display:block;
+text-align:center;
+text-decoration:none;
+color:#222;
+background:white;
+border:2px solid #444;
+border-radius:999px;
+padding:16px 10px;
+font-size:18px;
+font-weight:700;
+}
+
+.top-nav a.active{
+background:#333;
+color:white;
+border-color:#333;
+}
+
+/* PAGINA */
+
+.container{
+max-width:1040px;
+margin:auto;
+padding:0 20px 60px;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:24px;
+padding:32px 28px;
+margin-bottom:28px;
+}
+
+.card p{
+font-size:20px;
+line-height:1.8;
+margin-bottom:18px;
+}
+
+.section-title{
+font-size:32px;
+font-weight:800;
+margin-bottom:20px;
+}
+
+/* VOORBEELDEN */
+
+.example{
+margin-top:40px;
+margin-bottom:40px;
+}
+
+.example-title{
+font-size:24px;
+font-weight:800;
+margin-bottom:10px;
+}
+
+/* FORMULIER */
+
+form{
+display:grid;
+gap:16px;
+margin-top:20px;
+}
+
+label{
+font-weight:700;
+font-size:18px;
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+textarea{
+min-height:100px;
+}
+
+.submit-btn{
+background:var(--wju-red);
+color:white;
+border:none;
+border-radius:16px;
+padding:16px;
+font-size:20px;
+font-weight:800;
+cursor:pointer;
+}
+
+/* CONTRAST */
+
+.high-contrast{
+background:black !important;
+color:white !important;
+}
+
+.high-contrast .card{
+background:#111 !important;
+color:white !important;
+border-color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+<div class="topbar-inner">
+
+<div class="branding">
+<h1>WJU Zorg</h1>
+<p>Persoonlijke ondersteuning aan huis</p>
+</div>
+
+<div class="logo-box">
+<img src="../assets/logo.png" alt="Logo">
+</div>
+
+</div>
+</header>
+
+<section class="accessibility-bar">
+<div class="accessibility-inner">
+<button class="access-btn" onclick="voorlezenPagina()">Voorlezen</button>
+<button class="access-btn" onclick="toggleContrast()">Hoog contrast</button>
+<button class="access-btn" onclick="veranderLettergrootte(1)">A+</button>
+<button class="access-btn" onclick="veranderLettergrootte(-1)">A-</button>
+</div>
+</section>
+
+<nav class="top-nav">
+<a href="index.html">Wie is WJU Zorg</a>
+<a href="mantelzorgers.html">Mantelzorgers</a>
+<a href="tarieven.html" class="active">Tarieven</a>
+</nav>
+
+<main class="container">
+
+<section class="card">
+
+<h2 class="section-title">Tarieven</h2>
+
+<p>
+WJU Zorg werkt met een <strong>vast particulier tarief van €30 per uur</strong>.
+</p>
+
+<p>
+De minimale afname is <strong>1 uur</strong>.
+</p>
+
+<p>
+Dat betekent dat een afspraak altijd minimaal één uur wordt gerekend, ook als de ondersteuning korter duurt.
+</p>
+
+<p>
+Dit zorgt ervoor dat er rustig de tijd genomen kan worden en dat ondersteuning niet alleen om vervoer draait, maar om <strong>persoonlijke en praktische hulp</strong>.
+</p>
+
+<p>
+Wanneer dat prettig is kan Widjai ook <strong>mee naar binnen gaan bij een afspraak</strong>, even wachten terwijl u binnen bent of helpen met kleine praktische dingen zoals het <strong>opschrijven van een vervolgafspraak</strong>.
+</p>
+
+<p>
+Zo staat u er niet alleen voor.
+</p>
+
+<p>
+Heeft u een <strong>hulphond</strong>? Deze kan uiteraard gewoon mee in de auto.
+</p>
+
+</section>
+
+
+<section class="card">
+
+<h2 class="section-title">Voorbeelden</h2>
+
+
+<div class="example">
+
+<h3 class="example-title">Meerijden naar een afspraak</h3>
+
+<p>
+Heeft u een afspraak bij het ziekenhuis, de huisarts of een andere zorgverlener?
+</p>
+
+<p>
+WJU Zorg kan u ophalen, wachten terwijl u binnen bent en u daarna weer naar huis brengen.
+</p>
+
+<p>
+Wanneer u dat prettig vindt kan Widjai ook <strong>mee naar binnen gaan</strong>, even meeluisteren of bijvoorbeeld <strong>een vervolgafspraak opschrijven</strong>.
+</p>
+
+<p>
+Voor dit soort ondersteuning geldt het vaste tarief van <strong>€30 per uur (minimaal 1 uur)</strong>.
+</p>
+
+</div>
+
+
+<div class="example">
+
+<h3 class="example-title">Boodschappen doen</h3>
+
+<p>
+Samen boodschappen doen of boodschappen laten halen.
+</p>
+
+<p>
+De boodschappen worden daarna <strong>netjes tot in de keuken gebracht</strong>, zodat u daar geen omkijken meer naar heeft.
+</p>
+
+<p>
+Ook dit valt meestal binnen <strong>1 uur ondersteuning (€30)</strong>.
+</p>
+
+</div>
+
+
+<div class="example">
+
+<h3 class="example-title">Praktische hulp of een moment van gezelschap</h3>
+
+<p>
+Soms zijn er kleine praktische dingen in huis waar hulp bij nodig is.
+</p>
+
+<p>
+Bijvoorbeeld een klein klusje, hulp bij iets regelen of gewoon even langskomen voor een kop koffie en een gesprek.
+</p>
+
+<p>
+WJU Zorg biedt <strong>warme, praktische ondersteuning</strong>, afgestemd op wat op dat moment nodig is.
+</p>
+
+<p>
+Ook hiervoor geldt het vaste tarief van <strong>€30 per uur</strong>.
+</p>
+
+</div>
+
+</section>
+
+
+<section class="card">
+
+<h2 class="section-title">Mogelijk via PGB</h2>
+
+<p>
+Sommige mensen ontvangen ondersteuning via een <strong>Persoonsgebonden Budget (PGB)</strong>.
+</p>
+
+<p>
+Dit is een budget vanuit de gemeente waarmee ondersteuning kan worden betaald.
+</p>
+
+<p>
+Als u of uw familielid een PGB heeft, kan WJU Zorg mogelijk vanuit dat budget ondersteuning bieden.
+</p>
+
+<p>
+Heeft u nog geen PGB maar denkt u dat dit passend kan zijn? Dan kunt u hierover informatie krijgen via de gemeente Utrecht.
+</p>
+
+<p>
+In Utrecht kunt u hiervoor contact opnemen met <strong>Buurtteams Utrecht</strong>. Elke wijk heeft een eigen buurtteam en telefoonnummer.
+</p>
+
+<p>
+Meer informatie vindt u via: <strong>buurtteamsutrecht.nl/contact</strong>
+</p>
+
+<p>
+U kunt ook bellen met het <strong>Wmo-loket van de gemeente Utrecht</strong>: <strong>030-2869500</strong>
+</p>
+
+</section>
+
+
+<section class="card">
+
+<h2 class="section-title">Kennismaken</h2>
+
+<p>
+Wilt u meer weten over de tarieven of wilt u graag een vrijblijvende kennismaking?
+Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
+</p>
+
+<form action="https://formspree.io/f/xaqpnlrl" method="POST">
+
+<input type="hidden" name="formulier_type" value="tarievenpagina">
+
+<label>Naam</label>
+<input type="text" name="naam">
+
+<label>Telefoonnummer</label>
+<input type="tel" name="telefoon">
+
+<label>Email</label>
+<input type="email" name="email">
+
+<label>Adres</label>
+<input type="text" name="adres">
+
+<label>Uw vraag</label>
+<textarea name="bericht"></textarea>
+
+<button class="submit-btn">Kennismaken</button>
+
+</form>
+
+</section>
+
+</main>
+
+<script>
+
+let synth = window.speechSynthesis
+let huidigeLettergrootte = 100
+
+function veranderLettergrootte(richting){
+huidigeLettergrootte += richting*10
+document.body.style.fontSize = huidigeLettergrootte + "%"
+}
+
+function toggleContrast(){
+document.body.classList.toggle("high-contrast")
+}
+
+function voorlezenPagina(){
+if(synth.speaking){synth.cancel();return}
+let tekst=document.body.innerText
+let utter=new SpeechSynthesisUtterance(tekst)
+utter.lang="nl-NL"
+synth.speak(utter)
+}
+
+</script>
+
+</body>
+</html>
