@@ -600,7 +600,9 @@ textarea{
 
 <script>
 let synth = window.speechSynthesis
-let huidigeLettergrootte = parseInt(localStorage.getItem("fontSize")) || 100;
+let huidigeLettergrootte = 100;
+document.body.style.zoom = "100%";
+localStorage.removeItem("fontSize");
 
 document.body.style.zoom = huidigeLettergrootte + "%";
 
