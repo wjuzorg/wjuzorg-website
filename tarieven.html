@@ -489,11 +489,23 @@ Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
 <script>
 
 let synth = window.speechSynthesis
-let huidigeLettergrootte = 100
+let huidigeLettergrootte = 100;
+document.body.style.zoom = "100%";
+localStorage.removeItem("fontSize");
 
 function veranderLettergrootte(richting){
-huidigeLettergrootte += richting*10
-document.body.style.fontSize = huidigeLettergrootte + "%"
+
+  huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
+
+  if(huidigeLettergrootte < 80){
+    huidigeLettergrootte = 80;
+  }
+
+  if(huidigeLettergrootte > 160){
+    huidigeLettergrootte = 160;
+  }
+
+  document.body.style.zoom = huidigeLettergrootte + "%";
 }
 
 function toggleContrast(){
