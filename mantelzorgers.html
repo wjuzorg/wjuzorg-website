@@ -584,11 +584,24 @@ Wilt u als mantelzorger meer weten over wat WJU Zorg kan betekenen? Laat dan uw 
 <script>
 
 let synth = window.speechSynthesis
-let huidigeLettergrootte = 100
+let huidigeLettergrootte = 100;
+document.body.style.zoom = "100%";
+localStorage.removeItem("fontSize");
 
 function veranderLettergrootte(richting){
-huidigeLettergrootte += richting*10
-document.body.style.fontSize = huidigeLettergrootte + "%"
+
+  huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
+
+  if(huidigeLettergrootte < 80){
+    huidigeLettergrootte = 80;
+  }
+
+  if(huidigeLettergrootte > 160){
+    huidigeLettergrootte = 160;
+  }
+
+  document.body.style.zoom = huidigeLettergrootte + "%";
+
 }
 
 function toggleContrast(){
