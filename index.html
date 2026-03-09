@@ -546,36 +546,37 @@ textarea{
   </section>
 
   <section class="card">
-  <h2 class="section-title">Kennismaken</h2>
+    <h2 class="section-title">Kennismaken</h2>
 
-  <p>
-    Heeft u interesse en wilt u graag een vrijblijvende kennismaking?
-    Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
-  </p>
+    <p>
+      Heeft u interesse en wilt u graag een vrijblijvende kennismaking?
+      Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
+    </p>
 
-  <form id="kennismaking-form">
-    <input type="hidden" name="formulier_type" value="website">
+    <form action="https://formspree.io/f/xaqpnlrl" method="POST">
+      <input type="hidden" name="formulier_type" value="website">
 
-    <label>Naam</label>
-    <input type="text" name="naam" required>
+      <label>Naam</label>
+      <input type="text" name="naam">
 
-    <label>Telefoonnummer</label>
-    <input type="tel" name="telefoon" required>
+      <label>Telefoonnummer</label>
+      <input type="tel" name="telefoon">
 
-    <label>Email</label>
-    <input type="email" name="email" required>
+      <label>Email</label>
+      <input type="email" name="email">
 
-    <label>Adres</label>
-    <input type="text" name="adres">
+      <label>Adres</label>
+      <input type="text" name="adres">
 
-    <label>Bericht</label>
-    <textarea name="bericht"></textarea>
+      <label>Bericht</label>
+      <textarea name="bericht"></textarea>
 
-    <button class="submit-btn" type="submit">Kennismaken</button>
-  </form>
-</section>
+      <button class="submit-btn">Kennismaken</button>
+    </form>
+  </section>
 
-<h2 class="section-title">Wat lost WJU Zorg op?</h2>
+  <section class="card">
+    <h2 class="section-title">Wat lost WJU Zorg op?</h2>
 
     <p>
       WJU Zorg biedt een <strong>aanvullende dienst op bestaande voorzieningen</strong>.
@@ -600,17 +601,38 @@ textarea{
 
 <script>
 let synth = window.speechSynthesis
-let huidigeLettergrootte = 100
+let huidigeLettergrootte = localStorage.getItem("fontSize") || 100;
+
+document.body.style.fontSize = huidigeLettergrootte + "%";
 
 function veranderLettergrootte(richting){
-  huidigeLettergrootte += richting * 10
-  if(huidigeLettergrootte < 80) huidigeLettergrootte = 80
-  if(huidigeLettergrootte > 140) huidigeLettergrootte = 140
-  document.body.style.fontSize = huidigeLettergrootte + "%"
+  huidigeLettergrootte = parseInt(huidigeLettergrootte) + (richting * 10);
+
+  if(huidigeLettergrootte < 80){
+    huidigeLettergrootte = 80;
+  }
+
+  if(huidigeLettergrootte > 160){
+    huidigeLettergrootte = 160;
+  }
+
+  document.body.style.fontSize = huidigeLettergrootte + "%";
+
+  localStorage.setItem("fontSize", huidigeLettergrootte);
 }
 
 function toggleContrast(){
-  document.body.classList.toggle("high-contrast")
+  document.body.classList.toggle("high-contrast");
+
+  if(document.body.classList.contains("high-contrast")){
+    localStorage.setItem("contrast","on");
+  } else {
+    localStorage.removeItem("contrast");
+  }
+}
+
+if(localStorage.getItem("contrast") === "on"){
+  document.body.classList.add("high-contrast");
 }
 
 function voorlezenPagina(){
@@ -630,33 +652,6 @@ document.querySelectorAll(".accordion-button").forEach(btn=>{
     item.classList.toggle("open")
   })
 })
-const kennismakingForm = document.getElementById("kennismaking-form");
-
-if (kennismakingForm) {
-  kennismakingForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const formData = new FormData(kennismakingForm);
-
-    try {
-      const response = await fetch("https://formspree.io/f/xaqpnlrl", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Accept": "application/json"
-        }
-      });
-
-      if (response.ok) {
-        window.location.href = "bedankt.html";
-      } else {
-        alert("Er ging iets mis met verzenden. Probeert u het later nog eens of neem telefonisch contact op.");
-      }
-    } catch (error) {
-      alert("Er ging iets mis met verzenden. Probeert u het later nog eens of neem telefonisch contact op.");
-    }
-  });
-}
 </script>
 
 </body>
