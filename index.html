@@ -553,28 +553,22 @@ textarea{
       Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
     </p>
 
-    <form action="https://formspree.io/f/xaqpnlrl" method="POST">
-        <input type="hidden" name="_redirect" value="https://wjuzorg.github.io/wjuzorg-website/bedankt.html">
-      <input type="hidden" name="formulier_type" value="website">
+    <form id="kennismaking-form">
+  <input type="hidden" name="formulier_type" value="website">
 
-      <label>Naam</label>
-      <input type="text" name="naam">
+  <label>Naam</label>
+  <input type="text" name="naam" required>
 
-      <label>Telefoonnummer</label>
-      <input type="tel" name="telefoon">
+  <label>Telefoonnummer</label>
+  <input type="tel" name="telefoon" required>
 
-      <label>Email</label>
-      <input type="email" name="email">
+  <label>Email</label>
+  <input type="email" name="email" required>
 
-      <label>Adres</label>
-      <input type="text" name="adres">
+  <label>Adres</label>
+  <input type="text" name="adres">
 
-      <label>Bericht</label>
-      <textarea name="bericht"></textarea>
-
-      <button class="submit-btn">Kennismaken</button>
-    </form>
-  </section>
+  <label>Bericht</
 
   <section class="card">
     <h2 class="section-title">Wat lost WJU Zorg op?</h2>
