@@ -392,6 +392,43 @@ textarea{
     max-width:120px;
   }
 }
+
+.call-wrap{
+  max-width:1040px;
+  margin:12px auto 0 auto;
+  padding:0 20px;
+}
+
+.call-nav{
+  display:block;
+  width:100%;
+  padding:16px 10px;
+  border-radius:999px;
+  border:2px solid #444;
+  background:#fff;
+  color:#222;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  text-decoration:none;
+  box-sizing:border-box;
+}
+
+.call-nav:hover{
+  background:#f3f3f3;
+}
+
+@media (max-width: 900px){
+  .call-wrap{
+    padding:0 18px;
+    margin:10px auto 0 auto;
+  }
+
+  .call-nav{
+    font-size:17px;
+    padding:14px 10px;
+  }
+}
 </style>
 </head>
 
@@ -424,6 +461,10 @@ textarea{
   <a href="mantelzorgers.html">Mantelzorgers</a>
   <a href="tarieven.html">Tarieven</a>
 </nav>
+
+<div class="call-wrap">
+  <a href="tel:0638287648" class="call-nav">📞 Bel voor overleg</a>
+</div>
 
 <main class="container">
 
@@ -575,24 +616,25 @@ textarea{
   </form>
 </section>
 
-<h2 class="section-title">Wat lost WJU Zorg op?</h2>
+<section class="card">
+  <h2 class="section-title">Wat lost WJU Zorg op?</h2>
 
-    <p>
-      WJU Zorg biedt een <strong>aanvullende dienst op bestaande voorzieningen</strong>.
-    </p>
+  <p>
+    WJU Zorg biedt een <strong>aanvullende dienst op bestaande voorzieningen</strong>.
+  </p>
 
-    <p>
-      Praktische hulpvragen passen namelijk niet altijd goed bij een taxi, een vrijwilliger of formele zorg.
-    </p>
+  <p>
+    Praktische hulpvragen passen namelijk niet altijd goed bij een taxi, een vrijwilliger of formele zorg.
+  </p>
 
-    <p>
-      Soms is er juist behoefte aan één vast persoon die rustig de tijd neemt, meedenkt en helpt bij gewone, dagelijkse dingen.
-    </p>
+  <p>
+    Soms is er juist behoefte aan één vast persoon die rustig de tijd neemt, meedenkt en helpt bij gewone, dagelijkse dingen.
+  </p>
 
-    <p>
-      Dat is precies waar WJU Zorg in ondersteunt.
-    </p>
-  </section>
+  <p>
+    Dat is precies waar WJU Zorg in ondersteunt.
+  </p>
+</section>
 <footer style="text-align:center; margin-top:40px; font-size:16px;">
 <a href="privacy.html">Privacy</a>
 </footer>
@@ -601,9 +643,6 @@ textarea{
 <script>
 let synth = window.speechSynthesis
 let huidigeLettergrootte = 100;
-document.body.style.zoom = "100%";
-localStorage.removeItem("fontSize");
-
 document.body.style.zoom = huidigeLettergrootte + "%";
 
 function veranderLettergrootte(richting){

@@ -380,18 +380,28 @@ border-color:white;
     max-width:120px;
   }
 }
-.call-button{
-display:block;
-max-width:600px;
-margin:16px auto;
-padding:16px;
-background:#d40000;
-color:white;
-text-align:center;
-font-weight:700;
-border-radius:40px;
-text-decoration:none;
-font-size:18px;
+.call-wrap{
+  max-width:1040px;
+  margin:12px auto 0 auto;
+  padding:0 20px;
+}
+.call-nav{
+  display:block;
+  width:100%;
+  padding:16px 10px;
+  border-radius:999px;
+  border:2px solid #444;
+  background:#fff;
+  color:#222;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  text-decoration:none;
+  box-sizing:border-box;
+}
+
+.call-nav:hover{
+background:#f3f3f3;
 }
 </style>
 </head>
@@ -426,9 +436,9 @@ font-size:18px;
 <a href="mantelzorgers.html" class="active">Mantelzorgers</a>
 <a href="tarieven.html">Tarieven</a>
 </nav>
-<a href="tel:0638287648" class="call-button">
-Bel mij gerust
-</a>
+<div class="call-wrap">
+  <a href="tel:0638287648" class="call-nav">📞 Bel voor overleg</a>
+</div>
 <main class="container">
 
 <section class="card">
