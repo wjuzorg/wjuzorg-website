@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Bel mij terug - WJU Zorg</title>
+  <link rel="stylesheet" href="app.css"/>
+</head>
+
+<body class="form-page">
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-title">WJU Zorg</div>
+        <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
+      </div>
+      <img class="logo" src="logo.png" alt="WJU Zorg logo">
+    </div>
+
+    <div class="header-actions" aria-label="Toegankelijkheid">
+      <button id="btnContrast" class="btn-top" type="button">Hoog contrast</button>
+      <button id="btnAPlus" class="btn-top" type="button">A+</button>
+      <button id="btnAMinus" class="btn-top" type="button">A-</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="page-title">Bel mij terug</div>
+    <div class="trust" style="margin-top:0; margin-bottom:12px;">
+      <a href="index.html"><strong>Terug naar Home</strong></a>
+    </div>
+
+    <div class="card">
+      <form class="form" id="serviceForm">
+
+        <h2 class="form-title">Terugbelverzoek</h2>
+
+        <p class="form-intro">
+          Weet u nog niet precies wat u nodig heeft?<br>
+          Of wilt u eerst even overleggen?<br>
+          Laat hieronder uw gegevens achter.<br>
+          Ik bel u binnen 24 uur rustig terug om samen te bespreken wat mogelijk is.
+        </p>
+
+        <!-- NAAM -->
+        <div class="form-group">
+          <label for="full_name">Uw naam *</label>
+          <input id="full_name" name="full_name" type="text" required />
+        </div>
+
+        <!-- TELEFOON -->
+        <div class="form-group">
+          <label for="phone">Telefoonnummer *</label>
+          <input id="phone" name="phone" type="tel" required />
+        </div>
+
+        <!-- BELMOMENT -->
+        <div class="form-group">
+          <label for="preferred_daypart">
+            Wanneer komt het voor u uit om in de middag of avond gebeld te worden?
+          </label>
+          <select id="preferred_daypart" name="preferred_daypart">
+            <option value="maakt_niet_uit">Maakt niet uit</option>
+            <option value="middag">Middag</option>
+            <option value="avond_tot_1900">Avond (tot 19:00)</option>
+          </select>
+          <div class="hint">
+            Ik bel u in de middag of avond rustig terug om alles samen door te nemen.
+            Het kan zijn dat wij elkaar telefonisch even mislopen, dan probeer ik het later nog een keer.
+          </div>
+        </div>
+
+        <!-- EXTRA TOELICHTING -->
+        <div class="form-group">
+          <label for="callback_reason">Wilt u iets meegeven? (optioneel)</label>
+          <textarea
+            id="callback_reason"
+            name="callback_reason"
+            placeholder="Bijv. waar u hulp bij zoekt of waar u over twijfelt."
+          ></textarea>
+          <div class="hint">
+            Dit hoeft niet. Telefonisch bespreken is ook helemaal goed.
+          </div>
+        </div>
+
+        <p class="trust" style="margin-top:10px;">
+          <strong>U zit nergens aan vast.</strong> Dit is alleen een terugbelverzoek.
+        </p>
+
+        <!-- VERBORGEN VELDEN -->
+        <input type="hidden" name="type" value="belmijterug" />
+        <input type="hidden" name="service" value="bel_mij_terug" />
+        <input type="hidden" name="help_topic" value="bel_mij_terug" />
+        <input type="hidden" name="status" value="terugbellen" />
+
+        <button class="btn-primary" type="submit">Versturen</button>
+
+      </form>
+
+      <p class="trust" style="margin-top:14px;">
+        U kunt altijd bellen voor informatie of een kennismaking.<br />
+        Ook wanneer u minder goed ziet of hoort bent u welkom. Een begeleidende hond kan altijd mee.
+        We kijken samen naar een manier van contact en hulp die voor u werkt.
+      </p>
+
+    </div>
+  </main>
+
+  <div class="footerbar">
+    <div class="footerbar-inner">
+      <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
+      <a class="fbtn" href="zondag.html">Zondag</a>
+      <a class="fbtn" href="privacy.html">Privacy</a>
+      <a class="fbtn" href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>

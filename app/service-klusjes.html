@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Klusjes in en om het huis - WJU Zorg</title>
+  <link rel="stylesheet" href="app.css"/>
+</head>
+
+<body class="form-page">
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-title">WJU Zorg</div>
+        <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
+      </div>
+      <img class="logo" src="logo.png" alt="WJU Zorg logo">
+    </div>
+
+    <div class="header-actions" aria-label="Toegankelijkheid">
+      <button class="btn-top" type="button" data-action="read">Voorlezen</button>
+      <button class="btn-top" type="button" data-action="contrast">Hoog contrast</button>
+      <button class="btn-top" type="button" data-action="font-plus">A+</button>
+      <button class="btn-top" type="button" data-action="font-minus">A-</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="page-title">Klusjes in en om het huis</div>
+    <div class="trust" style="margin-top:0; margin-bottom:12px;">
+      <a href="index.html"><strong>Terug naar Home</strong></a>
+    </div>
+
+    <div class="card">
+      <form class="form" id="serviceForm">
+        <h2 class="form-title">Uw aanvraag</h2>
+        <p class="form-intro">
+          U vult uw gegevens in. Daarna neem ik contact met u op.
+        </p>
+
+        <div class="form-group">
+          <label for="full_name">Uw naam *</label>
+          <input id="full_name" name="full_name" type="text" required />
+        </div>
+
+        <div class="form-group">
+          <label for="address">Uw adres *</label>
+          <input id="address" name="address" type="text" required />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Telefoonnummer *</label>
+          <input id="phone" name="phone" type="tel" required />
+        </div>
+
+        <div class="form-group">
+          <label for="birthdate">Geboortedatum</label>
+          <input id="birthdate" name="birthdate" type="date" />
+        </div>
+
+        <!-- KLUS KEUZE -->
+        <div class="form-group">
+          <label for="task_help">Waar kan ik u mee helpen? *</label>
+          <select id="task_help" name="task_help" required>
+            <option value="">Kies...</option>
+            <option value="kleine_klus">Kleine klusjes in huis</option>
+            <option value="ophangen_monteren">Ophangen / monteren (bijv. hulpmiddelen, gordijn, lijst)</option>
+            <option value="lamp_batterij">Lamp vervangen / batterijen</option>
+            <option value="instellen">Iets instellen (tv, telefoon, wifi, afstandsbediening)</option>
+            <option value="verplaatsen">Spullen verplaatsen / licht opruimen</option>
+            <option value="veiligheid">Veiligheid in huis (bijv. losse kabel)</option>
+            <option value="bespreken">Graag even overleggen</option>
+          </select>
+          <div class="hint">
+            Het gaat om kleine, veilige klusjes. Twijfelt u? Kies gerust “even overleggen”.
+          </div>
+        </div>
+
+        <!-- EXTRA INFO -->
+        <div class="form-group">
+          <label for="task_details">Kunt u kort vertellen wat er moet gebeuren? (optioneel)</label>
+          <textarea
+            id="task_details"
+            name="task_details"
+            placeholder="Bijv. een lamp ophangen, iets vastzetten, tv opnieuw instellen, etc."
+          ></textarea>
+        </div>
+
+        <!-- BELMOMENT (jouw opgeslagen versie) -->
+        <div class="form-group">
+  <label for="preferred_daypart">Wanneer komt het voor u uit om even te bellen?</label>
+  <select id="preferred_daypart" name="preferred_daypart">
+    <option value="maakt_niet_uit">Maakt niet uit</option>
+    <option value="middag">Middag</option>
+    <option value="avond_tot_1900">Avond (tot 19:00)</option>
+  </select>
+  <div class="hint">
+    Ik bel u in de middag of avond rustig terug om alles samen door te nemen.
+    Het kan zijn dat wij elkaar telefonisch even mislopen, dan probeer ik het later nog een keer.
+  </div>
+</div>
+
+        <!-- WIJK / PLAATS -->
+        <div class="form-group">
+          <label for="preferred_area">Wijk / plaats (als u dat wilt aangeven)</label>
+          <input
+            id="preferred_area"
+            name="preferred_area"
+            type="text"
+            placeholder="Bijv. Utrecht Oost, Overvecht, De Bilt"
+          />
+          <div class="hint">
+            Ik werk bewust per wijk en per dagdeel. Zo kan ik rustig helpen,
+            veilig rijden en de reistijd beperken.
+          </div>
+        </div>
+
+        <!-- PGB -->
+        <div class="form-group">
+          <label for="funding_type">Ontvangt u ondersteuning via PGB? (optioneel)</label>
+          <select id="funding_type" name="funding_type">
+            <option value="particulier">Nee (particulier)</option>
+            <option value="pgb">Ja (PGB)</option>
+            <option value="onbekend">Onbekend / graag bespreken</option>
+          </select>
+        </div>
+
+        <!-- TOELICHTING -->
+        <div class="form-group">
+          <label for="message">Toelichting (optioneel)</label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Bijv. ik ben slecht ter been, trap lastig, graag rustig tempo, etc."
+          ></textarea>
+        </div>
+
+        <div class="form-terms">
+          <label class="terms-check">
+            <input type="checkbox" required>
+            <span>Akkoord met de voorwaarden</span>
+          </label>
+          <div class="terms-text">
+            Kan de afspraak niet doorgaan? Laat dit dan even weten.<br>
+          </div>
+        </div>
+
+        <!-- verborgen dashboard velden -->
+        <input type="hidden" name="type" value="service" />
+        <input type="hidden" name="service" value="klusjes_in_om_huis" />
+        <input type="hidden" name="help_topic" value="klusjes_in_om_huis" />
+        <input type="hidden" name="status" value="nieuw" />
+
+        <button class="btn-primary" type="submit">Versturen</button>
+      </form>
+
+      <p class="trust" style="margin-top:14px;">
+        U kunt altijd bellen voor informatie of een kennismaking.<br />
+        Ook wanneer u minder goed ziet of hoort bent u welkom. Een begeleidende hond kan altijd mee.
+        We kijken samen naar een manier van contact en hulp die voor u werkt.
+      </p>
+    </div>
+  </main>
+
+  <div class="footerbar">
+    <div class="footerbar-inner">
+      <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
+      <a class="fbtn" href="zondag.html">Zondag</a>
+      <a class="fbtn" href="privacy.html">Privacy</a>
+      <a class="fbtn" href="contact.html">Contact</a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

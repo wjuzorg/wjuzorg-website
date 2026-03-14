@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>WJU Zorg - Vandaag</title>
+  <link rel="stylesheet" href="app.css"/>
+  <style>
+    .header-wju { background-color: #a71d2a; color: white; padding: 40px 20px; position: relative; }
+    .logo-wju { position: absolute; right: 20px; top: 35px; height: 65px; background: white; border-radius: 10px; padding: 5px; }
+    .btn-red-wju { background-color: #a71d2a; color: white; border: none; padding: 18px; border-radius: 12px; font-weight: bold; text-decoration: none; display: block; text-align: left; padding-left: 20px; font-size: 1.3rem; }
+    .card-wju { background: white; border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid #eee; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+    .btn-action { background-color: #a71d2a; color: white; flex: 1; text-align: center; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+
+<body style="background-color: #f8f9fa; margin: 0; font-family: sans-serif;">
+
+  <div class="header-wju">
+    <h1 style="margin: 0; font-size: 2.4rem; font-weight: bold;">WJU Zorg</h1>
+    <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 1.1rem;">Persoonlijke ondersteuning aan huis</p>
+    <img src="logo.png" alt="WJU Logo" class="logo-wju">
+  </div>
+
+  <main style="padding: 25px;">
+    <h2 style="font-weight: bold; font-size: 1.8rem; margin-bottom: 20px;">Vandaag</h2>
+
+    <a href="invoer/new-entry.html" class="btn-red-wju" style="margin-bottom: 30px;">+ Nieuwe invoer</a>
+
+    <div style="background-color: #eef7ff; border-left: 5px solid #007bff; padding: 18px; border-radius: 10px; margin-bottom: 30px;">
+      📅 <strong>Deze week:</strong> <span id="weekCount">0</span> afspraken ingepland.
+      </div>
+    <div style="display:flex; gap:15px; margin-top:20px; flex-wrap:wrap;">
+  
+  <div style="background:white; padding:15px 20px; border-radius:12px; border:1px solid #eee;">
+    📅 Vandaag ingepland: <strong><span id="todayCount">0</span></strong>
+  </div>
+
+  <div style="background:white; padding:15px 20px; border-radius:12px; border:1px solid #eee;">
+    🆕 Nieuwe aanvragen: <strong><span id="newCount">0</span></strong>
+  </div>
+
+  <div style="background:white; padding:15px 20px; border-radius:12px; border:1px solid #eee;">
+    📞 Terugbelverzoeken: <strong><span id="callbackCount">0</span></strong>
+  </div>
+
+
+
+</div>
+<div id="callbackSection" style="margin-bottom:30px;">
+  <div style="background:white; border-left:1px solid #eee; padding:18px; border-radius:10px; margin-bottom:15px;">
+    <strong>📞 Nog terug te bellen</strong>
+    <div class="hint" style="margin-top:6px;">
+      Hieronder staan de mensen die nog teruggebeld moeten worden.
+    </div>
+  </div>
+
+  <div id="callbackList"></div>
+</div>
+
+    <div style="background: white; border-radius: 20px; padding: 25px; border: 1px solid #eee;">
+      <h3 style="font-weight: bold; margin-bottom: 25px; font-size: 1.5rem;">Planning vandaag</h3>
+      <div id="appointmentsList">Laden...</div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+  const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function loadToday() {
+    const today = new Date().toISOString().split("T")[0];
+
+    const { data, error } = await supabaseClient
+      .from("requests")
+      .select("*")
+      .eq("org_id", MIJN_ORG_ID)
+      .eq("status", "ingepland")
+      .gte("appointment_time", today + "T00:00:00")
+      .lt("appointment_time", today + "T23:59:59")
+      .order("appointment_time", { ascending: true });
+
+    const listDiv = document.getElementById("appointmentsList");
+    document.getElementById("todayCount").innerText = data ? data.length : 0;
+    listDiv.innerHTML = "";
+
+    if (error) {
+      listDiv.innerHTML = "<p style='text-align:center; color:red;'>Fout bij laden: " + error.message + "</p>";
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      listDiv.innerHTML = "<p style='text-align:center; color:#999;'>Geen ritten gevonden voor vandaag.</p>";
+      return;
+    }
+
+    data.forEach(item => {
+      const fullTime = item.appointment_time || "";
+      const timeDisplay = fullTime.includes("T")
+        ? fullTime.split("T")[1].substring(0, 5)
+        : fullTime.substring(0, 5);
+
+      const card = document.createElement("div");
+      card.className = "card-wju";
+      const now = new Date();
+
+if (item.appointment_time) {
+  const callTime = new Date(item.appointment_time);
+
+  if (callTime <= now) {
+    card.style.border = "3px solid #d32f2f";
+    card.style.background = "#fff5f5";
+  }
+}
+      card.innerHTML = `
+        <div style="font-size:1.3rem; margin-bottom:10px;">
+          <strong>${timeDisplay}</strong> — ${item.full_name || "Onbekend"}
+        </div>
+        <div style="color:#666; margin-bottom:20px; font-size:1.1rem;">
+          ${item.service || "Zorg"}<br>${item.address || ""}
+        </div>
+        <div style="display:flex; gap:15px;">
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.address || "")}" target="_blank" class="btn-action">🧭 Route</a>
+          <a href="today-detail.html?id=${item.id}" class="btn-action">Open</a>
+        </div>
+      `;
+      listDiv.appendChild(card);
+    });
+  }
+
+  async function loadWeekCount() {
+    const now = new Date();
+    const day = now.getDay();
+    const diffToMonday = day === 0 ? -6 : 1 - day;
+
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMonday);
+    monday.setHours(0, 0, 0, 0);
+
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    sunday.setHours(23, 59, 59, 999);
+
+    const { data, error } = await supabaseClient
+      .from("requests")
+      .select("*")
+      .eq("org_id", MIJN_ORG_ID)
+      .eq("status", "ingepland")
+      .gte("appointment_time", monday.toISOString())
+      .lte("appointment_time", sunday.toISOString());
+
+    document.getElementById("weekCount").innerText = error ? "0" : (data ? data.length : 0);
+  }
+
+  async function loadStats() {
+    const { data: newData } = await supabaseClient
+      .from("requests")
+      .select("*")
+      .eq("org_id", MIJN_ORG_ID)
+      .eq("status", "nieuw");
+
+    document.getElementById("newCount").innerText = newData ? newData.length : 0;
+
+    const { data: callbackData } = await supabaseClient
+      .from("requests")
+      .select("*")
+      .eq("org_id", MIJN_ORG_ID)
+      .eq("status", "terugbellen");
+
+    document.getElementById("callbackCount").innerText = callbackData ? callbackData.length : 0;
+  }
+
+  async function loadCallbackList() {
+    const listDiv = document.getElementById("callbackList");
+    if (!listDiv) return;
+
+    const { data, error } = await supabaseClient
+      .from("requests")
+      .select("*")
+      .eq("org_id", MIJN_ORG_ID)
+      .eq("status", "terugbellen");
+
+    listDiv.innerHTML = "";
+
+    if (error) {
+      listDiv.innerHTML = "<p style='color:red;'>Fout bij laden van terugbelverzoeken.</p>";
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      listDiv.innerHTML = "<p style='color:#666;'>Geen open terugbelverzoeken.</p>";
+      return;
+    }
+
+    data.sort((a, b) => {
+      const timeA = a.appointment_time ? new Date(a.appointment_time).getTime() : Number.MAX_SAFE_INTEGER;
+      const timeB = b.appointment_time ? new Date(b.appointment_time).getTime() : Number.MAX_SAFE_INTEGER;
+      return timeA - timeB;
+    });
+
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card-wju";
+
+      const terugbelTijd = item.appointment_time
+        ? item.appointment_time.replace("T", " ").substring(0, 16)
+        : "Geen tijd bekend";
+
+      card.innerHTML = `
+        <div style="font-size:1.2rem; margin-bottom:8px;">
+          <strong>${item.full_name || "Onbekend"}</strong>
+        </div>
+
+        <div style="margin-bottom:10px; color:#555; line-height:1.6;">
+          📞 ${item.phone || "Geen telefoonnummer"}<br>
+          ${item.service ? `📌 Hulpvraag: ${item.service}<br>` : ""}
+          ${item.appointment_time ? `🕒 Voorkeur terugbellen: ${terugbelTijd}<br>` : ""}
+          ${item.preferred_daypart ? `🗓️ Oorspronkelijk dagdeel: ${item.preferred_daypart}<br>` : ""}
+          ${item.message ? `📝 Opmerking: ${item.message}<br>` : ""}
+          ${item.special_notes ? `👤 Voor wie: ${item.special_notes}<br>` : ""}
+          ${item.address ? `📍 Adres: ${item.address}<br>` : ""}
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a href="invoer/new-entry.html" class="btn-action" style="display:inline-block;">Naar nieuwe invoer</a>
+          <button type="button" class="btn-action" style="border:none; cursor:pointer;" onclick="window.snoozeCallback('${item.id}')">Later terugbellen</button>
+          <button type="button" class="btn-action" style="border:none; cursor:pointer;" onclick="window.closeCallback('${item.id}')">Afsluiten</button>
+        </div>
+      `;
+
+      listDiv.appendChild(card);
+    });
+  }
+
+ async function snoozeCallback(rawId) {
+    const id = rawId.trim();
+    
+    // De prompt tekst passen we aan zodat hij weet dat DD-MM-JJJJ nu mag
+    let datumInvoer = prompt("Nieuwe datum? (bijv: 14-03-2026)");
+    if (!datumInvoer) return;
+
+    // We vervangen punten of slashes door streepjes voor de zekerheid
+    datumInvoer = datumInvoer.replace(/\./g, '-').replace(/\//g, '-');
+
+    // LOGICA VOOR HET OMDRAAIEN:
+    let [deel1, deel2, deel3] = datumInvoer.split('-');
+    let geformatteerdeDatum;
+
+    if (deel1.length === 4) {
+      // Als hij al JJJJ-MM-DD typte, laten we het zo
+      geformatteerdeDatum = `${deel1}-${deel2}-${deel3}`;
+    } else {
+      // Als hij DD-MM-JJJJ typte, draaien we het om naar JJJJ-MM-DD
+      geformatteerdeDatum = `${deel3}-${deel2}-${deel1}`;
+    }
+
+    const tijd = prompt("Welke tijd? (bijv. 14:30)");
+    if (!tijd) return;
+
+    const nieuweTijd = `${geformatteerdeDatum}T${tijd}:00`;
+
+    const { data, error } = await supabaseClient
+      .from("requests")
+      .update({
+        appointment_time: nieuweTijd,
+        status: "terugbellen"
+      })
+      .eq("id", id)
+      .eq("org_id", MIJN_ORG_ID)
+      .select();
+
+    if (error) {
+      alert("Er ging iets mis: " + error.message);
+      return;
+    }
+
+    if (data && data.length > 0) {
+      window.location.reload();
+    }
+  }
+       
+ async function closeCallback(rawId) {
+  const id = rawId.trim();
+
+  const bevestigen = confirm("Weet u zeker dat u dit terugbelverzoek wilt afsluiten?");
+  if (!bevestigen) return;
+
+  const { data, error } = await supabaseClient
+    .from("requests")
+    .update({
+      status: "gesloten",
+      closed_at: new Date().toISOString()
+    })
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID)
+    .select();
+
+  if (error) {
+    alert("Fout bij afsluiten: " + error.message);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    window.location.reload();
+  }
+}
+
+  window.snoozeCallback = snoozeCallback;
+  window.closeCallback = closeCallback;
+
+  loadToday();
+  loadWeekCount();
+  loadStats();
+  loadCallbackList();
+</script>
+</body>
+</html>

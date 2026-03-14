@@ -1,0 +1,757 @@
+:root{
+  --red:#b00000;
+  --white:#ffffff;
+  --black:#000000;
+  --border:#d9d9d9;
+  --radius:16px;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; background:var(--white); color:var(--black); font-family:
+  "Inter",
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Arial,
+  sans-serif; }
+  body{
+  font-size:1rem;
+  line-height:1.65;
+}
+.container{ max-width: 920px; margin:0 auto; padding: 14px 14px 120px; }
+a{ color:inherit; }
+
+.header{
+  position: relative; top:0; z-index:40;
+  background: var(--red); color: var(--white);
+}
+.header-top{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding: 16px 16px; /* bigger */
+}
+.brand{ min-width:0; }
+.brand-title{ font-weight:900; font-size:24px; line-height:1.1; } /* bigger */
+.brand-sub{ font-weight:700; font-size:14px; opacity:.95; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+.logo{
+  width:46px; height:46px; object-fit:contain;
+  background: var(--white);
+  padding:6px; border-radius:12px;
+}
+
+.header-actions{
+  display:flex; gap:10px; flex-wrap:wrap;
+  padding: 12px 16px 14px;
+  border-top: 1px solid rgba(255,255,255,.18);
+}
+.btn-top{
+  appearance:none;
+  border: 1px solid rgba(255,255,255,.35);
+  background: transparent;
+  color: var(--white);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.btn-top:active{ transform: translateY(1px); }
+
+.page-title{ font-size:22px; font-weight:900; margin: 12px 0 8px; }
+.lead{ font-size:16px; line-height:1.55; margin: 10px 0; }
+.card{ border:1px solid var(--border); border-radius: var(--radius); padding: 14px; margin: 12px 0; }
+.hint{ font-size:14px; line-height:1.45; opacity:.9; }
+
+.primary{
+  display:block;
+  width:100%;
+  background: var(--red);
+  color: var(--white);
+  border:none;
+  border-radius: var(--radius);
+  padding: 18px 18px;
+  font-size: 22px;
+  font-weight: 900;
+  text-align:center;
+  text-decoration:none;
+}
+.primary:active{ transform: translateY(1px); }
+
+.services{
+  display:grid; gap:12px;
+  grid-template-columns: 1fr;
+}
+@media(min-width:640px){
+  .services{ grid-template-columns: 1fr 1fr; }
+}
+.service{
+  background: var(--red);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 14px 14px;
+  text-decoration:none;
+  min-height: 126px;
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.service-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.service-title{ font-size:18px; font-weight:900; line-height:1.2; }
+.service-desc{ font-size:14px; font-weight:700; line-height:1.35; opacity:.95; margin-top:8px; }
+
+.icon{
+  width:38px; height:38px;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  flex:0 0 auto;
+}
+.icon svg{ width:24px; height:24px; stroke: var(--white); fill: none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+.trust{
+  margin-top: 14px;
+  font-size: 15px;
+  line-height:1.55;
+}
+
+.footerbar{
+  position: fixed; left:0; right:0; bottom:0; z-index:50;
+  background: var(--white);
+  border-top:1px solid var(--border);
+  padding: 10px 14px;
+}
+.footerbar-inner{
+  max-width: 920px; margin:0 auto;
+  display:grid; gap:10px;
+  grid-template-columns: 1fr 1fr;
+}
+@media(min-width:640px){
+  .footerbar-inner{ grid-template-columns: 1fr 1fr 1fr 1fr; }
+}
+.fbtn{
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--black);
+  border-radius: 999px;
+  padding: 12px 10px;
+  text-decoration:none;
+  font-weight:900;
+  font-size:15px;
+  background: var(--white);
+}
+.fbtn:active{ transform: translateY(1px); }
+/* =====================================
+   WJU Zorg – Senior vriendelijk formulier
+===================================== */
+
+/* formulier breedte & rust */
+.form {
+  margin-top: 18px;
+}
+
+/* elk blok duidelijke scheiding */
+.form-group {
+  display: block;
+  margin-bottom: 26px;
+}
+
+/* vragen / labels */
+.form-group label {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* invoervelden */
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 1px solid #dcdcdc;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+/* betere klikbaarheid ouderen */
+.form select {
+  height: 52px;
+}
+
+/* toelichting vak */
+.form textarea {
+  min-height: 130px;
+}
+
+/* checkbox regel rustiger */
+.checkbox-row {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* verstuur knop */
+.form button {
+  margin-top: 28px;
+  padding: 18px;
+  font-size: 20px;
+  border-radius: 14px;
+}
+
+/* ruimte onder knop */
+.after-submit-space {
+  height: 40px;
+}
+/* ===============================
+   WJU ZORG HEADER VERBETERING
+================================ */
+
+/* rode balk */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+}
+
+/* linkerkant tekstblok */
+.brand {
+    flex: 1;
+}
+
+/* WJU Zorg titel */
+.brand-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* ondertitel */
+.brand-sub {
+    font-size: 16px;
+    opacity: 0.95;
+}
+
+/* logo rechts */
+.logo {
+    width: 80px;
+    height: auto;
+    object-fit: contain;
+}
+/* =========================
+   HEADER - WIDE WJU Zorg
+========================= */
+
+.header-top{
+  padding: 28px 32px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+}
+
+.brand-title{
+  font-size:44px !important;
+  font-weight:900 !important;
+  letter-spacing:1.5px !important;
+}
+
+.brand-sub{
+  font-size:18px !important;
+  margin-top:6px !important;
+}
+
+.logo{
+  width:120px !important;
+  height:auto !important;
+  padding:4px !important;
+}
+
+.header-actions{
+  padding:12px 32px 20px 32px !important;
+}
+.brand{
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+}
+/* ================================
+   WJU Zorg — FORM "SJIEK" (senior)
+   Plak ONDERAAN assets/app.css
+   ================================ */
+
+/* 1) Alleen formulier: rustig lettertype + groter */
+main.container form,
+main.container .card form {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+/* 2) Titel + intro netjes (minder druk) */
+main.container .card h2 {
+  font-size: 26px;
+  line-height: 1.15;
+  margin: 0 0 10px 0;
+  letter-spacing: 0.2px;
+}
+main.container .card p {
+  margin: 0 0 14px 0;
+}
+
+/* 3) Ruimte tussen blokken */
+main.container .form-group,
+main.container .form-row,
+main.container .field {
+  margin-bottom: 16px !important;
+}
+
+/* 4) Labels duidelijker */
+main.container label {
+  display: block;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+/* 5) Velden groter + rustiger */
+main.container input[type="text"],
+main.container input[type="tel"],
+main.container input[type="date"],
+main.container input[type="datetime-local"],
+main.container select,
+main.container textarea {
+  width: 100%;
+  font-size: 18px;
+  padding: 14px 14px;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+/* 6) Textarea wat hoger (makkelijk typen/lezen) */
+main.container textarea {
+  min-height: 110px;
+}
+
+/* 7) Checkbox regel: netter uitlijnen */
+main.container .checkbox-row,
+main.container label input[type="checkbox"] {
+  transform: scale(1.15);
+}
+main.container .checkbox-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+main.container .checkbox-row input[type="checkbox"] {
+  margin-top: 4px;
+}
+
+/* 8) Verstuurknop: groot en “zorg” */
+main.container button[type="submit"],
+main.container .btn-primary {
+  font-size: 20px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  width: 100%;
+}
+
+/* 9) Extra witruimte onder knop (jouw “2x enter”) */
+.after-submit-space {
+  height: 18px;
+}
+/* Voorwaarden tekst: netjes binnen de kaart */
+main.container .checkbox-row label,
+main.container .terms-text,
+main.container .form-terms {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Als jouw checkbox in een label zit zonder class */
+main.container label {
+  max-width: 100%;
+  white-space: normal;
+}
+/* Formulieren: header niet sticky (meer overzicht) */
+body.form-page .header {
+  position: relative !important;
+}
+body.form-page .container {
+  padding-top: 14px !important;
+}
+/* voorwaarden tekst netjes binnen formulier */
+.checkbox-label{
+    display:block;
+    max-width:520px;
+    line-height:1.6;
+    font-size:16px;
+    margin-top:10px;
+}
+/* ===============================
+   VOORWAARDEN – gemeentelijke stijl
+================================ */
+
+.form-terms{
+    margin-top:28px;
+}
+
+.terms-main{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+    font-weight:600;
+}
+
+.terms-main input{
+    width:20px;
+    height:20px;
+}
+
+.terms-small{
+    margin-top:8px;
+    margin-left:30px;
+    font-size:14px;
+    color:#555;
+    line-height:1.5;
+    max-width:520px;
+}
+/* ===== VOORWAARDEN BLOK ===== */
+
+.form-terms{
+  margin-top:28px;
+}
+
+.terms-check{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:18px;
+  font-weight:600;
+}
+
+.terms-check input{
+  width:22px;
+  height:22px;
+}
+
+.terms-small{
+  margin-top:8px;
+  font-size:15px;
+  color:#555;
+  line-height:1.5;
+  max-width:520px;
+}
+
+.terms-pilot{
+  margin-top:6px;
+  font-size:13px;
+  color:#888;
+}
+/* ===== VOORWAARDEN UITLIJNING FIX ===== */
+
+.form-terms{
+  margin-top:28px;
+  width:100%;
+  max-width:720px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.terms-check{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  font-size:18px;
+  font-weight:600;
+}
+
+.terms-check input{
+  width:22px;
+  height:22px;
+  margin-top:4px;
+}
+
+.terms-small{
+  margin-top:8px;
+  font-size:15px;
+  color:#555;
+  line-height:1.5;
+}
+
+.terms-pilot{
+  margin-top:6px;
+  font-size:13px;
+  color:#888;
+}
+/* ===== VOORWAARDEN netjes in het midden (jouw structuur) ===== */
+
+/* het blok met checkbox + titel */
+main.container form .checkbox-row{
+  max-width: 720px !important;
+  margin: 26px auto 0 !important;
+  padding: 0 14px !important;
+}
+
+/* label netjes, groter en rustiger */
+main.container form .checkbox-row label{
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+/* checkbox zelf */
+main.container form .checkbox-row input[type="checkbox"]{
+  width: 22px !important;
+  height: 22px !important;
+  margin-top: 3px !important;
+}
+
+/* de tekstregel eronder (“Kunt u niet komen…”) */
+main.container form .checkbox-row + p,
+main.container form .checkbox-row + .hint,
+main.container form .checkbox-row + .trust{
+  max-width: 720px !important;
+  margin: 8px auto 0 !important;
+  padding: 0 14px !important;
+  font-size: 15px !important;
+  color: #555 !important;
+  line-height: 1.5 !important;
+}
+
+/* versturen-knop ook exact uitlijnen met het formulier */
+main.container form .btn-primary{
+  max-width: 720px !important;
+  margin: 18px auto 0 !important;
+  display: block !important;
+}
+/* ===== voorwaarden formulier netjes ===== */
+
+.form-terms{
+  max-width:720px;
+  margin:28px auto 10px;
+  padding:0 16px;
+}
+
+.terms-check{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  font-size:18px;
+  font-weight:800;
+}
+
+.terms-check input{
+  width:22px;
+  height:22px;
+  margin-top:4px;
+}
+
+.terms-text{
+  margin-top:10px;
+  font-size:15px;
+  color:#555;
+  line-height:1.5;
+}
+/* === FORMULIER: senior-sjiek spacing === */
+.form-card{
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.form-title{
+  font-size: 26px;
+  letter-spacing: 0.2px;
+}
+
+.form-intro{
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.form-group{
+  margin-bottom: 18px;
+}
+
+.form-group label{
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  font-size: 18px;
+  padding: 14px 14px;
+}
+
+.checkbox-row{
+  margin-top: 18px;
+}
+
+.terms-main{
+  font-size: 18px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.terms-small{
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 60ch;
+  margin: 8px 0 0 34px;
+  opacity: .9;
+}
+/* ===============================
+   FASE 2.5 – WJU ZORG LOOK
+================================ */
+
+/* Formulier als rustige kaart */
+main.container form{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 18px 18px 22px;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  background: #fff;
+}
+
+/* Titel + intro meer zorg-gevoel */
+main.container form h2{
+  font-size: 28px;
+  margin: 0 0 10px 0;
+}
+main.container form .form-intro,
+main.container form p{
+  max-width: 68ch;
+}
+
+/* Velden: net iets duidelijker */
+main.container form input[type="text"],
+main.container form input[type="tel"],
+main.container form input[type="date"],
+main.container form select,
+main.container form textarea{
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+}
+
+/* Focus: als je klikt wordt het rustig duidelijk */
+main.container form input:focus,
+main.container form select:focus,
+main.container form textarea:focus{
+  outline: none;
+  border-color: #999;
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+}
+
+/* Versturen knop: groot, strak */
+main.container form button[type="submit"],
+main.container form .btn-primary{
+  width: 100%;
+  max-width: 760px;
+  margin: 18px auto 0;
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  padding: 16px 18px;
+  border-radius: 16px;
+}
+
+/* Extra ruimte onder de knop + slottekst rustiger */
+main.container form .after-submit-space{
+  height: 18px;
+}
+main.container .trust{
+  max-width: 760px;
+  margin: 16px auto 0;
+  padding: 0 6px;
+  line-height: 1.6;
+}
+/* ===== WJU Zorg Versturen knop ===== */
+
+.btn-primary {
+  width: 100%;
+  background-color: #c40000;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 25px;
+  transition: 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #a80000;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+/* ===============================
+   WJU ZORG HIGH CONTRAST MODE
+================================ */
+
+.high-contrast {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+.high-contrast body {
+  background: #000 !important;
+  color: #fff !important;
+}
+
+.high-contrast .card,
+.high-contrast .service,
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+}
+
+.high-contrast a,
+.high-contrast h1,
+.high-contrast h2,
+.high-contrast h3,
+.high-contrast p,
+.high-contrast span,
+.high-contrast label {
+  color: #fff !important;
+}
+/* ===============================
+   FOOTER KNOPPEN FIX
+================================ */
+
+/* Normale weergave */
+.footerbar .fbtn {
+  color: #000 !important;
+  background: #fff !important;
+  border: 1px solid #000 !important;
+}
+
+/* In hoog contrast */
+.high-contrast .footerbar {
+  background: #000 !important;
+  border-top: 1px solid #fff !important;
+}
+
+.high-contrast .footerbar .fbtn {
+  color: #fff !important;
+  background: #000 !important;
+  border: 1px solid #fff !important;
+}

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Afspraak Details - WJU Zorg</title>
+  <link rel="stylesheet" href="app.css"/>
+  <style>
+    .info-section { background: #fdfdfd; border: 1px solid #eee; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+    .info-row { margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 5px; }
+    .info-label { font-size: 0.8rem; color: #888; text-transform: uppercase; display: block; }
+    .info-value { font-size: 1.1rem; color: #333; font-weight: 500; }
+    .special-note { background: #fff4e5; border-left: 4px solid #ff9800; padding: 10px; border-radius: 4px; margin-top: 10px; }
+    
+    .action-section { background: #fff; border-top: 2px solid #d9534f; padding-top: 20px; margin-top: 20px; }
+    .hidden-area { display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 12px; border: 1px solid #ddd; }
+    .btn-success { background-color: #28a745; color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+    .btn-danger { background-color: #d9534f; color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+
+<body class="form-page">
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-title">WJU Zorg</div>
+        <div class="brand-sub">Afspraak Informatie</div>
+      </div>
+      <img class="logo" src="logo.png" alt="WJU Zorg logo">
+    </div>
+  </div>
+
+  <main class="container">
+    <div id="loader" style="text-align:center; padding:50px;">Gegevens ophalen...</div>
+
+    <div id="content" style="display:none;">
+      <h2 id="clientName" style="margin-bottom:15px;">Naam Cliënt</h2>
+
+      <div class="info-section">
+        <div class="info-row">
+          <span class="info-label">Adres</span>
+          <span class="info-value" id="clientAddress">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Telefoonnummer</span>
+          <a href="#" id="phoneLink" class="info-value" style="color:#d9534f; text-decoration:none;">-</a>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Wat gaan we doen?</span>
+          <span class="info-value" id="serviceType">-</span>
+        </div>
+        <div id="destinationRow" class="info-row" style="display:none;">
+          <span class="info-label">Bestemming (Waarheen)</span>
+          <span class="info-value" id="destination">-</span>
+        </div>
+        
+        <div class="special-note">
+          <span class="info-label" style="color:#a66b00;">Belangrijk: Waar rekening mee houden?</span>
+          <span id="specialNotes" style="font-weight:bold;">Geen bijzonderheden genoteerd.</span>
+        </div>
+      </div>
+
+      <div class="action-section">
+        <h3 style="margin-bottom:15px;">Rapportage & Afronden</h3>
+        
+        <div style="margin-bottom: 20px;">
+          <label><strong>Hoeveel minuten gewerkt?</strong></label>
+          <select id="minutesSelect" class="form-control" style="width:100%; padding:12px; margin-top:8px; border-radius:8px;">
+            <option value="">Kies minuten...</option>
+            <option value="15">15 min</option>
+            <option value="30">30 min</option>
+            <option value="45">45 min</option>
+            <option value="60">60 min</option>
+            <option value="90">90 min</option>
+            <option value="120">120 min</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label><strong>Wat heb je gedaan? (Kort verslag)</strong></label>
+          <textarea id="workDone" style="width:100%; height:80px; margin-top:8px; padding:10px; border-radius:8px;" placeholder="Bijv. Wandeling gemaakt en de post gesorteerd."></textarea>
+        </div>
+
+        <button id="btnAfgerond" class="btn-success">✅ Afspraak Afronden</button>
+        <button id="btnNietGelukt" class="btn-danger">❌ Niet gelukt</button>
+
+        <div id="reasonArea" class="hidden-area">
+          <label><strong>Waarom is het niet gelukt?</strong></label>
+          <textarea id="reasonInput" style="width:100%; height:80px; margin-top:10px; padding:10px; border-radius:8px;" placeholder="Bijv. Cliënt was niet thuis."></textarea>
+          <button id="btnSaveReason" class="btn-success" style="margin-top:10px; background-color: #007bff;">Opslaan als niet gelukt</button>
+        </div>
+      </div>
+
+      <a href="today.html" style="display:block; text-align:center; margin-top:25px; color:#666; text-decoration:none;">⬅ Terug naar overzicht</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const appointmentId = urlParams.get('id');
+
+    async function loadAppointment() {
+      if (!appointmentId) return;
+
+      const { data, error } = await supabaseClient
+        .from("requests")
+        .select("*") // We halen nu alle kolommen op
+        .eq("id", appointmentId)
+        .single();
+
+      if (data) {
+        // Vul de info kaart
+        document.getElementById("clientName").textContent = data.full_name || "Naam onbekend";
+        document.getElementById("clientAddress").textContent = data.address || "Geen adres bekend";
+        document.getElementById("serviceType").textContent = data.service_type || "Niet gespecificeerd";
+        
+        if (data.phone) {
+          const pLink = document.getElementById("phoneLink");
+          pLink.textContent = data.phone;
+          pLink.href = "tel:" + data.phone;
+        }
+
+        // Bestemming tonen als die er is (bijv. bij meerijden)
+        if (data.destination) {
+          document.getElementById("destinationRow").style.display = "block";
+          document.getElementById("destination").textContent = data.destination;
+        }
+
+        // Bijzonderheden / Rekening houden met
+        if (data.special_notes) {
+          document.getElementById("specialNotes").textContent = data.special_notes;
+        }
+
+        document.getElementById("content").style.display = "block";
+        document.getElementById("loader").style.display = "none";
+      }
+    }
+
+    async function updateAppointment(status, minutes, workDescription = "", reason = "") {
+      const { error } = await supabaseClient
+        .from("requests")
+        .update({ 
+          status: status, 
+          duration_minutes: parseInt(minutes) || 0, 
+          work_done: workDescription, 
+          not_done_reason: reason 
+        })
+        .eq("id", appointmentId);
+
+      if (error) {
+        alert("Fout: " + error.message);
+      } else {
+        alert("Succesvol opgeslagen!");
+        window.location.href = "today.html";
+      }
+    }
+
+    document.getElementById('btnAfgerond').addEventListener('click', () => {
+      const mins = document.getElementById('minutesSelect').value;
+      const work = document.getElementById('workDone').value;
+      if(!mins) return alert("Selecteer de minuten.");
+      if(!work) return alert("Vul in wat je hebt gedaan.");
+      updateAppointment('voltooid', mins, work, "");
+    });
+
+    document.getElementById('btnNietGelukt').addEventListener('click', () => {
+      document.getElementById('reasonArea').style.display = 'block';
+    });
+
+    document.getElementById('btnSaveReason').addEventListener('click', () => {
+      const reason = document.getElementById('reasonInput').value;
+      if(!reason) return alert("Vul de reden in.");
+      updateAppointment('geannuleerd', 0, "", reason);
+    });
+
+    loadAppointment();
+  </script>
+</body>
+</html>

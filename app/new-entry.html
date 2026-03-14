@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Nieuwe Invoer - WJU Zorg</title>
+  <link rel="stylesheet" href="app.css"/>
+  <style>
+    .header-wju { background-color: #a71d2a; color: white; padding: 40px 20px; position: relative; }
+    .logo-wju { position: absolute; right: 20px; top: 35px; height: 65px; background: white; border-radius: 10px; padding: 5px; }
+    .script-box { background: #fff3f3; border-left: 5px solid #a71d2a; padding: 15px; margin-bottom: 20px; font-style: italic; color: #555; border-radius: 8px; border: 1px solid #eee; font-size: 1.1rem; line-height: 1.4; }
+    .btn-choice { display: block; width: 100%; padding: 20px; margin-bottom: 15px; border-radius: 15px; border: 2px solid #eee; font-weight: bold; font-size: 1.1rem; text-align: left; cursor: pointer; background: white; transition: 0.2s; color: #333; }
+    .btn-red { background-color: #a71d2a !important; color: white !important; border: none; }
+    .btn-green { background-color: #28a745 !important; color: white !important; width: 100%; padding: 22px; border-radius: 15px; border: none; font-weight: bold; font-size: 1.3rem; cursor: pointer; margin-top: 20px; }
+    .hidden { display: none; }
+    .form-control { width: 100%; padding: 18px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #ccc; font-size: 1.1rem; box-sizing: border-box; }
+    label { font-weight: bold; display: block; margin-bottom: 8px; color: #333; }
+  </style>
+</head>
+
+<body style="background-color: #f8f9fa; margin: 0; font-family: sans-serif;">
+
+  <div class="header-wju">
+    <h1 style="margin: 0; font-size: 2.4rem; font-weight: bold;">WJU Zorg</h1>
+    <p style="margin: 5px 0 0 0; opacity: 0.9;">Telefoon Assistent</p>
+    <img src="../logo.png" alt="WJU Logo" class="logo-wju">
+  </div>
+
+  <main style="padding: 25px; max-width: 600px; margin: 0 auto;">
+    
+    <div id="step1">
+      <div class="script-box">"Goedemiddag, u spreekt met Widjai van WJU Zorg. Hoe kan ik u helpen?"</div>
+      <label>Naam van de cliënt</label>
+      <input type="text" id="custName" class="form-control" placeholder="Bijv. Mevrouw Jansen">
+
+      <div class="script-box">"Fijn dat u belt. Weet u al waar u een afspraak voor wilt maken, of wilt u liever dat wij u later rustig terugbellen om eerst even kennis te maken of wat informatie te krijgen?"</div>
+      <button type="button" onclick="goToStep2('terugbellen')" class="btn-choice">📞 Bel mij later terug voor informatie of kennismaking</button>
+      <button type="button" onclick="goToStep2('direct')" class="btn-choice btn-red">📅 Ik weet al waar ik een afspraak voor wil maken</button>
+    </div>
+
+    <div id="step2" class="hidden">
+      
+      <div id="serviceSelection" class="hidden">
+        <div class="script-box">
+            "Dat is prima. Waar kunnen we u deze keer mee van dienst zijn? Ik vul het formulier nu samen met u telefonisch in om de afspraak direct te bevestigen. Als u iets niet begrijpt of u heeft vragen, dan kunnen we dat nu direct rustig bespreken."
+        </div>
+        <button type="button" onclick="openForm('service-zorgafspraak.html')" class="btn-choice">🚗 Vervoer naar een afspraak</button>
+        <button type="button" onclick="openForm('service-boodschappen.html')" class="btn-choice">🛒 Samen boodschappen doen</button>
+        <button type="button" onclick="openForm('service-gezelschap.html')" class="btn-choice">☕ Gezelschap / Kopje koffie</button>
+        <button type="button" onclick="openForm('service-klusjes.html')" class="btn-choice">🛠️ Een klusje in of om het huis</button>
+      </div>
+
+      <div id="callbackFields" class="hidden">
+        <div class="script-box">"Wegens het vele rijden hebben wij twee terugbelmomenten per dag, maar u wordt binnen 24 uur teruggebeld. Wanneer zou het voor u het beste uitkomen?"</div>
+        
+        <label>Datum & Tijdstip (voor de pop-up)</label>
+        <input type="datetime-local" id="cbDateTime" class="form-control">
+        
+        <label>Telefoonnummer</label>
+        <input type="tel" id="cbPhone" class="form-control" placeholder="Uw telefoonnummer">
+
+        <button type="button" onclick="saveCallback()" class="btn-green">✅ Terugbelverzoek opslaan</button>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; padding-bottom: 40px;">
+        <a href="../today.html" style="color: #a71d2a; text-decoration: none; font-weight: bold; border: 2px solid #a71d2a; padding: 10px 20px; border-radius: 10px;">⬅ Terug naar overzicht</a>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function goToStep2(type) {
+      const name = document.getElementById('custName').value;
+      if(!name) {
+        alert("Vul eerst de naam van de cliënt in.");
+        return;
+      }
+      document.getElementById('step1').classList.add('hidden');
+      document.getElementById('step2').classList.remove('hidden');
+      document.getElementById('serviceSelection').classList.add('hidden');
+      document.getElementById('callbackFields').classList.add('hidden');
+
+      if(type === 'terugbellen') {
+        document.getElementById('callbackFields').classList.remove('hidden');
+      } else {
+        document.getElementById('serviceSelection').classList.remove('hidden');
+      }
+    }
+
+    function openForm(bestandsnaam) {
+      const naam = document.getElementById('custName').value;
+      window.location.href = "../" + bestandsnaam + "?name=" + encodeURIComponent(naam);
+    }
+
+    async function saveCallback() {
+      const scheduledTime = document.getElementById('cbDateTime').value;
+      if(!scheduledTime) return alert("Kies a.u.b. een tijdstip.");
+
+      const { error } = await supabaseClient.from("requests").insert([{ 
+        full_name: document.getElementById('custName').value || 'Onbekende Cliënt',
+        phone: document.getElementById('cbPhone').value || '',
+        address: 'N.v.t. (Terugbelverzoek)',
+        appointment_time: scheduledTime, 
+        service: 'kennismaking', 
+        type: 'intake', 
+        status: 'terugbellen',
+        org_id: '4121dd3f-9d21-42b6-ab38-dccf791bfaaf' 
+      }]);
+
+      if (!error) {
+        alert("Terugbelverzoek is opgeslagen!");
+        window.location.href = "../today.html";
+      } else {
+        console.error(error);
+        alert("Fout bij opslaan: " + error.message + " (Kolom: " + error.details + ")");
+      }
+    } 
+    </script>
+</body>
+</html>

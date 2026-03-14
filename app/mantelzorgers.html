@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="nl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mantelzorgers - WJU Zorg</title><link rel="stylesheet" href="app.css"/></head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-title">WJU Zorg</div>
+      <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
+    </div>
+    <img class="logo" src="logo.png" alt="WJU Zorg logo">
+  </div>
+  <div class="header-actions" aria-label="Toegankelijkheid">
+  <button id="btnRead" class="btn-top" type="button">Voorlezen</button>
+  <button id="btnContrast" class="btn-top" type="button">Hoog contrast</button>
+  <button id="btnAPlus" class="btn-top" type="button">A+</button>
+  <button id="btnAMinus" class="btn-top" type="button">A-</button>
+</div>
+</div>
+
+<main class="container">
+  <div class="page-title">Mantelzorgers</div>
+  <div class="trust" style="margin-top:0; margin-bottom:12px;"><a href="index.html"><strong>Terug naar Home</strong></a></div>
+<div class="card"><p class="lead"><h2>Mantelzorgers</h2>
+
+<p>
+Veel mantelzorgers doen ontzettend veel voor een ouder, partner of familielid.
+Vaak gebeurt dat naast werk, een gezin en andere verantwoordelijkheden.
+</p>
+
+<p>
+Dat kan veel voldoening geven, maar soms is het ook gewoon veel om alleen te blijven doen.
+Dan kan het prettig zijn als er af en toe iemand helpt met praktische dingen.
+</p>
+
+<h3>Waar WJU Zorg bij kan helpen</h3>
+
+<p>
+WJU Zorg biedt praktische ondersteuning aan huis.
+Niet om mantelzorg over te nemen, maar om even mee te helpen waar dat nodig is.
+</p>
+
+<p>Dat kan bijvoorbeeld zijn:</p>
+
+<ul>
+<li>Samen naar een afspraak bij de huisarts of het ziekenhuis</li>
+<li>Boodschappen doen of even samen de winkel in</li>
+<li>Een klein klusje in huis</li>
+<li>Een kop koffie drinken of een wandeling maken</li>
+</ul>
+
+<p>
+Soms is het voor een mantelzorger gewoon fijn om te weten dat iemand even kan langsgaan.
+Bijvoorbeeld wanneer u zelf moet werken, een drukke week heeft of niet altijd mee kunt naar een afspraak.
+</p>
+
+<h3>Een vertrouwd gezicht</h3>
+
+<p>
+Bij WJU Zorg heeft u altijd te maken met één vast en vertrouwd gezicht.
+Dat geeft rust en duidelijkheid, zowel voor degene die ondersteuning krijgt als voor de mantelzorger.
+</p>
+
+<p>
+Tijdens een eerste telefoongesprek of kennismaking bespreken we rustig wat nodig is en wat prettig voelt.
+Een vrijblijvende kennismaking is altijd mogelijk.
+</p>
+
+<h3>Kennismaken voor mantelzorgers</h3>
+
+<p>
+Wilt u als mantelzorger meer weten over wat WJU Zorg kan betekenen?
+Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
+</p>
+
+<p>
+WJU Zorg werkt met een duidelijk uurtarief voor praktische ondersteuning.
+Tijdens het eerste gesprek bespreken we rustig wat mogelijk is.
+</p></div>
+<div class="card">
+  <h3 style="margin-top:0;">Kennismaken voor mantelzorgers</h3>
+  <p class="lead" style="margin-top:8px;">
+    Wilt u als mantelzorger meer weten of rustig overleggen?
+    Laat hieronder uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
+  </p>
+
+  <form class="form" id="contactForm">
+    <div class="form-group">
+      <label for="full_name">Uw naam</label>
+      <input id="full_name" name="full_name" type="text" required />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telefoonnummer</label>
+      <input id="phone" name="phone" type="tel" required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">E-mailadres</label>
+      <input id="email" name="email" type="email" />
+    </div>
+
+    <div class="form-group">
+      <label for="special_notes">Voor wie vraagt u hulp?</label>
+      <input
+        id="special_notes"
+        name="special_notes"
+        type="text"
+        placeholder="Bijvoorbeeld: voor mijn moeder, partner of familielid"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="message">Waar kunnen wij u bij helpen?</label>
+      <textarea
+        id="message"
+        name="message"
+        rows="5"
+        placeholder="Bijvoorbeeld: ik wil graag kennismaken, bel mij terug of ik wil graag hulp bij..."
+      ></textarea>
+    </div>
+
+    <input type="hidden" name="type" value="mantelzorger" />
+    <input type="hidden" name="service" value="bel_mij_terug" />
+    <input type="hidden" name="help_topic" value="mantelzorger_contact" />
+    <input type="hidden" name="status" value="nieuw" />
+
+    <button class="btn-primary" type="submit">Versturen</button>
+  </form>
+</div>
+</main>
+
+<div class="footerbar">
+  <div class="footerbar-inner">
+    <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
+    <a class="fbtn" href="zondag.html">Zondag</a>
+    <a class="fbtn" href="privacy.html">Privacy</a>
+    <a class="fbtn" href="contact.html">Contact</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
