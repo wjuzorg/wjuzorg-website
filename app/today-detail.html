@@ -175,7 +175,7 @@
     document.getElementById('btnSaveReason').addEventListener('click', () => {
       const reason = document.getElementById('reasonInput').value;
       if(!reason) return alert("Vul de reden in.");
-      updateAppointment('geannuleerd', 0, "", reason);
+      updateAppointment('gesloten', 0, "", reason);
     });
 
     loadAppointment();
