@@ -40,16 +40,12 @@
     🆕 Nieuwe aanvragen: <strong><span id="newCount">0</span></strong>
   </div>
 
-  <div style="background:white; padding:15px 20px; border-radius:12px; border:1px solid #eee;">
-    📞 Terugbelverzoeken: <strong><span id="callbackCount">0</span></strong>
-  </div>
-
-
+ 
 
 </div>
-<div id="callbackSection" style="margin-bottom:30px;">
+<div id="callbackSection" style="margin-top:30px; margin-bottom:30px;">
   <div style="background:white; border-left:1px solid #eee; padding:18px; border-radius:10px; margin-bottom:15px;">
-    <strong>📞 Nog terug te bellen</strong>
+    <strong>📞 Nog terug te bellen (<span id="callbackCount">0</span>)</strong>
     <div class="hint" style="margin-top:6px;">
       Hieronder staan de mensen die nog teruggebeld moeten worden.
     </div>
@@ -75,14 +71,6 @@
   async function loadToday() {
     const today = new Date().toISOString().split("T")[0];
 
-    const { data, error } = await supabaseClient
-      .from("requests")
-      .select("*")
-      .eq("org_id", MIJN_ORG_ID)
-      .eq("status", "ingepland")
-      .gte("appointment_time", today + "T00:00:00")
-      .lt("appointment_time", today + "T23:59:59")
-      .order("appointment_time", { ascending: true });
 
     const listDiv = document.getElementById("appointmentsList");
     document.getElementById("todayCount").innerText = data ? data.length : 0;
