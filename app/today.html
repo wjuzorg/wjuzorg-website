@@ -69,57 +69,94 @@
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   async function loadToday() {
-    const today = new Date().toISOString().split("T")[0];
+  const listDiv = document.getElementById("appointmentsList");
+  const todayCountEl = document.getElementById("todayCount");
 
+  if (listDiv) {
+    listDiv.innerHTML = "Laden...";
+  }
 
-    const listDiv = document.getElementById("appointmentsList");
-    document.getElementById("todayCount").innerText = data ? data.length : 0;
-    listDiv.innerHTML = "";
+  const { data, error } = await supabaseClient
+    .from("requests")
+    .select("*")
+    .eq("org_id", MIJN_ORG_ID)
+    .eq("status", "ingepland")
+    .order("appointment_time", { ascending: true });
 
-    if (error) {
+  if (error) {
+    console.error("Fout in loadToday:", error);
+    if (listDiv) {
       listDiv.innerHTML = "<p style='text-align:center; color:red;'>Fout bij laden: " + error.message + "</p>";
-      return;
     }
-
-    if (!data || data.length === 0) {
-      listDiv.innerHTML = "<p style='text-align:center; color:#999;'>Geen ritten gevonden voor vandaag.</p>";
-      return;
+    if (todayCountEl) {
+      todayCountEl.innerText = "0";
     }
-
-    data.forEach(item => {
-      const fullTime = item.appointment_time || "";
-      const timeDisplay = fullTime.includes("T")
-        ? fullTime.split("T")[1].substring(0, 5)
-        : fullTime.substring(0, 5);
-
-      const card = document.createElement("div");
-      card.className = "card-wju";
-      const now = new Date();
-
-if (item.appointment_time) {
-  const callTime = new Date(item.appointment_time);
-
-  if (callTime <= now) {
-    card.style.border = "3px solid #d32f2f";
-    card.style.background = "#fff5f5";
+    return;
   }
+
+  const vandaag = new Date();
+  const jaar = vandaag.getFullYear();
+  const maand = String(vandaag.getMonth() + 1).padStart(2, "0");
+  const dag = String(vandaag.getDate()).padStart(2, "0");
+  const vandaagString = `${jaar}-${maand}-${dag}`;
+
+  const todayItems = (data || []).filter(item => {
+    if (!item.appointment_time) return false;
+    return String(item.appointment_time).slice(0, 10) === vandaagString;
+  });
+
+  if (todayCountEl) {
+    todayCountEl.innerText = todayItems.length;
+  }
+
+  if (!listDiv) return;
+  listDiv.innerHTML = "";
+
+  if (todayItems.length === 0) {
+    listDiv.innerHTML = "<p style='text-align:center; color:#999;'>Geen ritten gevonden voor vandaag.</p>";
+    return;
+  }
+
+  todayItems.forEach(item => {
+    const fullTime = item.appointment_time || "";
+    let timeDisplay = "";
+
+    if (fullTime.includes("T")) {
+      timeDisplay = fullTime.split("T")[1].substring(0, 5);
+    } else if (fullTime.includes(" ")) {
+      timeDisplay = fullTime.split(" ")[1]?.substring(0, 5) || "";
+    } else {
+      timeDisplay = fullTime.substring(11, 16);
+    }
+
+    const card = document.createElement("div");
+    card.className = "card-wju";
+
+    const now = new Date();
+    if (item.appointment_time) {
+      const callTime = new Date(item.appointment_time);
+      if (callTime <= now) {
+        card.style.border = "3px solid #d32f2f";
+        card.style.background = "#fff5f5";
+      }
+    }
+
+    card.innerHTML = `
+      <div style="font-size:1.3rem; margin-bottom:10px;">
+        <strong>${timeDisplay || "Tijd onbekend"}</strong> — ${item.full_name || "Onbekend"}
+      </div>
+      <div style="color:#666; margin-bottom:20px; font-size:1.1rem;">
+        ${item.service || "Zorg"}<br>${item.address || ""}
+      </div>
+      <div style="display:flex; gap:15px;">
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.address || "")}" target="_blank" class="btn-action">🧭 Route</a>
+        <a href="today-detail.html?id=${item.id}" class="btn-action">Open</a>
+      </div>
+    `;
+    listDiv.appendChild(card);
+  });
 }
-      card.innerHTML = `
-        <div style="font-size:1.3rem; margin-bottom:10px;">
-          <strong>${timeDisplay}</strong> — ${item.full_name || "Onbekend"}
-        </div>
-        <div style="color:#666; margin-bottom:20px; font-size:1.1rem;">
-          ${item.service || "Zorg"}<br>${item.address || ""}
-        </div>
-        <div style="display:flex; gap:15px;">
-          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.address || "")}" target="_blank" class="btn-action">🧭 Route</a>
-          <a href="today-detail.html?id=${item.id}" class="btn-action">Open</a>
-        </div>
-      `;
-      listDiv.appendChild(card);
-    });
-  }
-
+  
   async function loadWeekCount() {
     const now = new Date();
     const day = now.getDay();
