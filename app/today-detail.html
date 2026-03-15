@@ -165,7 +165,7 @@
       const work = document.getElementById('workDone').value;
       if(!mins) return alert("Selecteer de minuten.");
       if(!work) return alert("Vul in wat je hebt gedaan.");
-      updateAppointment('voltooid', mins, work, "");
+      updateAppointment('gesloten', mins, work, "");
     });
 
     document.getElementById('btnNietGelukt').addEventListener('click', () => {
