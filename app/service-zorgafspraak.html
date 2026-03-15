@@ -161,10 +161,11 @@ U vult uw gegevens in. Daarna nemen wij contact met u op.
 <div class="footerbar">
   <div class="footerbar-inner">
     <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
-    <a class="fbtn" href="zondag.html">Zondag</a>
     <a class="fbtn" href="privacy.html">Privacy</a>
     <a class="fbtn" href="contact.html">Contact</a>
+    <a class="fbtn" href="javascript:void(0)" onclick="openAdmin()">Admin</a>
   </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
@@ -184,16 +185,16 @@ U vult uw gegevens in. Daarna nemen wij contact met u op.
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
-    
+
     const insertData = {
       full_name: formData.get('full_name'),
       phone: formData.get('phone'),
       address: formData.get('address'),
-      appointment_time: formData.get('appointment_at'), // Let op: name in HTML is 'appointment_at'
+      appointment_time: formData.get('appointment_at'),
       service: 'naar_afspraak',
-      type: 'kennismaken', // *** DIT IS DE REGEL DIE DE FOUTMELDING OPLOST ***
+      type: 'kennismaken',
       status: 'nieuw',
-      funding_type: formData.get('pgb'), // In jouw HTML heet dit veld 'pgb'
+      funding_type: formData.get('pgb'),
       message: formData.get('message'),
       org_id: '4121dd3f-9d21-42b6-ab38-dccf791bfaaf'
     };
@@ -204,7 +205,20 @@ U vult uw gegevens in. Daarna nemen wij contact met u op.
       alert("Er ging iets mis bij het opslaan: " + error.message);
     } else {
       alert("De afspraak voor vervoer is succesvol opgeslagen!");
-      window.location.href = "today.html"; 
+      window.location.href = "today.html";
     }
   });
+
+  function openAdmin() {
+    const code = prompt("Voer admin code in");
+    if (!code) return;
+
+    if (code === "widjai2026") {
+      window.location.href = "today.html";
+    } else {
+      alert("Onjuiste code");
+    }
+  }
 </script>
+</body>
+</html>
