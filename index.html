@@ -695,9 +695,14 @@ document.querySelectorAll(".accordion-button").forEach(btn=>{
 })
 const kennismakingForm = document.getElementById("kennismaking-form");
 
-if (kennismakingForm) {
-  kennismakingForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
+kennismakingForm.addEventListener("submit", async function (event) {
+
+  if (!kennismakingForm.checkValidity()) {
+    kennismakingForm.reportValidity();
+    return;
+  }
+
+  event.preventDefault();
 
     const formData = new FormData(kennismakingForm);
 
