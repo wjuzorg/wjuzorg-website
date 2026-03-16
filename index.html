@@ -697,12 +697,14 @@ const kennismakingForm = document.getElementById("kennismaking-form");
 
 kennismakingForm.addEventListener("submit", async function (event) {
 
-  if (!kennismakingForm.checkValidity()) {
-    kennismakingForm.reportValidity();
-    return;
-  }
+  if (kennismakingForm) {
+  kennismakingForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-  event.preventDefault();
+    if (!kennismakingForm.checkValidity()) {
+      kennismakingForm.reportValidity();
+      return;
+    }
 
     const formData = new FormData(kennismakingForm);
 
@@ -714,6 +716,17 @@ kennismakingForm.addEventListener("submit", async function (event) {
           "Accept": "application/json"
         }
       });
+
+      if (response.ok) {
+        window.location.href = "bedankt.html";
+      } else {
+        alert("Er ging iets mis met verzenden. Probeert u het later nog eens of neem telefonisch contact op.");
+      }
+    } catch (error) {
+      alert("Er ging iets mis met verzenden. Probeert u het later nog eens of neem telefonisch contact op.");
+    }
+  });
+}
 
       if (response.ok) {
         window.location.href = "bedankt.html";
