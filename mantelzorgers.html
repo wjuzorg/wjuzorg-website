@@ -595,10 +595,10 @@ Wilt u als mantelzorger meer weten over wat WJU Zorg kan betekenen? Laat dan uw 
 <input type="hidden" name="formulier_type" value="mantelzorgers">
 
 <label>Naam</label>
-<input type="text" name="naam">
+<input type="text" name="naam"> required>
 
 <label>Telefoonnummer</label>
-<input type="tel" name="telefoon">
+<input type="tel" name="telefoon"> required>
 
 <label>Email</label>
 <input type="email" name="email">
@@ -662,6 +662,11 @@ const mantelzorgForm = document.getElementById("mantelzorg-form");
 if (mantelzorgForm) {
   mantelzorgForm.addEventListener("submit", async function (event) {
     event.preventDefault();
+
+    if (!mantelzorgForm.checkValidity()) {
+      mantelzorgForm.reportValidity();
+      return;
+    }
 
     const formData = new FormData(mantelzorgForm);
 
