@@ -563,8 +563,11 @@ if (tarievenForm) {
   tarievenForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    if (!tarievenForm.checkValidity()) {
-      tarievenForm.reportValidity();
+    const naam = tarievenForm.querySelector('input[name="naam"]').value.trim();
+    const telefoon = tarievenForm.querySelector('input[name="telefoon"]').value.trim();
+
+    if (!naam || !telefoon) {
+      alert("Vul alstublieft uw naam en telefoonnummer in.");
       return;
     }
 
@@ -574,9 +577,7 @@ if (tarievenForm) {
       const response = await fetch("https://formspree.io/f/xaqpnlrl", {
         method: "POST",
         body: formData,
-        headers: {
-          "Accept": "application/json"
-        }
+        headers: { "Accept": "application/json" }
       });
 
       if (response.ok) {
