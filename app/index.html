@@ -14,13 +14,14 @@
       <div class="brand-title">WJU Zorg</div>
       <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
     </div>
-    <img class="logo" src="./logo.png" alt="WJU Zorg logo">
+    <img class="logo" src="logo.png" alt="WJU Zorg logo" onclick="openAdmin()" style="cursor:pointer;">
   </div>
-  <div class="header-actions" aria-label="Toegankelijkheid">
-    <button class="btn-top" type="button" data-action="read">Voorlezen</button>
-    <button class="btn-top" type="button" data-action="contrast">Hoog contrast</button>
-    <button class="btn-top" type="button" data-action="font-plus">A+</button>
-    <button class="btn-top" type="button" data-action="font-minus">A-</button>
+
+  <div class="header-actions" aria-label="Toegankelijkheid" style="display:flex; flex-wrap:nowrap; gap:6px; padding:8px 8px 10px;">
+    <button id="btnRead" class="btn-top" type="button" style="flex:1; min-width:0; font-size:11px; padding:8px 4px;">Voorlezen</button>
+    <button id="btnContrast" class="btn-top" type="button" style="flex:1; min-width:0; font-size:11px; padding:8px 4px;">Contrast</button>
+    <button id="btnAPlus" class="btn-top" type="button" style="flex:1; min-width:0; font-size:11px; padding:8px 4px;">A+</button>
+    <button id="btnAMinus" class="btn-top" type="button" style="flex:1; min-width:0; font-size:11px; padding:8px 4px;">A-</button>
   </div>
 </div>
 
@@ -81,19 +82,26 @@
       </a>
     </div>
 
-    <div class="trust">
-      <strong>U kunt altijd bellen voor informatie of een kennismaking.</strong><br>
-      Ook wanneer u minder goed ziet of hoort bent u welkom. Een begeleidende hond kan altijd mee.<br>We kijken samen naar een manier van contact en hulp die voor u werkt.
-    </div>
-  </main>
+   <div class="trust">
+  <strong>U kunt altijd bellen voor informatie of een kennismaking.</strong><br>
+  Ook wanneer u minder goed ziet of hoort bent u welkom. Een begeleidende hond kan altijd mee.<br>
+  We kijken samen naar een manier van contact en hulp die voor u werkt.
+</div>
+
+<p style="margin-top:14px; font-style: italic; color:#555;">
+  WJU Zorg biedt geen medische zorg. Wij helpen juist bij de praktische dingen daaromheen,
+  zodat het dagelijks leven wat makkelijker en rustiger wordt.
+</p>
+
+</main>
 
   
 <div class="footerbar">
   <div class="footerbar-inner">
     <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
+    <a class="fbtn" href="tarieven.html">Tarieven</a>
     <a class="fbtn" href="privacy.html">Privacy</a>
     <a class="fbtn" href="contact.html">Contact</a>
-    <a class="fbtn" href="javascript:void(0)" onclick="openAdmin()">Admin</a>
   </div>
 </div>
 <script>
