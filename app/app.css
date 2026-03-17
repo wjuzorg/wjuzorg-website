@@ -39,13 +39,12 @@ a{ color:inherit; }
 }
 
 .logo{
-  width:60px;
-  height:60px;
+  width:42px;
+  height:42px;
   object-fit:contain;
   background: white;
-  padding:6px;
+  padding:4px;
   border-radius:10px;
-  max-width:100%;
 }
 
 .header-actions{
@@ -291,6 +290,7 @@ a{ color:inherit; }
   display:flex;
   flex-direction:column;
   flex-grow:1;
+  min-width:0;
 }
 /* ================================
    WJU Zorg — FORM "SJIEK" (senior)
