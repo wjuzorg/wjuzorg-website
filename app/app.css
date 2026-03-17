@@ -3,745 +3,565 @@
   --white:#ffffff;
   --black:#000000;
   --border:#d9d9d9;
-  --radius:16px;
+  --radius:1rem;
 }
+
 *{ box-sizing:border-box; }
-html,body{ margin:0; padding:0; background:var(--white); color:var(--black); font-family:
-  "Inter",
-  system-ui,
-  -apple-system,
-  "Segoe UI",
-  Arial,
-  sans-serif; }
-  body{
+
+html, body{
+  margin:0;
+  padding:0;
+  background:var(--white);
+  color:var(--black);
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+body{
   font-size:1rem;
   line-height:1.65;
 }
-.container{ max-width: 920px; margin:0 auto; padding: 14px 14px 120px; }
-a{ color:inherit; }
 
-.header{
-  position: relative; top:0; z-index:40;
-  background: var(--red); color: var(--white);
+a{
+  color:inherit;
 }
+
+.container{
+  max-width:57.5rem;
+  margin:0 auto;
+  padding:0.875rem 0.875rem 7.5rem;
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.header,
+.header-wju{
+  position:relative;
+  z-index:40;
+  background:var(--red);
+  color:var(--white);
+  overflow:hidden;
+}
+
 .header-top{
-  display:flex; align-items:center; justify-content:space-between; gap:12px;
-  padding: 16px 16px; /* bigger */
-}
-.brand{ min-width:0; }
-.brand-title{ font-weight:900; font-size:24px; line-height:1.1; } /* bigger */
-.brand-sub{ 
-  font-weight:700; 
-  font-size:14px; 
-  opacity:.95; 
-  margin-top:4px; 
-  white-space:normal;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.75rem;
+  padding:1rem;
 }
 
-.logo{
-  width:42px;
-  height:42px;
+.brand{
+  display:flex;
+  flex-direction:column;
+  flex:1 1 auto;
+  min-width:0;
+}
+
+.brand-title{
+  font-weight:900;
+  font-size:1.5rem;
+  line-height:1.05;
+  letter-spacing:0;
+  margin:0;
+}
+
+.brand-sub{
+  font-weight:700;
+  font-size:0.875rem;
+  line-height:1.3;
+  opacity:.95;
+  margin-top:0.25rem;
+  white-space:normal;
+  overflow:visible;
+  text-overflow:unset;
+  max-width:100%;
+}
+
+.logo,
+.logo-wju{
+  width:3.5rem;
+  height:3.5rem;
+  min-width:3.5rem;
+  max-width:3.5rem;
   object-fit:contain;
-  background: white;
-  padding:4px;
-  border-radius:10px;
+  background:var(--white);
+  padding:0.25rem;
+  border-radius:0.625rem;
+  display:block;
+  flex:0 0 3.5rem;
 }
 
 .header-actions{
   display:flex;
-  gap:10px;
   flex-wrap:wrap;
-  padding:12px 16px 14px;
+  gap:0.5rem;
+  padding:0.625rem 0.75rem 0.75rem;
   border-top:1px solid rgba(255,255,255,.18);
 }
+
 .btn-top{
   appearance:none;
   border:1px solid rgba(255,255,255,.35);
   background:transparent;
   color:var(--white);
-  padding:10px 14px;
+  padding:0.5625rem 0.75rem;
   border-radius:999px;
   font-weight:900;
-  font-size:15px;
+  font-size:0.875rem;
   cursor:pointer;
   white-space:nowrap;
   flex:0 0 auto;
 }
-.btn-top:active{ transform: translateY(1px); }
 
-.page-title{ font-size:1.375rem; font-weight:900; margin: 12px 0 8px; }
-.lead{ font-size:1rem; line-height:1.55; margin: 10px 0; }
-.card{ border:1px solid var(--border); border-radius: var(--radius); padding: 14px; margin: 12px 0; }
-.hint{ font-size:14px; line-height:1.45; opacity:.9; }
-
-.primary{
-  display:block;
-  width:100%;
-  background: var(--red);
-  color: var(--white);
-  border:none;
-  border-radius: var(--radius);
-  padding: 18px 18px;
-  font-size: 22px;
-  font-weight: 900;
-  text-align:center;
-  text-decoration:none;
-}
-.primary:active{ transform: translateY(1px); }
-
-.services{
-  display:grid; gap:12px;
-  grid-template-columns: 1fr;
-}
-@media(min-width:640px){
-  .services{ grid-template-columns: 1fr 1fr; }
-}
-.service{
-  background: var(--red);
-  color: var(--white);
-  border-radius: var(--radius);
-  padding: 14px 14px;
-  text-decoration:none;
-  min-height: 126px;
-  display:flex; flex-direction:column; justify-content:space-between;
-}
-.service-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-.service-title{ font-size:18px; font-weight:900; line-height:1.2; }
-.service-desc{ font-size:14px; font-weight:700; line-height:1.35; opacity:.95; margin-top:8px; }
-
-.icon{
-  width:38px; height:38px;
-  border:1px solid rgba(255,255,255,.35);
-  border-radius:12px;
-  display:flex; align-items:center; justify-content:center;
-  flex:0 0 auto;
-}
-.icon svg{ width:24px; height:24px; stroke: var(--white); fill: none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-
-.trust{
-  margin-top: 14px;
-  font-size: 0.95rem;
-  line-height:1.55;
+.btn-top:active{
+  transform:translateY(1px);
 }
 
-.footerbar{
-  position: fixed; left:0; right:0; bottom:0; z-index:50;
-  background: var(--white);
-  border-top:1px solid var(--border);
-  padding: 10px 14px;
-}
-.footerbar-inner{
-  max-width: 920px; margin:0 auto;
-  display:grid; gap:10px;
-  grid-template-columns: 1fr 1fr;
-}
-@media(min-width:640px){
-  .footerbar-inner{ grid-template-columns: 1fr 1fr 1fr 1fr; }
-}
-.fbtn{
-  display:flex; align-items:center; justify-content:center;
-  border:1px solid var(--black);
-  border-radius: 999px;
-  padding: 12px 10px;
-  text-decoration:none;
-  font-weight:900;
-  font-size:15px;
-  background: var(--white);
-}
-.fbtn:active{ transform: translateY(1px); }
-/* =====================================
-   WJU Zorg – Senior vriendelijk formulier
-===================================== */
-
-/* formulier breedte & rust */
-.form {
-  margin-top: 18px;
+.btn-top:hover{
+  background:rgba(255,255,255,0.1);
 }
 
-/* elk blok duidelijke scheiding */
-.form-group {
-  display: block;
-  margin-bottom: 26px;
-}
-
-/* vragen / labels */
-.form-group label {
-  display: block;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-/* invoervelden */
-.form input,
-.form select,
-.form textarea {
-  width: 100%;
-  padding: 16px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: 1px solid #dcdcdc;
-  box-sizing: border-box;
-  background: #ffffff;
-}
-
-/* betere klikbaarheid ouderen */
-.form select {
-  height: 52px;
-}
-
-/* toelichting vak */
-.form textarea {
-  min-height: 130px;
-}
-
-/* checkbox regel rustiger */
-.checkbox-row {
-  margin-top: 20px;
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-/* verstuur knop */
-.form button {
-  margin-top: 28px;
-  padding: 18px;
-  font-size: 20px;
-  border-radius: 14px;
-}
-
-/* ruimte onder knop */
-.after-submit-space {
-  height: 40px;
-}
 /* ===============================
-   WJU ZORG HEADER VERBETERING
+   PAGINA BASIS
 ================================ */
 
-/* rode balk */
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 24px;
+.page-title{
+  font-size:1.375rem;
+  font-weight:900;
+  margin:0.75rem 0 0.5rem;
 }
 
-/* linkerkant tekstblok */
-.brand {
-    flex: 1;
+.lead{
+  font-size:1rem;
+  line-height:1.55;
+  margin:0.625rem 0;
 }
 
-/* WJU Zorg titel */
-.brand-title {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: 1px;
+.card{
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:0.875rem;
+  margin:0.75rem 0;
+  background:var(--white);
 }
 
-/* ondertitel */
-.brand-sub {
-  font-size: 16px;
-  opacity: 0.95;
-  white-space: normal;
-  line-height: 1.3;
-  margin-top: 4px;
+.hint{
+  font-size:0.875rem;
+  line-height:1.45;
+  opacity:.9;
 }
 
-/* logo rechts */
-.logo {
-    width: 80px;
-    height: auto;
-    object-fit: contain;
-}
-/* =========================
-   HEADER - WIDE WJU Zorg
-========================= */
-
-.header-top{
-  padding: 28px 32px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
+.trust{
+  margin-top:0.875rem;
+  font-size:0.95rem;
+  line-height:1.6;
+  max-width:47.5rem;
 }
 
-.brand-title{
-  font-size:2.75rem !important;
-  font-weight:900 !important;
-  letter-spacing:1.5px !important;
+/* ===============================
+   HOOFDKNOPPEN / SERVICES
+================================ */
+
+.primary,
+.btn-primary{
+  display:block;
+  width:100%;
+  background:var(--red);
+  color:var(--white);
+  border:none;
+  border-radius:var(--radius);
+  padding:1rem 1rem;
+  font-size:1.25rem;
+  font-weight:900;
+  text-align:center;
+  text-decoration:none;
+  cursor:pointer;
 }
 
-.brand-sub{
-  font-size:1.125rem !important;
-  margin-top:6px !important;
+.primary:active,
+.btn-primary:active{
+  transform:scale(0.98);
 }
 
-.logo{
-  width:120px !important;
-  height:auto !important;
-  padding:4px !important;
+.btn-primary:hover{
+  background:#a80000;
 }
 
-.header-actions{
-  padding:12px 32px 20px 32px !important;
+.services{
+  display:grid;
+  gap:0.75rem;
+  grid-template-columns:1fr;
 }
-.header-wju{
-  position: relative;
-  overflow: hidden;
-}
-.brand{
+
+.service{
+  background:var(--red);
+  color:var(--white);
+  border-radius:var(--radius);
+  padding:0.875rem;
+  text-decoration:none;
+  min-height:7.875rem;
   display:flex;
   flex-direction:column;
-  flex-grow:1;
-  min-width:0;
-}
-/* ================================
-   WJU Zorg — FORM "SJIEK" (senior)
-   Plak ONDERAAN assets/app.css
-   ================================ */
-
-/* 1) Alleen formulier: rustig lettertype + groter */
-main.container form,
-main.container .card form {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  font-size: 18px;
-  line-height: 1.55;
+  justify-content:space-between;
 }
 
-/* 2) Titel + intro netjes (minder druk) */
-main.container .card h2 {
-  font-size: 26px;
-  line-height: 1.15;
-  margin: 0 0 10px 0;
-  letter-spacing: 0.2px;
-}
-main.container .card p {
-  margin: 0 0 14px 0;
+.service-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:0.625rem;
 }
 
-/* 3) Ruimte tussen blokken */
-main.container .form-group,
-main.container .form-row,
-main.container .field {
-  margin-bottom: 16px !important;
+.service-title{
+  font-size:1.125rem;
+  font-weight:900;
+  line-height:1.2;
 }
 
-/* 4) Labels duidelijker */
-main.container label {
-  display: block;
-  font-weight: 700;
-  margin: 0 0 8px 0;
+.service-desc{
+  font-size:0.875rem;
+  font-weight:700;
+  line-height:1.35;
+  opacity:.95;
+  margin-top:0.5rem;
 }
 
-/* 5) Velden groter + rustiger */
+.icon{
+  width:2.375rem;
+  height:2.375rem;
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:0.75rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+
+.icon svg{
+  width:1.5rem;
+  height:1.5rem;
+  stroke:var(--white);
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+
+.footerbar{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:50;
+  background:var(--white);
+  border-top:1px solid var(--border);
+  padding:0.625rem 0.875rem;
+}
+
+.footerbar-inner{
+  max-width:57.5rem;
+  margin:0 auto;
+  display:grid;
+  gap:0.625rem;
+  grid-template-columns:1fr 1fr;
+}
+
+.fbtn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--black);
+  border-radius:999px;
+  padding:0.75rem 0.625rem;
+  text-decoration:none;
+  font-weight:900;
+  font-size:0.95rem;
+  background:var(--white);
+  color:#000;
+}
+
+.fbtn:active{
+  transform:translateY(1px);
+}
+
+/* ===============================
+   FORMULIEREN
+================================ */
+
+.form{
+  margin-top:1.125rem;
+}
+
+.form-card{
+  max-width:47.5rem;
+  margin:0 auto;
+}
+
+.form-title{
+  font-size:1.625rem;
+  letter-spacing:0.0125rem;
+}
+
+.form-intro{
+  font-size:1.125rem;
+  line-height:1.6;
+}
+
+.form-group{
+  display:block;
+  margin-bottom:1.125rem;
+}
+
+.form-group label{
+  display:block;
+  font-size:1.125rem;
+  font-weight:800;
+  margin-bottom:0.5rem;
+  line-height:1.4;
+}
+
+.form input,
+.form select,
+.form textarea,
 main.container input[type="text"],
 main.container input[type="tel"],
 main.container input[type="date"],
 main.container input[type="datetime-local"],
 main.container select,
-main.container textarea {
-  width: 100%;
-  font-size: 18px;
-  padding: 14px 14px;
-  border-radius: 12px;
-  box-sizing: border-box;
-}
-
-/* 6) Textarea wat hoger (makkelijk typen/lezen) */
-main.container textarea {
-  min-height: 110px;
-}
-
-/* 7) Checkbox regel: netter uitlijnen */
-main.container .checkbox-row,
-main.container label input[type="checkbox"] {
-  transform: scale(1.15);
-}
-main.container .checkbox-row {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-main.container .checkbox-row input[type="checkbox"] {
-  margin-top: 4px;
-}
-
-/* 8) Verstuurknop: groot en “zorg” */
-main.container button[type="submit"],
-main.container .btn-primary {
-  font-size: 20px;
-  padding: 16px 18px;
-  border-radius: 14px;
-  width: 100%;
-}
-
-/* 9) Extra witruimte onder knop (jouw “2x enter”) */
-.after-submit-space {
-  height: 18px;
-}
-/* Voorwaarden tekst: netjes binnen de kaart */
-main.container .checkbox-row label,
-main.container .terms-text,
-main.container .form-terms {
-  max-width: 100%;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
-
-/* Als jouw checkbox in een label zit zonder class */
-main.container label {
-  max-width: 100%;
-  white-space: normal;
-}
-/* Formulieren: header niet sticky (meer overzicht) */
-body.form-page .header {
-  position: relative !important;
-}
-body.form-page .container {
-  padding-top: 14px !important;
-}
-/* voorwaarden tekst netjes binnen formulier */
-.checkbox-label{
-    display:block;
-    max-width:520px;
-    line-height:1.6;
-    font-size:16px;
-    margin-top:10px;
-}
-/* ===============================
-   VOORWAARDEN – gemeentelijke stijl
-================================ */
-
-.form-terms{
-    margin-top:28px;
-}
-
-.terms-main{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:18px;
-    font-weight:600;
-}
-
-.terms-main input{
-    width:20px;
-    height:20px;
-}
-
-.terms-small{
-    margin-top:8px;
-    margin-left:30px;
-    font-size:14px;
-    color:#555;
-    line-height:1.5;
-    max-width:520px;
-}
-/* ===== VOORWAARDEN BLOK ===== */
-
-.form-terms{
-  margin-top:28px;
-}
-
-.terms-check{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-size:18px;
-  font-weight:600;
-}
-
-.terms-check input{
-  width:22px;
-  height:22px;
-}
-
-.terms-small{
-  margin-top:8px;
-  font-size:15px;
-  color:#555;
-  line-height:1.5;
-  max-width:520px;
-}
-
-.terms-pilot{
-  margin-top:6px;
-  font-size:13px;
-  color:#888;
-}
-/* ===== VOORWAARDEN UITLIJNING FIX ===== */
-
-.form-terms{
-  margin-top:28px;
+main.container textarea{
   width:100%;
-  max-width:720px;
-  margin-left:auto;
-  margin-right:auto;
+  padding:0.875rem;
+  font-size:1.125rem;
+  border-radius:0.75rem;
+  border:1px solid #d0d0d0;
+  box-sizing:border-box;
+  background:#fff;
 }
 
-.terms-check{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  font-size:18px;
-  font-weight:600;
+.form select{
+  min-height:3.25rem;
 }
 
-.terms-check input{
-  width:22px;
-  height:22px;
-  margin-top:4px;
+.form textarea,
+main.container textarea{
+  min-height:7rem;
 }
 
-.terms-small{
-  margin-top:8px;
-  font-size:15px;
-  color:#555;
-  line-height:1.5;
+.form button{
+  margin-top:1.75rem;
+  padding:1rem;
+  font-size:1.25rem;
+  border-radius:0.875rem;
 }
 
-.terms-pilot{
-  margin-top:6px;
-  font-size:13px;
-  color:#888;
-}
-/* ===== VOORWAARDEN netjes in het midden (jouw structuur) ===== */
-
-/* het blok met checkbox + titel */
-main.container form .checkbox-row{
-  max-width: 720px !important;
-  margin: 26px auto 0 !important;
-  padding: 0 14px !important;
+.after-submit-space{
+  height:1.125rem;
 }
 
-/* label netjes, groter en rustiger */
-main.container form .checkbox-row label{
-  display: flex !important;
-  align-items: flex-start !important;
-  gap: 12px !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-}
-
-/* checkbox zelf */
-main.container form .checkbox-row input[type="checkbox"]{
-  width: 22px !important;
-  height: 22px !important;
-  margin-top: 3px !important;
-}
-
-/* de tekstregel eronder (“Kunt u niet komen…”) */
-main.container form .checkbox-row + p,
-main.container form .checkbox-row + .hint,
-main.container form .checkbox-row + .trust{
-  max-width: 720px !important;
-  margin: 8px auto 0 !important;
-  padding: 0 14px !important;
-  font-size: 15px !important;
-  color: #555 !important;
-  line-height: 1.5 !important;
-}
-
-/* versturen-knop ook exact uitlijnen met het formulier */
-main.container form .btn-primary{
-  max-width: 720px !important;
-  margin: 18px auto 0 !important;
-  display: block !important;
-}
-/* ===== voorwaarden formulier netjes ===== */
-
-.form-terms{
-  max-width:720px;
-  margin:28px auto 10px;
-  padding:0 16px;
-}
-
-.terms-check{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  font-size:18px;
-  font-weight:800;
-}
-
-.terms-check input{
-  width:22px;
-  height:22px;
-  margin-top:4px;
-}
-
-.terms-text{
-  margin-top:10px;
-  font-size:15px;
-  color:#555;
-  line-height:1.5;
-}
-/* === FORMULIER: senior-sjiek spacing === */
-.form-card{
-  max-width: 760px;
-  margin: 0 auto;
-}
-
-.form-title{
-  font-size: 26px;
-  letter-spacing: 0.2px;
-}
-
-.form-intro{
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-.form-group{
-  margin-bottom: 18px;
-}
-
-.form-group label{
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea{
-  font-size: 18px;
-  padding: 14px 14px;
-}
-
-.checkbox-row{
-  margin-top: 18px;
-}
-
-.terms-main{
-  font-size: 18px;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.terms-small{
-  font-size: 16px;
-  line-height: 1.6;
-  max-width: 60ch;
-  margin: 8px 0 0 34px;
-  opacity: .9;
-}
-/* ===============================
-   FASE 2.5 – WJU ZORG LOOK
-================================ */
-
-/* Formulier als rustige kaart */
 main.container form{
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 18px 18px 22px;
-  border: 1px solid #e6e6e6;
-  border-radius: 16px;
-  background: #fff;
+  max-width:47.5rem;
+  margin:0 auto;
+  padding:1.125rem 1.125rem 1.375rem;
+  border:1px solid #e6e6e6;
+  border-radius:1rem;
+  background:#fff;
 }
 
-/* Titel + intro meer zorg-gevoel */
-main.container form h2{
-  font-size: 28px;
-  margin: 0 0 10px 0;
+main.container form h2,
+main.container .card h2{
+  font-size:1.75rem;
+  line-height:1.15;
+  margin:0 0 0.625rem;
+  letter-spacing:0.0125rem;
 }
+
+main.container .card p{
+  margin:0 0 0.875rem;
+}
+
 main.container form .form-intro,
 main.container form p{
-  max-width: 68ch;
+  max-width:68ch;
 }
 
-/* Velden: net iets duidelijker */
-main.container form input[type="text"],
-main.container form input[type="tel"],
-main.container form input[type="date"],
-main.container form select,
-main.container form textarea{
-  border: 1px solid #d0d0d0;
-  border-radius: 12px;
+main.container .form-group,
+main.container .form-row,
+main.container .field{
+  margin-bottom:1rem;
 }
 
-/* Focus: als je klikt wordt het rustig duidelijk */
+main.container label{
+  display:block;
+  font-weight:700;
+  margin:0 0 0.5rem;
+  max-width:100%;
+  white-space:normal;
+}
+
 main.container form input:focus,
 main.container form select:focus,
 main.container form textarea:focus{
-  outline: none;
-  border-color: #999;
-  box-shadow: 0 0 0 4px rgba(0,0,0,0.06);
+  outline:none;
+  border-color:#999;
+  box-shadow:0 0 0 4px rgba(0,0,0,0.06);
 }
 
-/* Versturen knop: groot, strak */
 main.container form button[type="submit"],
 main.container form .btn-primary{
-  width: 100%;
-  max-width: 760px;
-  margin: 18px auto 0;
-  display: block;
-  font-size: 20px;
-  font-weight: 800;
-  padding: 16px 18px;
-  border-radius: 16px;
+  width:100%;
+  max-width:47.5rem;
+  margin:1.125rem auto 0;
+  display:block;
+  font-size:1.25rem;
+  font-weight:800;
+  padding:1rem 1.125rem;
+  border-radius:1rem;
 }
 
-/* Extra ruimte onder de knop + slottekst rustiger */
-main.container form .after-submit-space{
-  height: 18px;
-}
 main.container .trust{
-  max-width: 760px;
-  margin: 16px auto 0;
-  padding: 0 6px;
-  line-height: 1.6;
-}
-/* ===== WJU Zorg Versturen knop ===== */
-
-.btn-primary {
-  width: 100%;
-  background-color: #c40000;
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-  padding: 18px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-  margin-bottom: 25px;
-  transition: 0.2s ease;
+  max-width:47.5rem;
+  margin:1rem auto 0;
+  padding:0 0.375rem;
+  line-height:1.6;
 }
 
-.btn-primary:hover {
-  background-color: #a80000;
-}
-
-.btn-primary:active {
-  transform: scale(0.98);
-}
 /* ===============================
-   WJU ZORG HIGH CONTRAST MODE
+   CHECKBOX / VOORWAARDEN
 ================================ */
 
-.high-contrast {
-  background: #000 !important;
-  color: #fff !important;
+.checkbox-row{
+  margin-top:1.125rem;
+  font-size:1rem;
+  line-height:1.6;
+  display:flex;
+  gap:0.75rem;
+  align-items:flex-start;
 }
 
-.high-contrast body {
-  background: #000 !important;
-  color: #fff !important;
+.checkbox-row input[type="checkbox"]{
+  margin-top:0.25rem;
+  transform:scale(1.15);
+}
+
+.checkbox-label{
+  display:block;
+  max-width:32.5rem;
+  line-height:1.6;
+  font-size:1rem;
+  margin-top:0.625rem;
+}
+
+.form-terms{
+  margin-top:1.75rem;
+  width:100%;
+  max-width:45rem;
+  margin-left:auto;
+  margin-right:auto;
+  padding:0 1rem;
+}
+
+.terms-main,
+.terms-check{
+  display:flex;
+  align-items:flex-start;
+  gap:0.75rem;
+  font-size:1.125rem;
+  font-weight:700;
+}
+
+.terms-main input,
+.terms-check input{
+  width:1.375rem;
+  height:1.375rem;
+  margin-top:0.25rem;
+}
+
+.terms-small,
+.terms-text{
+  margin-top:0.5rem;
+  font-size:0.95rem;
+  color:#555;
+  line-height:1.5;
+  max-width:32.5rem;
+}
+
+.terms-pilot{
+  margin-top:0.375rem;
+  font-size:0.8125rem;
+  color:#888;
+}
+
+main.container form .checkbox-row{
+  max-width:45rem;
+  margin:1.625rem auto 0 !important;
+  padding:0 0.875rem !important;
+}
+
+main.container form .checkbox-row label{
+  display:flex !important;
+  align-items:flex-start !important;
+  gap:0.75rem !important;
+  font-size:1.125rem !important;
+  font-weight:700 !important;
+}
+
+main.container form .checkbox-row input[type="checkbox"]{
+  width:1.375rem !important;
+  height:1.375rem !important;
+  margin-top:0.1875rem !important;
+}
+
+main.container form .checkbox-row + p,
+main.container form .checkbox-row + .hint,
+main.container form .checkbox-row + .trust{
+  max-width:45rem !important;
+  margin:0.5rem auto 0 !important;
+  padding:0 0.875rem !important;
+  font-size:0.95rem !important;
+  color:#555 !important;
+  line-height:1.5 !important;
+}
+
+main.container form .btn-primary{
+  max-width:45rem !important;
+  margin:1.125rem auto 0 !important;
+  display:block !important;
+}
+
+/* ===============================
+   HIGH CONTRAST
+================================ */
+
+.high-contrast{
+  background:#000 !important;
+  color:#fff !important;
+}
+
+.high-contrast body{
+  background:#000 !important;
+  color:#fff !important;
 }
 
 .high-contrast .card,
 .high-contrast .service,
 .high-contrast input,
 .high-contrast select,
-.high-contrast textarea {
-  background: #000 !important;
-  color: #fff !important;
-  border-color: #fff !important;
+.high-contrast textarea{
+  background:#000 !important;
+  color:#fff !important;
+  border-color:#fff !important;
 }
 
 .high-contrast a,
@@ -750,311 +570,112 @@ main.container .trust{
 .high-contrast h3,
 .high-contrast p,
 .high-contrast span,
-.high-contrast label {
-  color: #fff !important;
+.high-contrast label,
+.high-contrast strong,
+.high-contrast div{
+  color:#fff !important;
 }
+
+.high-contrast .footerbar{
+  background:#000 !important;
+  border-top:1px solid #fff !important;
+}
+
+.high-contrast .footerbar .fbtn{
+  color:#fff !important;
+  background:#000 !important;
+  border:1px solid #fff !important;
+}
+
 /* ===============================
-   FOOTER KNOPPEN FIX
+   FORM PAGE SPECIFIEK
 ================================ */
 
-/* Normale weergave */
-.footerbar .fbtn {
-  color: #000 !important;
-  background: #fff !important;
-  border: 1px solid #000 !important;
+body.form-page .header{
+  position:relative !important;
 }
 
-/* In hoog contrast */
-.high-contrast .footerbar {
-  background: #000 !important;
-  border-top: 1px solid #fff !important;
+body.form-page .container{
+  padding-top:0.875rem !important;
 }
 
-.high-contrast .footerbar .fbtn {
-  color: #fff !important;
-  background: #000 !important;
-  border: 1px solid #fff !important;
+/* ===============================
+   RESPONSIVE
+================================ */
+
+@media (min-width: 40rem){
+  .services{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .footerbar-inner{
+    grid-template-columns:1fr 1fr 1fr 1fr;
+  }
+
+  .header-top{
+    padding:1.25rem;
+  }
+
+  .brand-title{
+    font-size:2rem;
+  }
+
+  .brand-sub{
+    font-size:1rem;
+  }
+
+  .logo,
+  .logo-wju{
+    width:4.5rem;
+    height:4.5rem;
+    min-width:4.5rem;
+    max-width:4.5rem;
+    flex:0 0 4.5rem;
+  }
 }
-/* ===== MOBIELE HEADER FIX WJU ZORG ===== */
-@media (max-width: 600px){
+
+@media (max-width: 37.5rem){
   .header-actions{
     display:flex !important;
     flex-wrap:nowrap !important;
-    gap:6px !important;
-    padding:10px 10px 12px !important;
+    gap:0.375rem !important;
+    padding:0.5rem 0.5rem 0.625rem !important;
     justify-content:space-between !important;
   }
 
   .btn-top{
     flex:1 1 0 !important;
     min-width:0 !important;
-    font-size:12px !important;
-    padding:8px 6px !important;
-    text-align:center !important;
-  }
-}
-
-  .brand {
-    display: flex !important;
-    flex-direction: column !important;
-    flex-grow: 1 !important;
-    min-width: 0 !important;
-  }
-
-  .brand-title {
-    font-size: 24px !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0 !important;
-  }
-
-  .brand-sub {
-    font-size: 14px !important;
-    line-height: 1.3 !important;
-    margin-top: 4px !important;
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: unset !important;
-  }
-
-  .logo {
-    width: 56px !important;
-    height: 56px !important;
-    max-width: 56px !important;
-    object-fit: contain !important;
-    background: white !important;
-    padding: 4px !important;
-    border-radius: 10px !important;
-    flex: 0 0 56px !important;
-  }
-
-  .header-actions {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-    padding: 10px 12px 12px !important;
-  }
-
-  .btn-top {
-    font-size: 14px !important;
-    padding: 9px 12px !important;
-    flex: 0 0 auto !important;
-  }
-}
-/* ===== DEFINITIEVE HEADER FIX ALLE PAGINA'S ===== */
-.header {
-  background: var(--red) !important;
-  color: var(--white) !important;
-}
-
-.header-top {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-  padding: 16px !important;
-}
-
-.brand {
-  display: flex !important;
-  flex-direction: column !important;
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-}
-
-.brand-title {
-  font-size: 24px !important;
-  font-weight: 900 !important;
-  line-height: 1.05 !important;
-  letter-spacing: 0 !important;
-  margin: 0 !important;
-}
-
-.brand-sub {
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  line-height: 1.25 !important;
-  margin-top: 4px !important;
-  white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: unset !important;
-  max-width: 100% !important;
-}
-
-.logo {
-  width: 64px !important;
-  height: 64px !important;
-  min-width: 64px !important;
-  max-width: 64px !important;
-  object-fit: contain !important;
-  background: #fff !important;
-  padding: 4px !important;
-  border-radius: 10px !important;
-  display: block !important;
-  flex: 0 0 64px !important;
-}
-
-.header-actions {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-  padding: 10px 12px 12px !important;
-  border-top: 1px solid rgba(255,255,255,.18) !important;
-}
-
-.btn-top {
-  appearance: none !important;
-  border: 1px solid rgba(255,255,255,.35) !important;
-  background: transparent !important;
-  color: #fff !important;
-  padding: 9px 12px !important;
-  border-radius: 999px !important;
-  font-weight: 900 !important;
-  font-size: 14px !important;
-  white-space: nowrap !important;
-  flex: 0 0 auto !important;
-}
-
-@media (min-width: 601px) {
-  .header-top {
-    padding: 20px 20px !important;
-  }
-
-  .brand-title {
-    font-size: 32px !important;
-  }
-
-  .brand-sub {
-    font-size: 16px !important;
-  }
-
-  .logo {
-    width: 80px !important;
-    height: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    flex: 0 0 80px !important;
-  }
-}
-/* ===== COMPATIBILITEIT OUDE + NIEUWE HEADER ===== */
-.header,
-.header-wju{
-  background: var(--red) !important;
-  color: var(--white) !important;
-  position: relative !important;
-  overflow: hidden !important;
-}
-
-.header-top{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
-  gap:12px !important;
-  padding:16px !important;
-}
-
-.brand{
-  display:flex !important;
-  flex-direction:column !important;
-  flex:1 1 auto !important;
-  min-width:0 !important;
-}
-
-.brand-title{
-  font-size:24px !important;
-  font-weight:900 !important;
-  line-height:1.05 !important;
-  letter-spacing:0 !important;
-  margin:0 !important;
-}
-
-.brand-sub{
-  font-size:14px !important;
-  font-weight:700 !important;
-  line-height:1.25 !important;
-  margin-top:4px !important;
-  white-space:normal !important;
-  overflow:visible !important;
-  text-overflow:unset !important;
-  max-width:100% !important;
-}
-
-.logo,
-.logo-wju{
-  width:56px !important;
-  height:56px !important;
-  min-width:56px !important;
-  max-width:56px !important;
-  object-fit:contain !important;
-  background:#fff !important;
-  padding:4px !important;
-  border-radius:10px !important;
-  display:block !important;
-  flex:0 0 56px !important;
-  position:static !important;
-}
-
-.header-actions{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:8px !important;
-  padding:10px 12px 12px !important;
-  border-top:1px solid rgba(255,255,255,.18) !important;
-}
-
-.btn-top{
-  appearance:none !important;
-  border:1px solid rgba(255,255,255,.35) !important;
-  background:transparent !important;
-  color:#fff !important;
-  padding:9px 12px !important;
-  border-radius:999px !important;
-  font-weight:900 !important;
-  font-size:14px !important;
-  white-space:nowrap !important;
-  flex:0 0 auto !important;
-}
-
-@media (min-width: 601px){
-  .header-top{
-    padding:20px !important;
-  }
-
-  .brand-title{
-    font-size:32px !important;
-  }
-
-  .brand-sub{
-    font-size:16px !important;
-  }
-
-  .logo,
-  .logo-wju{
-    width:72px !important;
-    height:72px !important;
-    min-width:72px !important;
-    max-width:72px !important;
-    flex:0 0 72px !important;
-  }
-}
-/* ===== FORCE 1 REGEL ACCESSIBILITY ===== */
-@media (max-width: 600px){
-
-  .header-actions{
-    display:flex !important;
-    flex-wrap:nowrap !important;
-    gap:6px !important;
-    padding:8px 8px 10px !important;
-  }
-
-  .btn-top{
-    flex:1 !important;
-    min-width:0 !important;
-    font-size:11px !important;
-    padding:8px 4px !important;
+    font-size:0.6875rem !important;
+    padding:0.5rem 0.25rem !important;
     text-align:center !important;
     white-space:nowrap !important;
     overflow:hidden !important;
     text-overflow:ellipsis !important;
   }
 
+  .header-top{
+    padding:1rem !important;
+    gap:0.75rem !important;
+  }
+
+  .brand-title{
+    font-size:1.5rem !important;
+    line-height:1.1 !important;
+  }
+
+  .brand-sub{
+    font-size:0.875rem !important;
+    line-height:1.3 !important;
+    margin-top:0.25rem !important;
+  }
+
+  .logo,
+  .logo-wju{
+    width:3.5rem !important;
+    height:3.5rem !important;
+    min-width:3.5rem !important;
+    max-width:3.5rem !important;
+    flex:0 0 3.5rem !important;
+  }
 }
