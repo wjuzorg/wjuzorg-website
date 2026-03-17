@@ -1033,3 +1033,25 @@ main.container .trust{
     flex:0 0 72px !important;
   }
 }
+/* ===== FORCE 1 REGEL ACCESSIBILITY ===== */
+@media (max-width: 600px){
+
+  .header-actions{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:6px !important;
+    padding:8px 8px 10px !important;
+  }
+
+  .btn-top{
+    flex:1 !important;
+    min-width:0 !important;
+    font-size:11px !important;
+    padding:8px 4px !important;
+    text-align:center !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+}
