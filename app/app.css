@@ -773,14 +773,23 @@ main.container .trust{
   border: 1px solid #fff !important;
 }
 /* ===== MOBIELE HEADER FIX WJU ZORG ===== */
-@media (max-width: 600px) {
-  .header-top {
-    padding: 16px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 12px !important;
+@media (max-width: 600px){
+  .header-actions{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:6px !important;
+    padding:10px 10px 12px !important;
+    justify-content:space-between !important;
   }
+
+  .btn-top{
+    flex:1 1 0 !important;
+    min-width:0 !important;
+    font-size:12px !important;
+    padding:8px 6px !important;
+    text-align:center !important;
+  }
+}
 
   .brand {
     display: flex !important;
