@@ -923,3 +923,104 @@ main.container .trust{
     flex: 0 0 80px !important;
   }
 }
+/* ===== COMPATIBILITEIT OUDE + NIEUWE HEADER ===== */
+.header,
+.header-wju{
+  background: var(--red) !important;
+  color: var(--white) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.header-top{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:16px !important;
+}
+
+.brand{
+  display:flex !important;
+  flex-direction:column !important;
+  flex:1 1 auto !important;
+  min-width:0 !important;
+}
+
+.brand-title{
+  font-size:24px !important;
+  font-weight:900 !important;
+  line-height:1.05 !important;
+  letter-spacing:0 !important;
+  margin:0 !important;
+}
+
+.brand-sub{
+  font-size:14px !important;
+  font-weight:700 !important;
+  line-height:1.25 !important;
+  margin-top:4px !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:unset !important;
+  max-width:100% !important;
+}
+
+.logo,
+.logo-wju{
+  width:56px !important;
+  height:56px !important;
+  min-width:56px !important;
+  max-width:56px !important;
+  object-fit:contain !important;
+  background:#fff !important;
+  padding:4px !important;
+  border-radius:10px !important;
+  display:block !important;
+  flex:0 0 56px !important;
+  position:static !important;
+}
+
+.header-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+  padding:10px 12px 12px !important;
+  border-top:1px solid rgba(255,255,255,.18) !important;
+}
+
+.btn-top{
+  appearance:none !important;
+  border:1px solid rgba(255,255,255,.35) !important;
+  background:transparent !important;
+  color:#fff !important;
+  padding:9px 12px !important;
+  border-radius:999px !important;
+  font-weight:900 !important;
+  font-size:14px !important;
+  white-space:nowrap !important;
+  flex:0 0 auto !important;
+}
+
+@media (min-width: 601px){
+  .header-top{
+    padding:20px !important;
+  }
+
+  .brand-title{
+    font-size:32px !important;
+  }
+
+  .brand-sub{
+    font-size:16px !important;
+  }
+
+  .logo,
+  .logo-wju{
+    width:72px !important;
+    height:72px !important;
+    min-width:72px !important;
+    max-width:72px !important;
+    flex:0 0 72px !important;
+  }
+}
