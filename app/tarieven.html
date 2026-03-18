@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WJU Zorg - Tarieven</title>
+  <link rel="stylesheet" href="app.css?v=1300">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-title">WJU Zorg</div>
+      <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
+    </div>
+
+    <img src="logo.png" alt="WJU Logo" class="logo" onclick="openAdmin()" style="cursor:pointer;">
+  </div>
+
+  <div class="header-actions">
+    <button id="btnRead" class="btn-top">Voorlezen</button>
+    <button id="btnContrast" class="btn-top">Hoog contrast</button>
+    <button id="btnAPlus" class="btn-top">A+</button>
+    <button id="btnAMinus" class="btn-top">A-</button>
+  </div>
+
+</div>
+
+<!-- CONTENT -->
+<main class="container">
+
+  <div class="page-title">Tarieven</div>
+
+  <div class="trust" style="margin-top:0; margin-bottom:12px;">
+    <a href="index.html"><strong>Terug naar Home</strong></a>
+  </div>
+
+  <div class="card">
+
+    <p class="lead">
+      Bij WJU Zorg houden we het graag duidelijk en eerlijk.
+      U betaalt een vast tarief voor praktische ondersteuning aan huis.
+      Geen ingewikkelde constructies, maar gewoon hulp die bij u past.
+    </p>
+
+    <p class="lead">
+      <strong>Particulier instaptarief</strong><br>
+      €30 per uur
+    </p>
+
+    <p>
+      Dit tarief geldt voor particuliere ondersteuning aan huis.
+      De minimale afname is 1 uur.
+      Tijdens een eerste telefoongesprek of kennismaking bespreken we rustig wat nodig is en wat het beste bij uw situatie past.
+    </p>
+
+    <p>
+      <strong>Ondersteuning via PGB</strong><br>
+      In sommige situaties is ondersteuning via een persoonsgebonden budget (PGB) mogelijk.
+      Dan kan het tarief en de manier van financieren anders zijn dan bij particuliere ondersteuning.
+    </p>
+
+    <p>
+      Een PGB is een budget waarmee u zelf ondersteuning kunt inkopen.
+      U vraagt dit zelf aan via de gemeente of het buurtteam, door een hulpvraag in te dienen.
+      Daarna volgt een gesprek en stelt u een persoonlijk plan op.
+    </p>
+
+    <p>
+      Hierin legt u uit waarom u kiest voor een PGB in plaats van zorg in natura.
+      We denken hier uiteraard graag rustig met u over mee.
+    </p>
+
+    <p style="margin-top:15px; font-style: italic; color:#555;">
+      WJU Zorg biedt geen medische zorg. Wij helpen juist bij de praktische dingen daaromheen,
+      zoals meegaan naar een afspraak, boodschappen doen of ondersteuning in het dagelijks leven.
+    </p>
+
+    <p class="lead" style="margin-top:16px;">
+      Twijfelt u of heeft u vragen? U kunt altijd vrijblijvend contact opnemen.
+      We denken graag rustig met u mee.
+    </p>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<div class="footerbar">
+  <div class="footerbar-inner">
+    <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
+    <a class="fbtn" href="tarieven.html">Tarieven</a>
+    <a class="fbtn" href="privacy.html">Privacy</a>
+    <a class="fbtn" href="contact.html">Contact</a>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="app.js?v=1300"></script>
+
+<script>
+function openAdmin() {
+  const code = prompt("Voer admin code in");
+  if (!code) return;
+
+  if (code === "widjai2026") {
+    window.location.href = "today.html";
+  } else {
+    alert("Onjuiste code");
+  }
+}
+</script>
+
+</body>
+</html>
