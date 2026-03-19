@@ -235,6 +235,11 @@
               <input type="checkbox" id="observedDecline">
               <span>Zichtbare achteruitgang</span>
             </label>
+
+            <label class="checkbox-item">
+              <input type="checkbox" id="noSignalNeeded">
+              <span>N.v.t. / geen bijzonderheden</span>
+            </label>
           </div>
 
           <textarea
@@ -352,7 +357,6 @@
     function calculateInvoiceAmount() {
       const minutes = Number(document.getElementById("minutesSelect").value || 0);
       const rate = Number(document.getElementById("invoiceRate").value || 0);
-
       const hours = minutes / 60;
       const amount = hours * rate;
 
@@ -388,7 +392,7 @@
 
       document.getElementById("clientName").textContent = data.full_name || "Naam onbekend";
       document.getElementById("clientAddress").textContent = data.address || "Geen adres bekend";
-      document.getElementById("serviceType").textContent = data.service_type || "Niet gespecificeerd";
+      document.getElementById("serviceType").textContent = data.service || "Niet gespecificeerd";
       document.getElementById("fundingTypeDisplay").textContent = mapFundingLabel(data.funding_type);
       document.getElementById("hourlyRateDisplay").textContent = data.hourly_rate ? euro(data.hourly_rate) + " per uur" : "Niet ingevuld";
 
@@ -410,25 +414,25 @@
         document.getElementById("specialNotes").textContent = data.special_notes;
       }
 
-      // signalering invullen
       document.getElementById("riskDropout").checked = !!data.risk_dropout;
       document.getElementById("needsExtraSupport").checked = !!data.needs_extra_support;
       document.getElementById("hardToReach").checked = !!data.hard_to_reach;
       document.getElementById("observedDecline").checked = !!data.observed_decline;
+      document.getElementById("noSignalNeeded").checked = !!data.no_signal_needed;
       document.getElementById("internalSignalNotes").value = data.internal_signal_notes || "";
 
-      // rapportage invullen indien al eerder gedaan
       if (data.duration_minutes) {
         document.getElementById("minutesSelect").value = String(data.duration_minutes);
       }
+
       if (data.work_done) {
         document.getElementById("workDone").value = data.work_done;
       }
 
-      // facturatie defaults vullen vanuit bekende cliëntinfo
       if (data.funding_type) {
         document.getElementById("invoiceFundingType").value = data.funding_type;
       }
+
       if (data.hourly_rate) {
         document.getElementById("invoiceRate").value = String(data.hourly_rate);
       }
@@ -445,6 +449,7 @@
         needs_extra_support: document.getElementById("needsExtraSupport").checked,
         hard_to_reach: document.getElementById("hardToReach").checked,
         observed_decline: document.getElementById("observedDecline").checked,
+        no_signal_needed: document.getElementById("noSignalNeeded").checked,
         internal_signal_notes: document.getElementById("internalSignalNotes").value.trim()
       };
 
@@ -460,7 +465,9 @@
 
       const msg = document.getElementById("signaleringSaved");
       msg.style.display = "block";
-      setTimeout(() => msg.style.display = "none", 2500);
+      setTimeout(() => {
+        msg.style.display = "none";
+      }, 2500);
     }
 
     async function updateAppointment(status, minutes, workDescription = "", reason = "") {
@@ -478,10 +485,10 @@
         .eq("id", appointmentId);
 
       if (error) {
-  alert("Fout: " + error.message);
-} else {
-  alert("Afspraak opgeslagen. Controleer nu de facturatie.");
-}
+        alert("Fout: " + error.message);
+      } else {
+        alert("Afspraak opgeslagen. Controleer nu de facturatie.");
+      }
     }
 
     async function saveInvoiceItem() {
@@ -540,11 +547,11 @@
       }
 
       const msg = document.getElementById("invoiceSaved");
-msg.style.display = "block";
+      msg.style.display = "block";
 
-setTimeout(() => {
-  window.location.href = "today.html";
-}, 1200);
+      setTimeout(() => {
+        window.location.href = "today.html";
+      }, 1200);
     }
 
     async function repeatAppointment() {
@@ -556,10 +563,12 @@ setTimeout(() => {
       nextWeek.setDate(nextWeek.getDate() + 7);
 
       const payload = {
+        org_id: currentAppointment.org_id,
+        type: currentAppointment.type || "herhaalafspraak",
         full_name: currentAppointment.full_name || "",
         address: currentAppointment.address || "",
         phone: currentAppointment.phone || "",
-        service_type: currentAppointment.service_type || "",
+        service: currentAppointment.service || "",
         destination: currentAppointment.destination || "",
         special_notes: currentAppointment.special_notes || "",
         funding_type: currentAppointment.funding_type || null,
@@ -611,6 +620,32 @@ setTimeout(() => {
     });
 
     document.getElementById("btnRepeatAppointment").addEventListener("click", repeatAppointment);
+
+    const signalIds = [
+      "riskDropout",
+      "needsExtraSupport",
+      "hardToReach",
+      "observedDecline"
+    ];
+
+    const noSignalCheckbox = document.getElementById("noSignalNeeded");
+
+    noSignalCheckbox.addEventListener("change", () => {
+      if (noSignalCheckbox.checked) {
+        signalIds.forEach(id => {
+          document.getElementById(id).checked = false;
+        });
+        document.getElementById("internalSignalNotes").value = "";
+      }
+    });
+
+    signalIds.forEach(id => {
+      document.getElementById(id).addEventListener("change", () => {
+        if (document.getElementById(id).checked) {
+          noSignalCheckbox.checked = false;
+        }
+      });
+    });
 
     loadAppointment();
   </script>
