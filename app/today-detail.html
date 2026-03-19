@@ -509,7 +509,7 @@
         client_name: currentAppointment?.full_name || "",
         client_address: currentAppointment?.address || "",
         service_date: new Date().toISOString().slice(0, 10),
-        service_type: currentAppointment?.service_type || "",
+        service_type: currentAppointment?.service || "",
         duration_minutes: minutes,
         rate_snapshot: rate,
         amount_snapshot: amount,
@@ -540,8 +540,11 @@
       }
 
       const msg = document.getElementById("invoiceSaved");
-      msg.style.display = "block";
-      setTimeout(() => msg.style.display = "none", 2500);
+msg.style.display = "block";
+
+setTimeout(() => {
+  window.location.href = "today.html";
+}, 1200);
     }
 
     async function repeatAppointment() {
