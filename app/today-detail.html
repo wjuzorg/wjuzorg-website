@@ -478,11 +478,10 @@
         .eq("id", appointmentId);
 
       if (error) {
-        alert("Fout: " + error.message);
-      } else {
-        alert("Afspraak opgeslagen.");
-        window.location.href = "today.html";
-      }
+  alert("Fout: " + error.message);
+} else {
+  alert("Afspraak opgeslagen. Controleer nu de facturatie.");
+}
     }
 
     async function saveInvoiceItem() {
