@@ -82,36 +82,37 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <script>
-const supabase = window.supabase.createClient(
-  "https://ligdgbdhreatsuejcinq.supabase.co",
-  "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j"
-);
+const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
+
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function loadRequests() {
   const list = document.getElementById("list");
   list.innerHTML = "<p>Laden...</p>";
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("requests")
     .select("*")
-    .eq("org_id", "4121dd3f-9d21-42b6-ab38-dccf791bfaaf")
-    .not("status", "in", '("gesloten")')
+    .eq("org_id", MIJN_ORG_ID)
+    .eq("status", "nieuw")
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error);
+    console.error("Laadfout:", error);
     list.innerHTML = "<p style='color:red;'>Fout bij laden: " + error.message + "</p>";
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    list.innerHTML = "<p>Geen nieuwe aanvragen gevonden.</p>";
     return;
   }
 
   list.innerHTML = "";
 
-  if (!data || data.length === 0) {
-    list.innerHTML = "<p>Geen nieuwe aanvragen</p>";
-    return;
-  }
-
-  data.forEach(r => {
+  data.forEach((r) => {
     const div = document.createElement("div");
     div.className = "card";
 
@@ -135,13 +136,15 @@ async function loadRequests() {
 }
 
 async function updateStatus(id, status) {
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from("requests")
     .update({ status: status })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID);
 
   if (error) {
     alert("Fout bij updaten: " + error.message);
+    console.error("Updatefout:", error);
     return;
   }
 
