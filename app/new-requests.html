@@ -126,7 +126,7 @@ async function loadRequests() {
 
       <div class="buttons">
         <button class="btn btn-call" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
-        <button class="btn btn-plan" onclick="updateStatus('${r.id}','ingepland')">Inplannen</button>
+        <button class="btn btn-plan" onclick="planRequest('${r.id}')">Inplannen</button>
         <button class="btn btn-close" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
       </div>
     `;
@@ -135,23 +135,33 @@ async function loadRequests() {
   });
 }
 
-async function updateStatus(id, status) {
+<script>
+async function planRequest(id) {
+  const datum = prompt("Welke datum? (bijv. 2026-03-20)");
+  if (!datum) return;
+
+  const tijd = prompt("Welke tijd? (bijv. 14:30)");
+  if (!tijd) return;
+
+  const afspraakTijd = `${datum}T${tijd}:00`;
+
   const { error } = await supabaseClient
     .from("requests")
-    .update({ status: status })
+    .update({
+      status: "ingepland",
+      appointment_time: afspraakTijd
+    })
     .eq("id", id)
     .eq("org_id", MIJN_ORG_ID);
 
   if (error) {
-    alert("Fout bij updaten: " + error.message);
-    console.error("Updatefout:", error);
+    alert("Fout bij inplannen: " + error.message);
+    console.error("Planfout:", error);
     return;
   }
 
   loadRequests();
 }
-
-loadRequests();
 </script>
 
 </body>
