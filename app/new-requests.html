@@ -81,6 +81,8 @@
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
 <script>
 const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
@@ -135,7 +137,22 @@ async function loadRequests() {
   });
 }
 
-<script>
+async function updateStatus(id, status) {
+  const { error } = await supabaseClient
+    .from("requests")
+    .update({ status: status })
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID);
+
+  if (error) {
+    alert("Fout bij updaten: " + error.message);
+    console.error("Updatefout:", error);
+    return;
+  }
+
+  loadRequests();
+}
+
 async function planRequest(id) {
   const datum = prompt("Welke datum? (bijv. 2026-03-20)");
   if (!datum) return;
@@ -162,6 +179,8 @@ async function planRequest(id) {
 
   loadRequests();
 }
+
+loadRequests();
 </script>
 
 </body>
