@@ -152,20 +152,36 @@ async function updateStatus(id, status) {
 }
 
 async function planRequest(id) {
-  const datum = prompt("Welke datum? (bijv. 2026-03-20)");
-  if (!datum) return;
+  const { data, error: readError } = await supabaseClient
+    .from("requests")
+    .select("appointment_time, planned_date, planned_time_block")
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID)
+    .single();
 
-  const tijd = prompt("Welke tijd? (bijv. 14:30)");
-  if (!tijd) return;
+  if (readError) {
+    alert("Fout bij ophalen van aanvraag: " + readError.message);
+    console.error("Leesfout:", readError);
+    return;
+  }
 
-  const afspraakTijd = `${datum}T${tijd}:00`;
+  let afspraakTijd = null;
+
+  if (data.appointment_time) {
+    afspraakTijd = data.appointment_time;
+  }
+
+  const updatePayload = {
+    status: "ingepland"
+  };
+
+  if (afspraakTijd) {
+    updatePayload.appointment_time = afspraakTijd;
+  }
 
   const { error } = await supabaseClient
     .from("requests")
-    .update({
-      status: "ingepland",
-      appointment_time: afspraakTijd
-    })
+    .update(updatePayload)
     .eq("id", id)
     .eq("org_id", MIJN_ORG_ID);
 
@@ -173,6 +189,10 @@ async function planRequest(id) {
     alert("Fout bij inplannen: " + error.message);
     console.error("Planfout:", error);
     return;
+  }
+
+  if (!afspraakTijd) {
+    alert("De aanvraag is doorgezet naar ingepland. Vul later nog de exacte datum en tijd aan in het dashboard.");
   }
 
   loadRequests();
