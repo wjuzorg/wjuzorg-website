@@ -89,10 +89,9 @@ const supabase = window.supabase.createClient(
 
 async function loadRequests() {
   const { data, error } = await supabase
-    .from("requests")
-    .select("*")
-    .eq("status", "nieuw")
-    .order("created_at", { ascending: false });
+  .from("requests")
+  .select("*")
+  .order("created_at", { ascending: false });
 
   const list = document.getElementById("list");
   list.innerHTML = "";
