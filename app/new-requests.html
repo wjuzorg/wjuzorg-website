@@ -88,12 +88,22 @@ const supabase = window.supabase.createClient(
 );
 
 async function loadRequests() {
-  const { data, error } = await supabase
-  .from("requests")
-  .select("*")
-  .order("created_at", { ascending: false });
-
   const list = document.getElementById("list");
+  list.innerHTML = "<p>Laden...</p>";
+
+  const { data, error } = await supabase
+    .from("requests")
+    .select("*")
+    .eq("org_id", "4121dd3f-9d21-42b6-ab38-dccf791bfaaf")
+    .not("status", "in", '("gesloten")')
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    list.innerHTML = "<p style='color:red;'>Fout bij laden: " + error.message + "</p>";
+    return;
+  }
+
   list.innerHTML = "";
 
   if (!data || data.length === 0) {
@@ -110,6 +120,8 @@ async function loadRequests() {
       <div class="info">📞 ${r.phone || "-"}</div>
       <div class="info">🛠️ ${r.service || "-"}</div>
       <div class="info">📝 ${r.message || ""}</div>
+      <div class="info">📍 ${r.address || "-"}</div>
+      <div class="info">🕒 Status: ${r.status || "-"}</div>
 
       <div class="buttons">
         <button class="btn btn-call" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
@@ -123,10 +135,15 @@ async function loadRequests() {
 }
 
 async function updateStatus(id, status) {
-  await supabase
+  const { error } = await supabase
     .from("requests")
     .update({ status: status })
     .eq("id", id);
+
+  if (error) {
+    alert("Fout bij updaten: " + error.message);
+    return;
+  }
 
   loadRequests();
 }
