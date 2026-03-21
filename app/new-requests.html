@@ -131,10 +131,19 @@ async function loadRequests() {
     div.innerHTML = `
       <div class="name">${r.full_name || "Onbekend"}</div>
       <div class="info">📞 ${r.phone || "-"}</div>
-      <div class="info">🛠️ ${r.service || "-"}</div>
+      ${r.service === "naar_afspraak" ? "Zorgafspraak" : r.service}
       <div class="info">📝 ${r.message || ""}</div>
       <div class="info">📍 ${r.address || "-"}</div>
       <div class="info">🕒 Status: ${r.status || "-"}</div>
+      ${r.destination ? `<div class="info">📍 Naar: ${r.destination}</div>` : ""}
+
+${r.appointment_time ? `<div class="info">🗓️ Afspraak: ${new Date(r.appointment_time).toLocaleString()}</div>` : ""}
+
+${r.needs_support ? `<div class="info">👥 Begeleiding: ${r.needs_support}</div>` : ""}
+
+${r.preferred_daypart ? `<div class="info">📱 Terugbellen: ${r.preferred_daypart}</div>` : ""}
+
+${r.message ? `<div class="info">📝 ${r.message}</div>` : ""}
 
       <div class="buttons">
         <button class="btn btn-call" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
