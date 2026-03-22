@@ -651,12 +651,11 @@ textarea{
 </main>
 
 <script>
-let synth = window.speechSynthesis
+let synth = window.speechSynthesis;
 let huidigeLettergrootte = 100;
 document.body.style.zoom = huidigeLettergrootte + "%";
 
 function veranderLettergrootte(richting){
-
   huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
 
   if(huidigeLettergrootte < 80){
@@ -668,36 +667,34 @@ function veranderLettergrootte(richting){
   }
 
   document.body.style.zoom = huidigeLettergrootte + "%";
-
   localStorage.setItem("fontSize", huidigeLettergrootte);
 }
 
 function toggleContrast(){
-  document.body.classList.toggle("high-contrast")
+  document.body.classList.toggle("high-contrast");
 }
 
 function voorlezenPagina(){
   if(synth.speaking){
-    synth.cancel()
-    return
+    synth.cancel();
+    return;
   }
-  let tekst = document.body.innerText
-  let utter = new SpeechSynthesisUtterance(tekst)
-  utter.lang = "nl-NL"
-  synth.speak(utter)
+  let tekst = document.body.innerText;
+  let utter = new SpeechSynthesisUtterance(tekst);
+  utter.lang = "nl-NL";
+  synth.speak(utter);
 }
 
-document.querySelectorAll(".accordion-button").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    let item = btn.parentElement
-    item.classList.toggle("open")
-  })
-})
+document.querySelectorAll(".accordion-button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    let item = btn.parentElement;
+    item.classList.toggle("open");
+  });
+});
+
 const kennismakingForm = document.getElementById("kennismaking-form");
 
-kennismakingForm.addEventListener("submit", async function (event) {
-
-  if (kennismakingForm) {
+if (kennismakingForm) {
   kennismakingForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -716,17 +713,6 @@ kennismakingForm.addEventListener("submit", async function (event) {
           "Accept": "application/json"
         }
       });
-
-      if (response.ok) {
-        window.location.href = "bedankt.html";
-      } else {
-        alert("Er ging iets mis met verzenden. Probeert u het later nog eens of neem telefonisch contact op.");
-      }
-    } catch (error) {
-      alert("Er ging iets mis met verzenden. Probeert u het later nog eens of neem telefonisch contact op.");
-    }
-  });
-}
 
       if (response.ok) {
         window.location.href = "bedankt.html";

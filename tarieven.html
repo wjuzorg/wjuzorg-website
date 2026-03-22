@@ -1,336 +1,412 @@
 <!doctype html>
 <html lang="nl">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K7V4HMW2NH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7V4HMW2NH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7V4HMW2NH');
+  </script>
 
-  gtag('config', 'G-K7V4HMW2NH');
-</script>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>WJU Zorg - Tarieven</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>WJU Zorg - Tarieven</title>
 
-<style>
+  <style>
+    :root{
+      --wju-red:#c40000;
+      --text:#222;
+      --bg:#f3f3f3;
+      --card:#f7f7f7;
+      --border:#d8d8d8;
+    }
 
-:root{
---wju-red:#c40000;
---text:#222;
---bg:#f3f3f3;
---card:#f7f7f7;
---border:#d8d8d8;
-}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:var(--bg);
-color:var(--text);
-}
+    /* HEADER */
 
-/* HEADER */
+    .topbar{
+      background:var(--wju-red);
+      color:white;
+      padding:32px 36px 24px;
+    }
 
-.topbar{
-background:var(--wju-red);
-color:white;
-padding:32px 36px 24px;
-}
+    .topbar-inner{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
 
-.topbar-inner{
-max-width:1200px;
-margin:auto;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+    .branding h1{
+      margin:0;
+      font-size:58px;
+      font-weight:800;
+    }
 
-.branding h1{
-margin:0;
-font-size:58px;
-font-weight:800;
-}
+    .branding p{
+      margin:8px 0 0;
+      font-size:22px;
+      font-weight:700;
+    }
 
-.branding p{
-margin:8px 0 0;
-font-size:22px;
-font-weight:700;
-}
+    .logo-box{
+      background:white;
+      padding:10px 14px;
+      border-radius:14px;
+    }
 
-.logo-box{
-background:white;
-padding:10px 14px;
-border-radius:14px;
-}
+    .logo-box img{
+      max-width:110px;
+    }
 
-.logo-box img{
-max-width:110px;
-}
+    /* TOEGANKELIJKHEID */
 
-/* TOEGANKELIJKHEID */
+    .accessibility-bar{
+      background:var(--wju-red);
+      padding:0 36px 26px;
+    }
 
-.accessibility-bar{
-background:var(--wju-red);
-padding:0 36px 26px;
-}
-
-.accessibility-inner{
-  max-width:1200px;
-  margin:auto;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.access-btn{
-background:#d40000;
-color:white;
-border:2px solid white;
-padding:14px;
-border-radius:30px;
-font-size:16px;
-cursor:pointer;
-width:100%;
-}
-
-/* NAVIGATIE */
-
-.top-nav{
-max-width:1040px;
-margin:22px auto;
-padding:0 20px;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-}
-
-.top-nav a{
-display:block;
-text-align:center;
-text-decoration:none;
-color:#222;
-background:white;
-border:2px solid #444;
-border-radius:999px;
-padding:16px 10px;
-font-size:18px;
-font-weight:700;
-}
-
-.top-nav a.active{
-background:#333;
-color:white;
-border-color:#333;
-}
-
-/* PAGINA */
-
-.container{
-max-width:1040px;
-margin:auto;
-padding:0 20px 60px;
-}
-
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:24px;
-padding:32px 28px;
-margin-bottom:28px;
-}
-
-.card p{
-font-size:20px;
-line-height:1.8;
-margin-bottom:18px;
-}
-
-.section-title{
-font-size:32px;
-font-weight:800;
-margin-bottom:20px;
-}
-
-/* VOORBEELDEN */
-
-.example{
-margin-top:40px;
-margin-bottom:40px;
-}
-
-.example-title{
-font-size:24px;
-font-weight:800;
-margin-bottom:10px;
-}
-
-/* FORMULIER */
-
-form{
-display:grid;
-gap:16px;
-margin-top:20px;
-}
-
-label{
-font-weight:700;
-font-size:18px;
-}
-
-input,textarea{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #ccc;
-font-size:16px;
-}
-
-textarea{
-min-height:100px;
-}
-
-.submit-btn{
-background:var(--wju-red);
-color:white;
-border:none;
-border-radius:16px;
-padding:16px;
-font-size:20px;
-font-weight:800;
-cursor:pointer;
-}
-
-/* CONTRAST */
-
-.high-contrast{
-background:black !important;
-color:white !important;
-}
-
-.high-contrast .card{
-background:#111 !important;
-color:white !important;
-border-color:white;
-}
-@media (max-width: 900px){
     .accessibility-inner{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-}
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
 
-.topbar{
-padding:24px 18px 18px;
-}
+    .access-btn{
+      background:transparent;
+      color:white;
+      border:1px solid rgba(255,255,255,0.5);
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+    }
 
-.topbar-inner{
-  flex-direction:row;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-}
+    /* NAVIGATIE */
 
-.branding h1{
-font-size:42px;
-}
+    .top-nav{
+      max-width:1040px;
+      margin:22px auto;
+      padding:0 20px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
 
-.branding p{
-font-size:18px;
-}
+    .top-nav a{
+      display:block;
+      text-align:center;
+      text-decoration:none;
+      color:#222;
+      background:white;
+      border:2px solid #444;
+      border-radius:999px;
+      padding:16px 10px;
+      font-size:18px;
+      font-weight:700;
+    }
 
-.logo-box img{
-max-width:100px;
-}
+    .top-nav a.active{
+      background:#333;
+      color:white;
+      border-color:#333;
+    }
 
-.top-nav{
-grid-template-columns:1fr;
-gap:10px;
-margin:18px auto;
-padding:0 18px;
-}
+    /* BELKNOP */
 
-.top-nav a{
-padding:14px 10px;
-font-size:17px;
-}
+    .call-wrap{
+      max-width:1040px;
+      margin:12px auto 0 auto;
+      padding:0 20px;
+    }
 
-.container{
-padding:0 18px 50px;
-}
+    .call-nav{
+      display:block;
+      width:100%;
+      padding:16px 10px;
+      border-radius:999px;
+      border:2px solid #444;
+      background:#fff;
+      color:#222;
+      text-align:center;
+      font-size:18px;
+      font-weight:700;
+      text-decoration:none;
+      box-sizing:border-box;
+    }
 
-.card{
-padding:22px 18px;
-border-radius:20px;
-margin-bottom:20px;
-}
+    .call-nav:hover{
+      background:#f3f3f3;
+    }
 
-.card p{
-font-size:18px;
-line-height:1.7;
-}
+    /* PAGINA */
 
-.section-title{
-font-size:28px;
-margin-bottom:16px;
-}
+    .container{
+      max-width:1040px;
+      margin:auto;
+      padding:0 20px 60px;
+    }
 
-.example-title{
-font-size:21px;
-}
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:28px 24px;
+      margin-bottom:22px;
+    }
 
-.submit-btn{
-width:100%;
-font-size:19px;
-padding:15px;
-}
+    .card p{
+      font-size:20px;
+      line-height:1.7;
+    }
 
-}
-.call-nav{
-display:block;
-max-width:600px;
-margin:10px auto;
-padding:16px;
-border-radius:40px;
-border:2px solid #444;
-background:#fff;
-color:#222;
-text-align:center;
-font-size:18px;
-font-weight:600;
-text-decoration:none;
-}
+    .section-title{
+      font-size:32px;
+      font-weight:800;
+      margin-bottom:16px;
+    }
 
-.call-nav:hover{
-background:#f3f3f3;
-}
-@media (max-width: 900px){
-  .call-nav{
-    max-width:100%;
-    margin:12px 18px;
-    font-size:18px;
-    padding:14px;
-  }
-}
-</style>
+    /* VOORBEELDEN */
+
+    .example{
+      margin-top:34px;
+      margin-bottom:34px;
+    }
+
+    .example-title{
+      font-size:24px;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    /* FORMULIER */
+
+    form{
+      display:grid;
+      gap:16px;
+    }
+
+    label{
+      font-weight:700;
+    }
+
+    .required-star{
+      color:var(--wju-red);
+      margin-left:4px;
+    }
+
+    input,textarea{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #ccc;
+      font-size:16px;
+      box-sizing:border-box;
+    }
+
+    textarea{
+      min-height:100px;
+    }
+
+    .submit-btn{
+      background:var(--wju-red);
+      color:white;
+      border:none;
+      border-radius:16px;
+      padding:16px;
+      font-size:20px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    /* CONTRAST */
+
+    .high-contrast{
+      background:black !important;
+      color:white !important;
+    }
+
+    .high-contrast .card{
+      background:#111 !important;
+      color:white !important;
+      border-color:white;
+    }
+
+    @media (max-width: 900px){
+      .topbar{
+        padding:24px 18px 18px;
+      }
+
+      .topbar-inner{
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+        gap:14px;
+      }
+
+      .branding h1{
+        font-size:42px;
+        line-height:1.1;
+      }
+
+      .branding p{
+        font-size:18px;
+      }
+
+      .logo-box{
+        padding:8px 10px;
+      }
+
+      .logo-box img{
+        max-width:100px;
+      }
+
+      .accessibility-bar{
+        padding:0 18px 18px;
+      }
+
+      .accessibility-inner{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      }
+
+      .access-btn{
+        width:100%;
+        text-align:center;
+        padding:12px 10px;
+        font-size:15px;
+      }
+
+      .top-nav{
+        grid-template-columns:1fr;
+        gap:10px;
+        margin:18px auto;
+        padding:0 18px;
+      }
+
+      .top-nav a{
+        padding:14px 10px;
+        font-size:17px;
+      }
+
+      .call-wrap{
+        padding:0 18px;
+        margin:10px auto 0 auto;
+      }
+
+      .call-nav{
+        font-size:17px;
+        padding:14px 10px;
+      }
+
+      .container{
+        padding:0 18px 50px;
+      }
+
+      .card{
+        padding:22px 18px;
+        border-radius:20px;
+        margin-bottom:20px;
+      }
+
+      .card p{
+        font-size:18px;
+        line-height:1.7;
+      }
+
+      .section-title{
+        font-size:28px;
+        line-height:1.2;
+        margin-bottom:16px;
+      }
+
+      .example-title{
+        font-size:21px;
+        line-height:1.3;
+      }
+
+      label{
+        font-size:17px;
+      }
+
+      input,
+      textarea{
+        font-size:16px;
+        padding:13px;
+      }
+
+      .submit-btn{
+        width:100%;
+        text-align:center;
+        font-size:19px;
+        padding:15px;
+      }
+    }
+
+    @media (max-width: 480px){
+      .branding h1{
+        font-size:36px;
+      }
+
+      .branding p{
+        font-size:16px;
+      }
+
+      .accessibility-inner{
+        grid-template-columns:1fr;
+      }
+
+      .access-btn{
+        font-size:14px;
+      }
+
+      .top-nav a{
+        font-size:16px;
+      }
+
+      .section-title{
+        font-size:25px;
+      }
+
+      .card p{
+        font-size:17px;
+      }
+
+      .logo-box img{
+        max-width:120px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header class="topbar">
-<div class="topbar-inner">
+  <div class="topbar-inner">
 
-<div class="branding">
-<h1>WJU Zorg</h1>
-<p>Persoonlijke ondersteuning aan huis</p>
-</div>
+    <div class="branding">
+      <h1>WJU Zorg</h1>
+      <p>Persoonlijke ondersteuning aan huis</p>
+    </div>
 
-<div class="logo-box">
-<img src="logo-wjuzorg.png" alt="Logo WJU Zorg"></div>
+    <div class="logo-box">
+      <img src="logo-wjuzorg.png" alt="Logo WJU Zorg">
+    </div>
 
-</div>
+  </div>
 </header>
 
 <section class="accessibility-bar">
@@ -343,195 +419,172 @@ background:#f3f3f3;
 </section>
 
 <nav class="top-nav">
-<a href="index.html">Wie is WJU Zorg</a>
-<a href="mantelzorgers.html">Mantelzorgers</a>
-<a href="tarieven.html" class="active">Tarieven</a>
+  <a href="index.html">Wie is WJU Zorg</a>
+  <a href="mantelzorgers.html">Mantelzorgers</a>
+  <a href="tarieven.html" class="active">Tarieven</a>
 </nav>
-<a href="tel:0638287648" class="call-nav">
-📞 Bel voor overleg
-</a>
+
+<div class="call-wrap">
+  <a href="tel:0638287648" class="call-nav">📞 Bel voor overleg</a>
+</div>
+
 <main class="container">
 
-<section class="card">
+  <section class="card">
+    <h2 class="section-title">Tarieven</h2>
 
-<h2 class="section-title">Tarieven</h2>
+    <p>
+      WJU Zorg werkt op dit moment met een <strong>kennismakingstarief van €30 per uur</strong>.
+    </p>
 
-<p>
-WJU Zorg werkt met een <strong>vast particulier tarief van €30 per uur</strong>.
-</p>
+    <p>
+      De minimale afname is <strong>1 uur</strong>.
+    </p>
 
-<p>
-De minimale afname is <strong>1 uur</strong>.
-</p>
+    <p>
+      De ondersteuning draait niet alleen om vervoer, maar juist om <strong>persoonlijke en praktische hulp</strong>.
+    </p>
 
-<p>
-Dat betekent dat een afspraak altijd minimaal één uur wordt gerekend, ook als de ondersteuning korter duurt.
-</p>
+    <p>
+      Wanneer dat prettig is kan Widjai ook <strong>mee naar binnen gaan bij een afspraak</strong>, even wachten terwijl u binnen bent of helpen met kleine praktische dingen zoals het <strong>opschrijven van een vervolgafspraak</strong>.
+    </p>
 
-<p>
-Dit zorgt ervoor dat er rustig de tijd genomen kan worden en dat ondersteuning niet alleen om vervoer draait, maar om <strong>persoonlijke en praktische hulp</strong>.
-</p>
+    <p>
+      Zo staat u er niet alleen voor.
+    </p>
 
-<p>
-Wanneer dat prettig is kan Widjai ook <strong>mee naar binnen gaan bij een afspraak</strong>, even wachten terwijl u binnen bent of helpen met kleine praktische dingen zoals het <strong>opschrijven van een vervolgafspraak</strong>.
-</p>
+    <p>
+      Heeft u een <strong>hulphond</strong>? Deze kan uiteraard gewoon mee in de auto.
+    </p>
+  </section>
 
-<p>
-Zo staat u er niet alleen voor.
-</p>
+  <section class="card">
+    <h2 class="section-title">Voorbeelden</h2>
 
-<p>
-Heeft u een <strong>hulphond</strong>? Deze kan uiteraard gewoon mee in de auto.
-</p>
+    <div class="example">
+      <h3 class="example-title">Meerijden naar een afspraak</h3>
 
-</section>
+      <p>
+        Heeft u een afspraak bij het ziekenhuis, de huisarts of een andere zorgverlener?
+      </p>
 
+      <p>
+        WJU Zorg kan u ophalen, wachten terwijl u binnen bent en u daarna weer naar huis brengen.
+      </p>
 
-<section class="card">
+      <p>
+        Wanneer u dat prettig vindt kan Widjai ook <strong>mee naar binnen gaan</strong>, even meeluisteren of bijvoorbeeld <strong>een vervolgafspraak opschrijven</strong>.
+      </p>
 
-<h2 class="section-title">Voorbeelden</h2>
+      <p>
+        Voor dit soort ondersteuning geldt op dit moment het <strong>kennismakingstarief van €30 per uur (minimaal 1 uur)</strong>.
+      </p>
+    </div>
 
+    <div class="example">
+      <h3 class="example-title">Boodschappen doen</h3>
 
-<div class="example">
+      <p>
+        Samen boodschappen doen of boodschappen laten halen.
+      </p>
 
-<h3 class="example-title">Meerijden naar een afspraak</h3>
+      <p>
+        De boodschappen worden daarna <strong>netjes tot in de keuken gebracht</strong>, zodat u daar geen omkijken meer naar heeft.
+      </p>
 
-<p>
-Heeft u een afspraak bij het ziekenhuis, de huisarts of een andere zorgverlener?
-</p>
+      <p>
+        Ook dit valt meestal binnen <strong>1 uur ondersteuning (€30 kennismakingstarief)</strong>.
+      </p>
+    </div>
 
-<p>
-WJU Zorg kan u ophalen, wachten terwijl u binnen bent en u daarna weer naar huis brengen.
-</p>
+    <div class="example">
+      <h3 class="example-title">Praktische hulp of een moment van gezelschap</h3>
 
-<p>
-Wanneer u dat prettig vindt kan Widjai ook <strong>mee naar binnen gaan</strong>, even meeluisteren of bijvoorbeeld <strong>een vervolgafspraak opschrijven</strong>.
-</p>
+      <p>
+        Soms zijn er kleine praktische dingen in huis waar hulp bij nodig is.
+      </p>
 
-<p>
-Voor dit soort ondersteuning geldt het vaste tarief van <strong>€30 per uur (minimaal 1 uur)</strong>.
-</p>
+      <p>
+        Bijvoorbeeld een klein klusje, hulp bij iets regelen of gewoon even langskomen voor een kop koffie en een gesprek.
+      </p>
 
-</div>
+      <p>
+        WJU Zorg biedt <strong>warme, praktische ondersteuning</strong>, afgestemd op wat op dat moment nodig is.
+      </p>
 
+      <p>
+        Ook hiervoor geldt op dit moment het <strong>kennismakingstarief van €30 per uur</strong>.
+      </p>
+    </div>
+  </section>
 
-<div class="example">
+  <section class="card">
+    <h2 class="section-title">Mogelijk via PGB</h2>
 
-<h3 class="example-title">Boodschappen doen</h3>
+    <p>
+      Sommige mensen ontvangen ondersteuning via een <strong>Persoonsgebonden Budget (PGB)</strong>.
+    </p>
 
-<p>
-Samen boodschappen doen of boodschappen laten halen.
-</p>
+    <p>
+      Dit is een budget vanuit de gemeente waarmee ondersteuning kan worden betaald.
+    </p>
 
-<p>
-De boodschappen worden daarna <strong>netjes tot in de keuken gebracht</strong>, zodat u daar geen omkijken meer naar heeft.
-</p>
+    <p>
+      Als u of uw familielid een PGB heeft, kan WJU Zorg mogelijk vanuit dat budget ondersteuning bieden.
+    </p>
 
-<p>
-Ook dit valt meestal binnen <strong>1 uur ondersteuning (€30)</strong>.
-</p>
+    <p>
+      Heeft u nog geen PGB maar denkt u dat dit passend kan zijn? Dan kunt u hierover informatie krijgen via de gemeente Utrecht.
+    </p>
 
-</div>
+    <p>
+      In Utrecht kunt u hiervoor contact opnemen met <strong>Buurtteams Utrecht</strong>. Elke wijk heeft een eigen buurtteam en telefoonnummer.
+    </p>
 
+    <p>
+      Meer informatie vindt u via: <strong>buurtteamsutrecht.nl/contact</strong>
+    </p>
 
-<div class="example">
+    <p>
+      U kunt ook bellen met het <strong>Wmo-loket van de gemeente Utrecht</strong>: <strong>030-2869500</strong>
+    </p>
+  </section>
 
-<h3 class="example-title">Praktische hulp of een moment van gezelschap</h3>
+  <section class="card">
+    <h2 class="section-title">Kennismaken</h2>
 
-<p>
-Soms zijn er kleine praktische dingen in huis waar hulp bij nodig is.
-</p>
+    <p>
+      Wilt u meer weten over de tarieven of wilt u graag een vrijblijvende kennismaking?
+      Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
+    </p>
 
-<p>
-Bijvoorbeeld een klein klusje, hulp bij iets regelen of gewoon even langskomen voor een kop koffie en een gesprek.
-</p>
+    <form id="tarieven-form">
 
-<p>
-WJU Zorg biedt <strong>warme, praktische ondersteuning</strong>, afgestemd op wat op dat moment nodig is.
-</p>
+      <input type="hidden" name="formulier_type" value="tarievenpagina">
 
-<p>
-Ook hiervoor geldt het vaste tarief van <strong>€30 per uur</strong>.
-</p>
+      <label>Naam <span class="required-star">*</span></label>
+      <input type="text" name="naam" required>
 
-</div>
+      <label>Telefoonnummer <span class="required-star">*</span></label>
+      <input type="tel" name="telefoon" required>
 
-</section>
+      <label>Email</label>
+      <input type="email" name="email">
 
+      <label>Adres</label>
+      <input type="text" name="adres">
 
-<section class="card">
+      <label>Uw vraag</label>
+      <textarea name="bericht"></textarea>
 
-<h2 class="section-title">Mogelijk via PGB</h2>
+      <button class="submit-btn">Kennismaken</button>
 
-<p>
-Sommige mensen ontvangen ondersteuning via een <strong>Persoonsgebonden Budget (PGB)</strong>.
-</p>
-
-<p>
-Dit is een budget vanuit de gemeente waarmee ondersteuning kan worden betaald.
-</p>
-
-<p>
-Als u of uw familielid een PGB heeft, kan WJU Zorg mogelijk vanuit dat budget ondersteuning bieden.
-</p>
-
-<p>
-Heeft u nog geen PGB maar denkt u dat dit passend kan zijn? Dan kunt u hierover informatie krijgen via de gemeente Utrecht.
-</p>
-
-<p>
-In Utrecht kunt u hiervoor contact opnemen met <strong>Buurtteams Utrecht</strong>. Elke wijk heeft een eigen buurtteam en telefoonnummer.
-</p>
-
-<p>
-Meer informatie vindt u via: <strong>buurtteamsutrecht.nl/contact</strong>
-</p>
-
-<p>
-U kunt ook bellen met het <strong>Wmo-loket van de gemeente Utrecht</strong>: <strong>030-2869500</strong>
-</p>
-
-</section>
-
-
-<section class="card">
-
-<h2 class="section-title">Kennismaken</h2>
-
-<p>
-Wilt u meer weten over de tarieven of wilt u graag een vrijblijvende kennismaking?
-Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
-</p>
-
-<form id="tarieven-form">
-
-<input type="hidden" name="formulier_type" value="tarievenpagina">
-
-<label>Naam</label>
-<input type="text" name="naam" required>
-
-<label>Telefoonnummer</label>
-<input type="tel" name="telefoon" required>
-
-<label>Email</label>
-<input type="email" name="email">
-
-<label>Adres</label>
-<input type="text" name="adres">
-
-<label>Uw vraag</label>
-<textarea name="bericht"></textarea>
-
-<button class="submit-btn">Kennismaken</button>
-
-</form>
-
-</section>
+    </form>
+  </section>
 
 </main>
 
 <script>
-
 let synth = window.speechSynthesis
 let huidigeLettergrootte = 100;
 document.body.style.zoom = "100%";
@@ -553,16 +606,17 @@ function veranderLettergrootte(richting){
 }
 
 function toggleContrast(){
-document.body.classList.toggle("high-contrast")
+  document.body.classList.toggle("high-contrast")
 }
 
 function voorlezenPagina(){
-if(synth.speaking){synth.cancel();return}
-let tekst=document.body.innerText
-let utter=new SpeechSynthesisUtterance(tekst)
-utter.lang="nl-NL"
-synth.speak(utter)
+  if(synth.speaking){synth.cancel();return}
+  let tekst=document.body.innerText
+  let utter=new SpeechSynthesisUtterance(tekst)
+  utter.lang="nl-NL"
+  synth.speak(utter)
 }
+
 const tarievenForm = document.getElementById("tarieven-form");
 
 if (tarievenForm) {
