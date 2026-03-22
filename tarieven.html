@@ -77,11 +77,11 @@ padding:0 36px 26px;
 }
 
 .accessibility-inner{
-display:grid;
-grid-template-columns: 1fr 1fr;
-gap:10px;
-max-width:600px;
-margin:0 auto;
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
 .access-btn{
@@ -215,6 +215,12 @@ color:white !important;
 border-color:white;
 }
 @media (max-width: 900px){
+    .accessibility-inner{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+}
 
 .topbar{
 padding:24px 18px 18px;
@@ -328,12 +334,12 @@ background:#f3f3f3;
 </header>
 
 <section class="accessibility-bar">
-<div class="accessibility-inner">
-<button class="access-btn" onclick="voorlezenPagina()">Voorlezen</button>
-<button class="access-btn" onclick="toggleContrast()">Hoog contrast</button>
-<button class="access-btn" onclick="veranderLettergrootte(1)">A+</button>
-<button class="access-btn" onclick="veranderLettergrootte(-1)">A-</button>
-</div>
+  <div class="accessibility-inner">
+    <button class="access-btn" onclick="voorlezenPagina()">Voorlezen</button>
+    <button class="access-btn" onclick="toggleContrast()">Hoog contrast</button>
+    <button class="access-btn" onclick="veranderLettergrootte(1)">A+</button>
+    <button class="access-btn" onclick="veranderLettergrootte(-1)">A-</button>
+  </div>
 </section>
 
 <nav class="top-nav">
