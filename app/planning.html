@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Planning - WJU Zorg</title>
+  <link rel="stylesheet" href="app.css?v=2" />
+  <style>
+    body{
+      margin:0;
+      background:#f8f9fa;
+      font-family:Arial, Helvetica, sans-serif;
+      color:#222;
+    }
+
+    .page{
+      max-width:700px;
+      margin:0 auto;
+      padding:24px 18px 40px;
+    }
+
+    .top-link{
+      display:inline-block;
+      margin-bottom:18px;
+      text-decoration:none;
+      font-weight:bold;
+      color:#a71d2a;
+      border:2px solid #a71d2a;
+      border-radius:10px;
+      padding:10px 16px;
+      background:#fff;
+    }
+
+    h1{
+      margin:0 0 18px 0;
+      font-size:2rem;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:22px;
+    }
+
+    .stat-card{
+      background:#fff;
+      border:1px solid #eee;
+      border-radius:14px;
+      padding:16px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.04);
+      font-size:1rem;
+    }
+
+    .section-title{
+      margin:24px 0 12px 0;
+      font-size:1.3rem;
+      font-weight:bold;
+    }
+
+    .day-card, .area-card{
+      background:#fff;
+      border:1px solid #eee;
+      border-radius:14px;
+      padding:16px;
+      margin-bottom:14px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.04);
+    }
+
+    .day-title{
+      font-weight:bold;
+      font-size:1.1rem;
+      margin-bottom:10px;
+      color:#a71d2a;
+    }
+
+    .item{
+      padding:10px 0;
+      border-top:1px solid #f0f0f0;
+      font-size:0.98rem;
+      line-height:1.5;
+    }
+
+    .item:first-child{
+      border-top:none;
+      padding-top:0;
+    }
+
+    .empty{
+      color:#777;
+      font-style:italic;
+    }
+
+    .area-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 0;
+      border-top:1px solid #f0f0f0;
+    }
+
+    .area-row:first-child{
+      border-top:none;
+      padding-top:0;
+    }
+
+    .muted{
+      color:#666;
+      font-size:0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <a href="today.html" class="top-link">← Terug naar Today</a>
+
+    <h1>Planning</h1>
+
+    <div class="stats">
+      <div class="stat-card">
+        📅 Afspraken deze week: <strong><span id="weekAppointments">0</span></strong>
+      </div>
+      <div class="stat-card">
+        📞 Terugbelverzoeken deze week: <strong><span id="weekCallbacks">0</span></strong>
+      </div>
+    </div>
+
+    <div class="section-title">Weekplanning</div>
+    <div id="weekPlanning"></div>
+
+    <div class="section-title">Wijkoverzicht</div>
+    <div class="area-card">
+      <div id="areaOverview"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+    const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function getStartOfWeek(date) {
+      const d = new Date(date);
+      const day = d.getDay();
+      const diff = day === 0 ? -6 : 1 - day; // maandag start
+      d.setDate(d.getDate() + diff);
+      d.setHours(0, 0, 0, 0);
+      return d;
+    }
+
+    function formatDateKey(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function formatTime(dateString) {
+      if (!dateString) return "Tijd onbekend";
+      const d = new Date(dateString);
+      if (isNaN(d)) return "Tijd onbekend";
+      return d.toLocaleTimeString("nl-NL", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function getDayLabel(dateObj) {
+      return dateObj.toLocaleDateString("nl-NL", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
+    }
+
+    function getArea(item) {
+      if (item.preferred_area && item.preferred_area.trim()) return item.preferred_area.trim();
+      if (item.address && item.address.trim()) return item.address.trim();
+      return "Onbekend";
+    }
+
+    async function loadPlanning() {
+      const weekPlanning = document.getElementById("weekPlanning");
+      const areaOverview = document.getElementById("areaOverview");
+
+      weekPlanning.innerHTML = "<div class='muted'>Laden...</div>";
+      areaOverview.innerHTML = "<div class='muted'>Laden...</div>";
+
+      const today = new Date();
+      const startOfWeek = getStartOfWeek(today);
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(endOfWeek.getDate() + 7);
+
+      const startISO = startOfWeek.toISOString();
+      const endISO = endOfWeek.toISOString();
+
+      const { data: appointments, error: appointmentsError } = await supabaseClient
+        .from("requests")
+        .select("*")
+        .eq("org_id", MIJN_ORG_ID)
+        .eq("status", "ingepland")
+        .gte("appointment_time", startISO)
+        .lt("appointment_time", endISO)
+        .order("appointment_time", { ascending: true });
+
+      const { data: callbacks, error: callbacksError } = await supabaseClient
+        .from("requests")
+        .select("*")
+        .eq("org_id", MIJN_ORG_ID)
+        .eq("status", "terugbellen")
+        .gte("created_at", startISO)
+        .lt("created_at", endISO)
+        .order("created_at", { ascending: true });
+
+      if (appointmentsError || callbacksError) {
+        weekPlanning.innerHTML = "<div class='muted'>Fout bij laden van planning.</div>";
+        areaOverview.innerHTML = "<div class='muted'>Fout bij laden van wijkoverzicht.</div>";
+        console.error(appointmentsError || callbacksError);
+        return;
+      }
+
+      document.getElementById("weekAppointments").innerText = appointments ? appointments.length : 0;
+      document.getElementById("weekCallbacks").innerText = callbacks ? callbacks.length : 0;
+
+      // 7 dagen van de week opbouwen
+      const days = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(startOfWeek);
+        d.setDate(startOfWeek.getDate() + i);
+        days.push(d);
+      }
+
+      weekPlanning.innerHTML = "";
+
+      days.forEach(day => {
+        const dayKey = formatDateKey(day);
+
+        const dayItems = (appointments || []).filter(item => {
+          if (!item.appointment_time) return false;
+          return item.appointment_time.slice(0, 10) === dayKey;
+        });
+
+        const card = document.createElement("div");
+        card.className = "day-card";
+
+        let inner = `<div class="day-title">${getDayLabel(day)}</div>`;
+
+        if (dayItems.length === 0) {
+          inner += `<div class="empty">Geen afspraken</div>`;
+        } else {
+          dayItems.forEach(item => {
+            inner += `
+              <div class="item">
+                <strong>${formatTime(item.appointment_time)}</strong> — ${item.full_name || "Onbekend"}<br>
+                <span class="muted">${item.service || "Onbekend"}${getArea(item) ? " — " + getArea(item) : ""}</span>
+              </div>
+            `;
+          });
+        }
+
+        card.innerHTML = inner;
+        weekPlanning.appendChild(card);
+      });
+
+      // Wijkoverzicht
+      const areaCounts = {};
+
+      (appointments || []).forEach(item => {
+        const area = getArea(item);
+        areaCounts[area] = (areaCounts[area] || 0) + 1;
+      });
+
+      const sortedAreas = Object.entries(areaCounts).sort((a, b) => b[1] - a[1]);
+
+      areaOverview.innerHTML = "";
+
+      if (sortedAreas.length === 0) {
+        areaOverview.innerHTML = "<div class='empty'>Nog geen wijken in de planning deze week.</div>";
+      } else {
+        sortedAreas.forEach(([area, count]) => {
+          const row = document.createElement("div");
+          row.className = "area-row";
+          row.innerHTML = `
+            <div>${area}</div>
+            <div><strong>${count}</strong></div>
+          `;
+          areaOverview.appendChild(row);
+        });
+      }
+    }
+
+    loadPlanning();
+  </script>
+</body>
+</html>
