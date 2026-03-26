@@ -64,14 +64,74 @@
   line-height:1.5;
 }
 
-  .btn-small{
+ .btn-small{
   background:#28a745;
   color:white;
   border:none;
-  padding:6px 10px;
-  border-radius:6px;
-  font-size:0.8rem;
+  padding:8px 10px;
+  border-radius:8px;
+  font-size:0.78rem;
   cursor:pointer;
+  white-space:nowrap;
+}
+
+.client-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  margin-bottom:14px;
+}
+
+.client-name{
+  font-weight:bold;
+  flex:1;
+  min-width:0;
+  line-height:1.3;
+}
+
+.client-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  max-width:58%;
+}
+
+@media (max-width: 640px){
+  .container{
+    padding:14px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .row{
+    flex-direction:column;
+    gap:4px;
+    margin-bottom:10px;
+  }
+
+  .client-header{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .client-actions{
+    max-width:100%;
+    justify-content:flex-start;
+  }
+
+  .btn-small{
+    font-size:0.75rem;
+    padding:8px 9px;
+  }
+
+  .total{
+    font-size:1.05rem;
+  }
 }
 
     .status{
@@ -159,9 +219,10 @@ listEl.innerHTML = "";
 totalEl.innerText = "€0";
 
 const { data, error } = await supabaseClient
-.from("invoice_items")
-.select("*")
-.order("created_at",{ascending:false});
+  .from("invoice_items")
+  .select("*")
+  .eq("status", "open")
+  .order("created_at", { ascending: false });
 
 if(error){
 statusEl.innerHTML = "Fout: " + error.message;
@@ -196,30 +257,23 @@ for(const client in grouped){
 
 listEl.innerHTML += `
   <div class="card">
-    <div class="row" style="align-items:center; margin-bottom:14px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:20px;">
+    <div class="client-header">
+      <div class="client-name">${client}</div>
 
-  <div style="display:flex; align-items:center; width:100%;">
+      <div class="client-actions">
+        <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
+          Factuur
+        </button>
 
-  <div style="font-weight:bold; flex:1; min-width:220px;">
-    ${client}
-  </div>
+        <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
+          Aanpassen
+        </button>
 
-  <div style="display:flex; gap:8px;">
-    <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
-      Factuur
-    </button>
-
-    <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
-      Aanpassen
-    </button>
-
-    <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
-      Cliëntenkaart
-    </button>
-  </div>
-
-</div>
+        <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+          Cliëntenkaart
+        </button>
+      </div>
+    </div>
 `;
 
 grouped[client].forEach(item => {
@@ -254,6 +308,10 @@ function generateInvoice(client){
 
   localStorage.setItem("wju_invoice_client", client);
   localStorage.setItem("wju_invoice_items", JSON.stringify(itemsForClient));
+  localStorage.setItem(
+    "wju_invoice_item_ids",
+    JSON.stringify(itemsForClient.map(item => item.id))
+  );
 
   window.location.href = "factuur-pdf.html?client=" + encodeURIComponent(client);
 }

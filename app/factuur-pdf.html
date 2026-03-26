@@ -23,23 +23,14 @@
       box-shadow:0 2px 10px rgba(0,0,0,0.08);
     }
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:20px;
-      margin-bottom:25px;
+    .logo-wrap{
+      margin-bottom:20px;
     }
 
-    .title{
-      font-size:2rem;
-      font-weight:bold;
-      margin-bottom:8px;
-    }
-
-    .muted{
-      color:#666;
-      line-height:1.5;
+    .logo-wrap img{
+      height:70px;
+      width:auto;
+      display:block;
     }
 
     .actions{
@@ -64,6 +55,117 @@
     .btn-secondary{
       background:#e9ecef;
       color:#333;
+    }
+
+    .topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  margin-bottom:25px;
+  flex-wrap:wrap;
+}
+
+.topbar-left{
+  flex:1 1 420px;
+  min-width:260px;
+}
+
+.topbar-right{
+  flex:0 1 240px;
+  min-width:220px;
+  text-align:right;
+}
+
+@media (max-width: 640px){
+  body{
+    padding:10px;
+  }
+
+  .sheet{
+    padding:18px;
+  }
+
+  .logo-wrap{
+    margin-bottom:14px;
+  }
+
+  .logo-wrap img{
+    height:56px;
+  }
+
+  .actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .btn{
+    width:100%;
+    text-align:center;
+    box-sizing:border-box;
+  }
+
+  .topbar{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .topbar-left,
+  .topbar-right{
+    min-width:0;
+    width:100%;
+  }
+
+  .topbar-right{
+    text-align:left;
+  }
+
+  .title{
+    font-size:1.55rem;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr{
+    display:block;
+    width:100%;
+  }
+
+  thead{
+    display:none;
+  }
+
+  tr{
+    border-bottom:1px solid #e5e5e5;
+    padding:10px 0;
+    margin-bottom:10px;
+  }
+
+  td{
+    border:none;
+    padding:6px 0;
+    text-align:left !important;
+  }
+
+  .total-box{
+    font-size:1rem;
+    text-align:left;
+  }
+}
+
+    .title{
+      font-size:2rem;
+      font-weight:bold;
+      margin-bottom:8px;
+    }
+
+    .muted{
+      color:#555;
+      line-height:1.6;
+      font-size:0.95rem;
     }
 
     .block{
@@ -115,7 +217,7 @@
 
     .footer-note{
       margin-top:24px;
-      line-height:1.6;
+      line-height:1.7;
       color:#444;
     }
 
@@ -140,32 +242,39 @@
 </head>
 <body>
   <div class="sheet">
-      <div style="margin-bottom:20px;">
-  <img src="logofactuur.png" alt="WJU Zorg logo"
-       style="height:70px; width:auto; display:block;">
-</div>
+
+    <div class="logo-wrap">
+      <img src="logofactuur.png" alt="WJU Zorg logo">
+    </div>
+
     <div class="actions">
       <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
       <button class="btn" onclick="printInvoice()">Print / Opslaan als PDF</button>
     </div>
 
-    <div class="topbar">
-      <div>
-        <div class="title">Conceptfactuur</div>
-        <div class="muted">
-  <strong>WJU Zorg</strong><br>
-  Zenithstraat 21<br>
-  3582 PK Utrecht<br>
-  Nederland<br><br>
+  <div class="topbar">
+  <div class="topbar-left">
+    <div class="title">Conceptfactuur</div>
+    <div class="muted">
+      <strong>WJU Zorg</strong><br>
+      Zenithstraat 21<br>
+      3582 PK Utrecht<br>
+      Nederland<br><br>
 
-  E-mail: wjuzorg@gmail.com<br>
-  Website: www.wjuzorg.nl<br>
-  KVK: 42018479<br>
-  BTW: vrijgesteld volgens art. 11 lid 1 onderdeel g Wet OB<br><br>
+      E-mail: wjuzorg@gmail.com<br>
+      Website: www.wjuzorg.nl<br>
+      KVK: 42018479<br>
+      BTW: vrijgesteld volgens art. 11 lid 1 onderdeel g Wet OB<br><br>
 
-  IBAN: VUL-HIER-JE-ZAKELIJKE-REKENING-IN
+      IBAN: VUL-HIER-JE-ZAKELIJKE-REKENING-IN
+    </div>
+  </div>
+
+  <div class="muted topbar-right">
+    <div><strong>Factuurdatum:</strong> <span id="invoiceDate"></span></div>
+    <div><strong>Betaaltermijn:</strong> binnen 14 dagen</div>
+  </div>
 </div>
-      </div>
 
       <div class="muted" style="text-align:right;">
         <div><strong>Factuurdatum:</strong> <span id="invoiceDate"></span></div>
@@ -202,9 +311,19 @@
       <strong>BTW:</strong> vrijgesteld van omzetbelasting volgens artikel 11 lid 1 onderdeel g Wet OB.<br>
       Wij verzoeken u vriendelijk deze factuur binnen 14 dagen te voldoen op de zakelijke bankrekening van WJU Zorg.
     </div>
+
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
     function euro(amount){
       return Number(amount || 0).toLocaleString("nl-NL", {
         style: "currency",
@@ -247,6 +366,8 @@
       document.getElementById("clientAddress").textContent = firstAddress;
 
       const tbody = document.getElementById("invoiceTableBody");
+      tbody.innerHTML = "";
+
       let total = 0;
 
       items.forEach(item => {
@@ -266,117 +387,25 @@
       document.getElementById("invoiceTotal").textContent = euro(total);
     }
 
-    loadInvoicePdf();
-    
     async function printInvoice() {
+      const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
 
-  const requestId = new URLSearchParams(window.location.search).get("id");
+      if (itemIds.length > 0) {
+        const { error } = await supabaseClient
+          .from("invoice_items")
+          .update({ status: "gefactureerd" })
+          .in("id", itemIds);
 
-  if(requestId){
-
-    await supabase
-      .from("requests")
-      .update({ invoiced: true })
-      .eq("id", requestId);
-
-  }
-
-  window.print();
-}
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-
-<script>
-  const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
-
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
-
-  function euro(amount){
-    return Number(amount || 0).toLocaleString("nl-NL", {
-      style: "currency",
-      currency: "EUR"
-    });
-  }
-
-  function getServiceDescription(serviceType){
-    const s = (serviceType || "").toLowerCase();
-
-    if (s.includes("zorgafspraak") || s.includes("begeleiding naar afspraak")) {
-      return "Begeleiding naar en bij afspraken ter ondersteuning van zelfstandig functioneren.";
-    }
-
-    if (s.includes("boodschap")) {
-      return "Praktische begeleiding bij dagelijkse boodschappen ter ondersteuning van zelfstandig functioneren.";
-    }
-
-    if (s.includes("klus")) {
-      return "Praktische ondersteuning bij lichte werkzaamheden in en om het huis ter ontlasting van de cliënt.";
-    }
-
-    if (s.includes("gezelschap") || s.includes("wandeling")) {
-      return "Individuele begeleiding en sociaal contact ter voorkoming van eenzaamheid.";
-    }
-
-    return "Praktische begeleiding ter ondersteuning van zelfstandig functioneren.";
-  }
-
-  function loadInvoicePdf(){
-    const client = localStorage.getItem("wju_invoice_client") || "Onbekende cliënt";
-    const items = JSON.parse(localStorage.getItem("wju_invoice_items") || "[]");
-
-    document.getElementById("invoiceDate").textContent =
-      new Date().toLocaleDateString("nl-NL");
-
-    document.getElementById("clientName").textContent = client;
-
-    const firstAddress = items[0]?.client_address || "Adres nog niet beschikbaar";
-    document.getElementById("clientAddress").textContent = firstAddress;
-
-    const tbody = document.getElementById("invoiceTableBody");
-    tbody.innerHTML = "";
-
-    let total = 0;
-
-    items.forEach(item => {
-      const amount = Number(item.amount_snapshot || 0);
-      total += amount;
-
-      tbody.innerHTML += `
-        <tr>
-          <td>${item.service_type || "-"}</td>
-          <td>${getServiceDescription(item.service_type)}</td>
-          <td class="right">${item.duration_minutes || 0}</td>
-          <td class="right">${euro(amount)}</td>
-        </tr>
-      `;
-    });
-
-    document.getElementById("invoiceTotal").textContent = euro(total);
-  }
-
-  async function printInvoice() {
-    const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
-
-    if (itemIds.length > 0) {
-      const { error } = await supabaseClient
-        .from("invoice_items")
-        .update({ status: "gefactureerd" })
-        .in("id", itemIds);
-
-      if (error) {
-        alert("Fout bij opslaan als gefactureerd: " + error.message);
-        return;
+        if (error) {
+          alert("Fout bij opslaan als gefactureerd: " + error.message);
+          return;
+        }
       }
+
+      window.print();
     }
 
-    window.print();
-  }
-
-  loadInvoicePdf();
-</script>
+    loadInvoicePdf();
+  </script>
 </body>
 </html>
