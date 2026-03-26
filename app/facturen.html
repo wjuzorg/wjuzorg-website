@@ -254,126 +254,103 @@
       });
     }
 
-    async function loadInvoices(){
+    async function loadInvoices() {
+  const statusEl = document.getElementById("status");
+  const listEl = document.getElementById("invoiceList");
+  const totalEl = document.getElementById("totalAmount");
 
-const statusEl = document.getElementById("status");
-const listEl = document.getElementById("invoiceList");
-const totalEl = document.getElementById("totalAmount");
+  statusEl.innerText = "Factuurregels laden...";
+  listEl.innerHTML = "";
+  totalEl.innerText = "€0,00";
 
-statusEl.innerText = "Factuurregels laden...";
-listEl.innerHTML = "";
-totalEl.innerText = "€0";
+  const { data, error } = await supabaseClient
+    .from("invoice_items")
+    .select("*")
+    .eq("status", "open")
+    .order("created_at", { ascending: false });
 
-const { data, error } = await supabaseClient
-  .from("invoice_items")
-  .select("*")
-  .eq("status", "open")
-  .order("created_at", { ascending: false });
+  if (error) {
+    statusEl.innerHTML = "Fout: " + error.message;
+    return;
+  }
 
-if(error){
-statusEl.innerHTML = "Fout: " + error.message;
-return;
-}
-invoiceItemsData = data || [];
+  invoiceItemsData = data || [];
 
-if(!data || data.length === 0){
-statusEl.innerHTML = "Nog geen facturen.";
-return;
-}
+  if (!data || data.length === 0) {
+    statusEl.innerHTML = "Nog geen facturen.";
+    return;
+  }
 
-statusEl.innerHTML = "";
+  statusEl.innerHTML = "";
 
-let total = 0;
+  let total = 0;
+  const grouped = {};
 
-const grouped = {};
+  data.forEach(item => {
+    const client = item.client_name || "Onbekende cliënt";
 
-data.forEach(item => {
+    if (!grouped[client]) {
+      grouped[client] = [];
+    }
 
-const client = item.client_name || "Onbekende cliënt";
+    grouped[client].push(item);
+  });
 
-if(!grouped[client]){
-grouped[client] = [];
-}
+  for (const client in grouped) {
+    let clientTotal = 0;
 
-grouped[client].push(item);
+    listEl.innerHTML += `
+      <div class="card">
+        <div class="client-header">
+          <div class="client-name">${client}</div>
 
-});
+          <div class="client-actions">
+            <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
+              Factuur
+            </button>
 
-for (const client in grouped) {
+            <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
+              Aanpassen
+            </button>
 
-let clientTotal = 0;
+            <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+              Cliëntenkaart
+            </button>
+          </div>
+        </div>
 
-listEl.innerHTML += `
-<div class="card">
+        <div class="invoice-lines">
+    `;
 
-<div class="client-header">
-<div class="client-name">${client}</div>
+    grouped[client].forEach(item => {
+      const amount = Number(item.amount_snapshot || 0);
+      total += amount;
+      clientTotal += amount;
 
-<div class="client-actions">
+      listEl.innerHTML += `
+        <div class="invoice-line">
+          <div class="line-left">
+            <div class="line-service">${item.service_type || "-"}</div>
+            <div class="line-meta">${item.duration_minutes || 0} min</div>
+          </div>
 
-<button class="btn-small"
-onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
-Factuur
-</button>
+          <div class="line-amount">${euro(amount)}</div>
+        </div>
+      `;
+    });
 
-<button class="btn-small"
-onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
-Aanpassen
-</button>
+    listEl.innerHTML += `
+        </div>
 
-<button class="btn-small"
-onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
-Cliëntenkaart
-</button>
+        <div class="client-subtotal">
+          <span>Subtotaal ${client}</span>
+          <span>${euro(clientTotal)}</span>
+        </div>
+      </div>
+    `;
+  }
 
-</div>
-</div>
-
-<div class="invoice-lines">
-`;
-
-grouped[client].forEach(item => {
-
-const amount = Number(item.amount_snapshot || 0);
-
-total += amount;
-clientTotal += amount;
-
-listEl.innerHTML += `
-<div class="invoice-line">
-
-<div class="line-left">
-<div class="line-service">${item.service_type || "-"}</div>
-<div class="line-meta">${item.duration_minutes || 0} min</div>
-</div>
-
-<div class="line-amount">${euro(amount)}</div>
-
-</div>
-`;
-
-});
-
-listEl.innerHTML += `
-
-</div>
-
-<div class="client-subtotal">
-<span>Subtotaal ${client}</span>
-<span>${euro(clientTotal)}</span>
-</div>
-
-</div>
-`;
-
-}
-
-listEl.innerHTML += `</div>`;
-
-}
-
-totalEl.innerText = euro(total);
-
+  totalEl.innerText = euro(total);
 }
 
 function generateInvoice(client){
