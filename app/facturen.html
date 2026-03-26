@@ -19,6 +19,24 @@
       padding:20px;
     }
 
+    .page-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:10px;
+    }
+
+    .back-link{
+      text-decoration:none;
+      background:#eee;
+      padding:8px 14px;
+      border-radius:8px;
+      font-size:0.9rem;
+      color:#333;
+      white-space:nowrap;
+    }
+
     .card{
       background:white;
       padding:20px;
@@ -27,112 +45,18 @@
       box-shadow:0 2px 6px rgba(0,0,0,0.05);
     }
 
-    .row{
-      display:flex;
-      justify-content:space-between;
-      gap:15px;
-      margin-bottom:8px;
-    }
-
-    .row strong{
-      font-size:1rem;
-    }
-
     .total{
       font-weight:bold;
       font-size:1.2rem;
       margin-top:15px;
     }
 
-    .btn{
-      background:#28a745;
-      color:white;
-      padding:15px;
-      border:none;
-      border-radius:10px;
-      width:100%;
-      font-weight:bold;
-      margin-top:20px;
-      cursor:pointer;
-      font-size:1rem;
-    }
-    
     .small{
-  font-size:0.9rem;
-  color:#666;
-  margin-top:10px;
-  line-height:1.5;
-}
-
- .btn-small{
-  background:#28a745;
-  color:white;
-  border:none;
-  padding:8px 10px;
-  border-radius:8px;
-  font-size:0.78rem;
-  cursor:pointer;
-  white-space:nowrap;
-}
-
-.client-header{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap:12px;
-  width:100%;
-  margin-bottom:14px;
-}
-
-.client-name{
-  font-weight:bold;
-  flex:1;
-  min-width:0;
-  line-height:1.3;
-}
-
-.client-actions{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-  max-width:58%;
-}
-
-@media (max-width: 640px){
-  .container{
-    padding:14px;
-  }
-
-  .card{
-    padding:16px;
-  }
-
-  .row{
-    flex-direction:column;
-    gap:4px;
-    margin-bottom:10px;
-  }
-
-  .client-header{
-    flex-direction:column;
-    align-items:stretch;
-  }
-
-  .client-actions{
-    max-width:100%;
-    justify-content:flex-start;
-  }
-
-  .btn-small{
-    font-size:0.75rem;
-    padding:8px 9px;
-  }
-
-  .total{
-    font-size:1.05rem;
-  }
-}
+      font-size:0.9rem;
+      color:#666;
+      margin-top:10px;
+      line-height:1.5;
+    }
 
     .status{
       margin-bottom:15px;
@@ -154,75 +78,149 @@
       padding:18px;
       border-radius:12px;
       color:#666;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
     }
 
-    .muted{
-      color:#888;
-      font-size:0.9rem;
-      margin-top:5px;
+    .btn-small{
+      background:#28a745;
+      color:white;
+      border:none;
+      padding:8px 10px;
+      border-radius:8px;
+      font-size:0.78rem;
+      cursor:pointer;
+      white-space:nowrap;
     }
-    
+
+    .client-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      width:100%;
+      margin-bottom:14px;
+    }
+
+    .client-name{
+      font-weight:bold;
+      flex:1;
+      min-width:0;
+      line-height:1.3;
+      font-size:1.05rem;
+    }
+
+    .client-actions{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      max-width:58%;
+    }
+
     .invoice-lines{
-  margin-top:10px;
-  border-top:1px solid #eee;
-  padding-top:10px;
-}
+      margin-top:10px;
+      border-top:1px solid #eee;
+      padding-top:10px;
+    }
 
-.invoice-line{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
-  padding:10px 0;
-  border-bottom:1px solid #f2f2f2;
-}
+    .invoice-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      padding:10px 0;
+      border-bottom:1px solid #f2f2f2;
+    }
 
-.invoice-line:last-child{
-  border-bottom:none;
-}
+    .invoice-line:last-child{
+      border-bottom:none;
+    }
 
-.line-left{
-  flex:1;
-}
+    .line-left{
+      flex:1;
+      min-width:0;
+    }
 
-.line-service{
-  font-weight:600;
-}
+    .line-service{
+      font-weight:600;
+      margin-bottom:3px;
+    }
 
-.line-meta{
-  color:#777;
-  font-size:0.9rem;
-}
+    .line-meta{
+      color:#777;
+      font-size:0.9rem;
+    }
 
-.line-amount{
-  font-weight:bold;
-}
+    .line-amount{
+      font-weight:bold;
+      white-space:nowrap;
+    }
 
-.client-subtotal{
-  margin-top:12px;
-  padding-top:12px;
-  border-top:1px solid #ddd;
-  display:flex;
-  justify-content:space-between;
-  font-weight:bold;
-}
-    
+    .client-subtotal{
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid #ddd;
+      display:flex;
+      justify-content:space-between;
+      font-weight:bold;
+    }
+
+    @media (max-width: 640px){
+      .container{
+        padding:14px;
+      }
+
+      .page-header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .card{
+        padding:16px;
+      }
+
+      .client-header{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .client-actions{
+        max-width:100%;
+        justify-content:flex-start;
+      }
+
+      .btn-small{
+        font-size:0.75rem;
+        padding:8px 9px;
+      }
+
+      .invoice-line{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .line-amount{
+        margin-top:4px;
+      }
+
+      .client-subtotal{
+        flex-direction:column;
+        gap:4px;
+      }
+
+      .total{
+        font-size:1.05rem;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-  <h2>Factuur overzicht</h2>
-  <a href="today.html" style="
-    text-decoration:none;
-    background:#eee;
-    padding:8px 14px;
-    border-radius:8px;
-    font-size:0.9rem;
-    color:#333;
-  ">← Terug naar Today</a>
-</div>
+    <div class="page-header">
+      <h2>Factuur overzicht</h2>
+      <a href="today.html" class="back-link">← Terug naar Today</a>
+    </div>
 
     <div id="status" class="status">Factuurregels laden...</div>
     <div id="invoiceList"></div>
@@ -234,6 +232,7 @@
         BTW vrijgesteld van omzetbelasting volgens artikel 11 lid 1 onderdeel g Wet OB.<br>
         Betaling binnen 14 dagen.
       </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -245,6 +244,7 @@
       SUPABASE_URL,
       SUPABASE_ANON_KEY
     );
+
     let invoiceItemsData = [];
 
     function euro(amount){
@@ -255,138 +255,124 @@
     }
 
     async function loadInvoices() {
-  const statusEl = document.getElementById("status");
-  const listEl = document.getElementById("invoiceList");
-  const totalEl = document.getElementById("totalAmount");
+      const statusEl = document.getElementById("status");
+      const listEl = document.getElementById("invoiceList");
+      const totalEl = document.getElementById("totalAmount");
 
-  statusEl.innerText = "Factuurregels laden...";
-  listEl.innerHTML = "";
-  totalEl.innerText = "€0,00";
+      statusEl.textContent = "Factuurregels laden...";
+      listEl.innerHTML = "";
+      totalEl.textContent = "€0,00";
 
-  const { data, error } = await supabaseClient
-    .from("invoice_items")
-    .select("*")
-    .eq("status", "open")
-    .order("created_at", { ascending: false });
+      const { data, error } = await supabaseClient
+        .from("invoice_items")
+        .select("*")
+        .eq("status", "open")
+        .order("created_at", { ascending: false });
 
-  if (error) {
-    statusEl.innerHTML = "Fout: " + error.message;
-    return;
-  }
+      if (error) {
+        statusEl.innerHTML = `<div class="error">Fout: ${error.message}</div>`;
+        return;
+      }
 
-  invoiceItemsData = data || [];
+      invoiceItemsData = data || [];
 
-  if (!data || data.length === 0) {
-    statusEl.innerHTML = "Nog geen facturen.";
-    return;
-  }
+      if (!data || data.length === 0) {
+        statusEl.textContent = "Nog geen facturen.";
+        return;
+      }
 
-  statusEl.innerHTML = "";
+      statusEl.textContent = "";
 
-  let total = 0;
-  const grouped = {};
+      let total = 0;
+      const grouped = {};
 
-  data.forEach(item => {
-    const client = item.client_name || "Onbekende cliënt";
+      data.forEach(item => {
+        const client = item.client_name || "Onbekende cliënt";
+        if (!grouped[client]) grouped[client] = [];
+        grouped[client].push(item);
+      });
 
-    if (!grouped[client]) {
-      grouped[client] = [];
+      for (const client in grouped) {
+        let clientTotal = 0;
+
+        listEl.innerHTML += `
+          <div class="card">
+            <div class="client-header">
+              <div class="client-name">${client}</div>
+
+              <div class="client-actions">
+                <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
+                  Factuur
+                </button>
+
+                <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
+                  Aanpassen
+                </button>
+
+                <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+                  Cliëntenkaart
+                </button>
+              </div>
+            </div>
+
+            <div class="invoice-lines">
+        `;
+
+        grouped[client].forEach(item => {
+          const amount = Number(item.amount_snapshot || 0);
+          total += amount;
+          clientTotal += amount;
+
+          listEl.innerHTML += `
+            <div class="invoice-line">
+              <div class="line-left">
+                <div class="line-service">${item.service_type || "-"}</div>
+                <div class="line-meta">${item.duration_minutes || 0} min</div>
+              </div>
+
+              <div class="line-amount">${euro(amount)}</div>
+            </div>
+          `;
+        });
+
+        listEl.innerHTML += `
+            </div>
+
+            <div class="client-subtotal">
+              <span>Subtotaal ${client}</span>
+              <span>${euro(clientTotal)}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      totalEl.textContent = euro(total);
     }
 
-    grouped[client].push(item);
-  });
+    function generateInvoice(client){
+      const itemsForClient = invoiceItemsData.filter(item => item.client_name === client);
 
-  for (const client in grouped) {
-    let clientTotal = 0;
+      if (!itemsForClient || itemsForClient.length === 0) {
+        alert("Geen factuurregels gevonden voor " + client);
+        return;
+      }
 
-    listEl.innerHTML += `
-      <div class="card">
-        <div class="client-header">
-          <div class="client-name">${client}</div>
+      localStorage.setItem("wju_invoice_client", client);
+      localStorage.setItem("wju_invoice_items", JSON.stringify(itemsForClient));
+      localStorage.setItem("wju_invoice_item_ids", JSON.stringify(itemsForClient.map(item => item.id)));
 
-          <div class="client-actions">
-            <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
-              Factuur
-            </button>
+      window.location.href = "factuur-pdf.html?client=" + encodeURIComponent(client);
+    }
 
-            <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
-              Aanpassen
-            </button>
+    function editInvoice(client){
+      alert("Factuur aanpassen voor: " + client);
+    }
 
-            <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
-              Cliëntenkaart
-            </button>
-          </div>
-        </div>
+    function openClientCard(client){
+      alert("Cliëntenkaart openen voor: " + client);
+    }
 
-        <div class="invoice-lines">
-    `;
-
-    grouped[client].forEach(item => {
-      const amount = Number(item.amount_snapshot || 0);
-      total += amount;
-      clientTotal += amount;
-
-      listEl.innerHTML += `
-        <div class="invoice-line">
-          <div class="line-left">
-            <div class="line-service">${item.service_type || "-"}</div>
-            <div class="line-meta">${item.duration_minutes || 0} min</div>
-          </div>
-
-          <div class="line-amount">${euro(amount)}</div>
-        </div>
-      `;
-    });
-
-    listEl.innerHTML += `
-        </div>
-
-        <div class="client-subtotal">
-          <span>Subtotaal ${client}</span>
-          <span>${euro(clientTotal)}</span>
-        </div>
-      </div>
-    `;
-  }
-
-  totalEl.innerText = euro(total);
-}
-
-function generateInvoice(client){
-  const itemsForClient = invoiceItemsData.filter(item => item.client_name === client);
-
-  if(!itemsForClient || itemsForClient.length === 0){
-    alert("Geen factuurregels gevonden voor " + client);
-    return;
-  }
-
-  localStorage.setItem("wju_invoice_client", client);
-  localStorage.setItem("wju_invoice_items", JSON.stringify(itemsForClient));
-  localStorage.setItem(
-    "wju_invoice_item_ids",
-    JSON.stringify(itemsForClient.map(item => item.id))
-  );
-
-  window.location.href = "factuur-pdf.html?client=" + encodeURIComponent(client);
-}
-
-function editInvoice(client){
-  alert("Factuur aanpassen voor: " + client);
-}
-
-function openClientCard(client){
-  alert("Cliëntenkaart openen voor: " + client);
-}
-
-/* volgende stap:
-hier gaan we straks:
-- factuurregels ophalen van deze cliënt
-- PDF maken
-*/
-
-
-  loadInvoices();
+    loadInvoices();
   </script>
 </body>
 </html>
