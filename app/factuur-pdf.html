@@ -283,6 +283,100 @@
 
   window.print();
 }
-  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+  const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  function euro(amount){
+    return Number(amount || 0).toLocaleString("nl-NL", {
+      style: "currency",
+      currency: "EUR"
+    });
+  }
+
+  function getServiceDescription(serviceType){
+    const s = (serviceType || "").toLowerCase();
+
+    if (s.includes("zorgafspraak") || s.includes("begeleiding naar afspraak")) {
+      return "Begeleiding naar en bij afspraken ter ondersteuning van zelfstandig functioneren.";
+    }
+
+    if (s.includes("boodschap")) {
+      return "Praktische begeleiding bij dagelijkse boodschappen ter ondersteuning van zelfstandig functioneren.";
+    }
+
+    if (s.includes("klus")) {
+      return "Praktische ondersteuning bij lichte werkzaamheden in en om het huis ter ontlasting van de cliënt.";
+    }
+
+    if (s.includes("gezelschap") || s.includes("wandeling")) {
+      return "Individuele begeleiding en sociaal contact ter voorkoming van eenzaamheid.";
+    }
+
+    return "Praktische begeleiding ter ondersteuning van zelfstandig functioneren.";
+  }
+
+  function loadInvoicePdf(){
+    const client = localStorage.getItem("wju_invoice_client") || "Onbekende cliënt";
+    const items = JSON.parse(localStorage.getItem("wju_invoice_items") || "[]");
+
+    document.getElementById("invoiceDate").textContent =
+      new Date().toLocaleDateString("nl-NL");
+
+    document.getElementById("clientName").textContent = client;
+
+    const firstAddress = items[0]?.client_address || "Adres nog niet beschikbaar";
+    document.getElementById("clientAddress").textContent = firstAddress;
+
+    const tbody = document.getElementById("invoiceTableBody");
+    tbody.innerHTML = "";
+
+    let total = 0;
+
+    items.forEach(item => {
+      const amount = Number(item.amount_snapshot || 0);
+      total += amount;
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${item.service_type || "-"}</td>
+          <td>${getServiceDescription(item.service_type)}</td>
+          <td class="right">${item.duration_minutes || 0}</td>
+          <td class="right">${euro(amount)}</td>
+        </tr>
+      `;
+    });
+
+    document.getElementById("invoiceTotal").textContent = euro(total);
+  }
+
+  async function printInvoice() {
+    const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
+
+    if (itemIds.length > 0) {
+      const { error } = await supabaseClient
+        .from("invoice_items")
+        .update({ status: "gefactureerd" })
+        .in("id", itemIds);
+
+      if (error) {
+        alert("Fout bij opslaan als gefactureerd: " + error.message);
+        return;
+      }
+    }
+
+    window.print();
+  }
+
+  loadInvoicePdf();
+</script>
 </body>
 </html>
