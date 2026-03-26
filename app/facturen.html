@@ -1,210 +1,279 @@
 <!doctype html>
 <html lang="nl">
-
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Facturen - WJU Zorg</title>
 
-<title>Facturen - WJU Zorg</title>
+  <style>
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f3f3f3;
+      margin:0;
+      color:#222;
+    }
 
-<style>
+    .container{
+      max-width:700px;
+      margin:auto;
+      padding:20px;
+    }
 
-body{
-font-family:Arial;
-background:#f3f3f3;
-margin:0;
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:15px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      margin-bottom:8px;
+    }
+
+    .row strong{
+      font-size:1rem;
+    }
+
+    .total{
+      font-weight:bold;
+      font-size:1.2rem;
+      margin-top:15px;
+    }
+
+    .btn{
+      background:#28a745;
+      color:white;
+      padding:15px;
+      border:none;
+      border-radius:10px;
+      width:100%;
+      font-weight:bold;
+      margin-top:20px;
+      cursor:pointer;
+      font-size:1rem;
+    }
+    
+    .small{
+  font-size:0.9rem;
+  color:#666;
+  margin-top:10px;
+  line-height:1.5;
 }
 
-.container{
-max-width:700px;
-margin:auto;
-padding:20px;
+  .btn-small{
+  background:#28a745;
+  color:white;
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:0.8rem;
+  cursor:pointer;
 }
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:15px;
-box-shadow:0 2px 6px rgba(0,0,0,0.05);
-}
+    .status{
+      margin-bottom:15px;
+      color:#666;
+      font-size:0.95rem;
+    }
 
-.row{
-display:flex;
-justify-content:space-between;
-margin-bottom:8px;
-}
+    .error{
+      background:#fff1f1;
+      color:#a40000;
+      border:1px solid #f1b5b5;
+      padding:12px;
+      border-radius:10px;
+      margin-bottom:15px;
+    }
 
-.total{
-font-weight:bold;
-font-size:1.2rem;
-margin-top:15px;
-}
+    .empty{
+      background:#fff;
+      padding:18px;
+      border-radius:12px;
+      color:#666;
+    }
 
-.btn{
-background:#28a745;
-color:white;
-padding:15px;
-border:none;
-border-radius:10px;
-width:100%;
-font-weight:bold;
-margin-top:20px;
-cursor:pointer;
-}
-
-.small{
-font-size:0.85rem;
-color:#666;
-margin-top:10px;
-}
-
-.status{
-margin-bottom:15px;
-color:#888;
-}
-
-</style>
+    .muted{
+      color:#888;
+      font-size:0.9rem;
+      margin-top:5px;
+    }
+  </style>
 </head>
 
-
 <body>
-
-<div class="container">
-
-<h2>Factuur overzicht</h2>
-
-<div id="status" class="status">Laden...</div>
-
-<div id="invoiceList"></div>
-
-<div class="card">
-
-<div class="total">
-Totaal: <span id="totalAmount">€0</span>
+  <div class="container">
+    <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+  <h2>Factuur overzicht</h2>
+  <a href="today.html" style="
+    text-decoration:none;
+    background:#eee;
+    padding:8px 14px;
+    border-radius:8px;
+    font-size:0.9rem;
+    color:#333;
+  ">← Terug naar Today</a>
 </div>
 
-<div class="small">
-BTW vrijgesteld van omzetbelasting volgens artikel 11 lid 1 onderdeel g Wet OB.<br>
-Betaling binnen 14 dagen.
-</div>
+    <div id="status" class="status">Factuurregels laden...</div>
+    <div id="invoiceList"></div>
 
-<button class="btn" onclick="generateInvoice()">
-Genereer factuur
-</button>
+    <div class="card">
+      <div class="total">Totaal: <span id="totalAmount">€0,00</span></div>
 
-</div>
+      <div class="small">
+        BTW vrijgesteld van omzetbelasting volgens artikel 11 lid 1 onderdeel g Wet OB.<br>
+        Betaling binnen 14 dagen.
+      </div>
+  </div>
 
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
 
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+    let invoiceItemsData = [];
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    function euro(amount){
+      return Number(amount || 0).toLocaleString("nl-NL", {
+        style: "currency",
+        currency: "EUR"
+      });
+    }
 
-<script>
+    async function loadInvoices(){
 
-const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+const statusEl = document.getElementById("status");
+const listEl = document.getElementById("invoiceList");
+const totalEl = document.getElementById("totalAmount");
 
-const supabase = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY
-);
+statusEl.innerText = "Factuurregels laden...";
+listEl.innerHTML = "";
+totalEl.innerText = "€0";
 
-
-function euro(amount){
-
-return Number(amount || 0).toLocaleString(
-"nl-NL",
-{
-style:"currency",
-currency:"EUR"
-}
-);
-
-}
-
-
-async function loadInvoices(){
-
-const status = document.getElementById("status");
-const list = document.getElementById("invoiceList");
-
-status.innerText = "Factuurregels laden...";
-
-
-const { data, error } = await supabase
+const { data, error } = await supabaseClient
 .from("invoice_items")
 .select("*")
 .order("created_at",{ascending:false});
 
-
-console.log("invoice_items data:",data);
-console.log("invoice_items error:",error);
-
-
 if(error){
-
-status.innerText = "Fout: " + error.message;
+statusEl.innerHTML = "Fout: " + error.message;
 return;
-
 }
-
+invoiceItemsData = data || [];
 
 if(!data || data.length === 0){
-
-status.innerText = "Nog geen factuurregels gevonden.";
+statusEl.innerHTML = "Nog geen facturen.";
 return;
-
 }
 
-
-status.innerText = "";
+statusEl.innerHTML = "";
 
 let total = 0;
 
+const grouped = {};
+
 data.forEach(item => {
 
-const amount = Number(item.amount_snapshot || 0);
+const client = item.client_name || "Onbekende cliënt";
 
+if(!grouped[client]){
+grouped[client] = [];
+}
+
+grouped[client].push(item);
+
+});
+
+for(const client in grouped){
+
+listEl.innerHTML += `
+  <div class="card">
+    <div class="row" style="align-items:center; margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:20px;">
+
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+
+  <div style="font-weight:bold;">
+    ${client}
+  </div>
+
+  <div style="display:flex; gap:8px;">
+    <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
+      Factuur
+    </button>
+
+    <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
+      Aanpassen
+    </button>
+
+    <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+      Cliëntenkaart
+    </button>
+  </div>
+
+</div>
+`;
+
+grouped[client].forEach(item => {
+
+const amount = Number(item.amount_snapshot || 0);
 total += amount;
 
-list.innerHTML += `
-
-<div class="card">
-
+listEl.innerHTML += `
 <div class="row">
-<span>${item.client_name || "Onbekende cliënt"}</span>
+<span>${item.service_type || "-"} • ${item.duration_minutes} min</span>
 <span>${euro(amount)}</span>
 </div>
-
-<div class="small">
-${item.service_type || "-"} • ${item.duration_minutes || 0} min
-</div>
-
-</div>
-
 `;
 
 });
 
-
-document.getElementById("totalAmount").innerText = euro(total);
-
-}
-
-
-
-function generateInvoice(){
-
-alert("Hier gaan we straks de PDF factuur genereren 🔥");
+listEl.innerHTML += `</div>`;
 
 }
 
+totalEl.innerText = euro(total);
 
-loadInvoices();
+}
 
-</script>
+function generateInvoice(client){
+  const itemsForClient = invoiceItemsData.filter(item => item.client_name === client);
+
+  if(!itemsForClient || itemsForClient.length === 0){
+    alert("Geen factuurregels gevonden voor " + client);
+    return;
+  }
+
+  localStorage.setItem("wju_invoice_client", client);
+  localStorage.setItem("wju_invoice_items", JSON.stringify(itemsForClient));
+
+  window.location.href = "factuur-pdf.html?client=" + encodeURIComponent(client);
+}
+
+function editInvoice(client){
+  alert("Factuur aanpassen voor: " + client);
+}
+
+function openClientCard(client){
+  alert("Cliëntenkaart openen voor: " + client);
+}
+
+/* volgende stap:
+hier gaan we straks:
+- factuurregels ophalen van deze cliënt
+- PDF maken
+*/
 
 
+  loadInvoices();
+  </script>
 </body>
 </html>
