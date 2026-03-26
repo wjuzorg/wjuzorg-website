@@ -244,7 +244,7 @@
   <div class="sheet">
 
     <div class="logo-wrap">
-      <img src="logofactuur.png" alt="WJU Zorg logo">
+      <img src="logofactuur.jpg" alt="WJU Zorg logo">
     </div>
 
     <div class="actions">
@@ -388,9 +388,12 @@
     }
 
     async function printInvoice() {
+      const btn = document.querySelector('.btn:not(.btn-secondary)');
       const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
 
       if (itemIds.length > 0) {
+        btn.innerText = "Bezig met verwerken...";
+        
         const { error } = await supabaseClient
           .from("invoice_items")
           .update({ status: "gefactureerd" })
@@ -398,11 +401,18 @@
 
         if (error) {
           alert("Fout bij opslaan als gefactureerd: " + error.message);
+          btn.innerText = "Print / Opslaan als PDF";
           return;
         }
       }
 
+      btn.innerText = "Gefactureerd!";
+      
+      // Open het print dialoog
       window.print();
+      
+      // FIX: Stuurt je direct terug naar het overzicht, zodat de cliënt daar ververst wordt en wegvalt
+      window.location.href = "facturen.html";
     }
 
     loadInvoicePdf();
