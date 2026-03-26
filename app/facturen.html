@@ -161,6 +161,52 @@
       font-size:0.9rem;
       margin-top:5px;
     }
+    
+    .invoice-lines{
+  margin-top:10px;
+  border-top:1px solid #eee;
+  padding-top:10px;
+}
+
+.invoice-line{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid #f2f2f2;
+}
+
+.invoice-line:last-child{
+  border-bottom:none;
+}
+
+.line-left{
+  flex:1;
+}
+
+.line-service{
+  font-weight:600;
+}
+
+.line-meta{
+  color:#777;
+  font-size:0.9rem;
+}
+
+.line-amount{
+  font-weight:bold;
+}
+
+.client-subtotal{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #ddd;
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+}
+    
   </style>
 </head>
 
@@ -253,42 +299,74 @@ grouped[client].push(item);
 
 });
 
-for(const client in grouped){
+for (const client in grouped) {
+
+let clientTotal = 0;
 
 listEl.innerHTML += `
-  <div class="card">
-    <div class="client-header">
-      <div class="client-name">${client}</div>
+<div class="card">
 
-      <div class="client-actions">
-        <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
-          Factuur
-        </button>
+<div class="client-header">
+<div class="client-name">${client}</div>
 
-        <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
-          Aanpassen
-        </button>
+<div class="client-actions">
 
-        <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
-          Cliëntenkaart
-        </button>
-      </div>
-    </div>
+<button class="btn-small"
+onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
+Factuur
+</button>
+
+<button class="btn-small"
+onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
+Aanpassen
+</button>
+
+<button class="btn-small"
+onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+Cliëntenkaart
+</button>
+
+</div>
+</div>
+
+<div class="invoice-lines">
 `;
 
 grouped[client].forEach(item => {
 
 const amount = Number(item.amount_snapshot || 0);
+
 total += amount;
+clientTotal += amount;
 
 listEl.innerHTML += `
-<div class="row">
-<span>${item.service_type || "-"} • ${item.duration_minutes} min</span>
-<span>${euro(amount)}</span>
+<div class="invoice-line">
+
+<div class="line-left">
+<div class="line-service">${item.service_type || "-"}</div>
+<div class="line-meta">${item.duration_minutes || 0} min</div>
+</div>
+
+<div class="line-amount">${euro(amount)}</div>
+
 </div>
 `;
 
 });
+
+listEl.innerHTML += `
+
+</div>
+
+<div class="client-subtotal">
+<span>Subtotaal ${client}</span>
+<span>${euro(clientTotal)}</span>
+</div>
+
+</div>
+`;
+
+}
 
 listEl.innerHTML += `</div>`;
 
