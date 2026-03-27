@@ -154,44 +154,35 @@
 
 <body>
 
-<div style="text-align:center; margin-top:20px;">
-  <img src="logofactuur.jpg" alt="WJU Zorg" style="max-width:220px;">
-</div>
-
   <div class="container">
+
+    <div style="text-align:center; margin:30px 0 10px 0;">
+      <img src="logofactuur.jpg" alt="WJU Zorg" style="max-width:220px;">
+    </div>
 
     <div class="topbar">
       <h2>Cliëntenkaart</h2>
-      <div id="printChoiceBox" class="card" style="display:none; max-width:420px;">
-  <div class="section-title">Welke versie wilt u printen?</div>
-
- <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-
-<button class="btn" onclick="printWithInvoices()">
-Print met facturen
-</button>
-
-<button class="btn btn-secondary" onclick="printWithoutInvoices()">
-Print zonder facturen
-</button>
-
-<button class="btn" onclick="pdfWithInvoices()">
-PDF met facturen
-</button>
-
-<button class="btn btn-secondary" onclick="pdfWithoutInvoices()">
-PDF zonder facturen
-</button>
-
-<button class="btn btn-secondary" onclick="closePrintChoice()">
-Sluiten
-</button>
-
-</div>
 
       <div class="actions">
         <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
-      <button class="btn" onclick="openPrintChoice()">Rapport / Print</button>
+        <button class="btn" onclick="openPrintChoice()">Rapport / Print</button>
+      </div>
+    </div>
+
+    <div id="printChoiceBox" class="card" style="display:none; max-width:520px; margin:0 auto 20px auto;">
+      <div class="section-title">Welke versie wilt u printen?</div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <button class="btn" onclick="printWithInvoices()">Print met facturen</button>
+        <button class="btn btn-secondary" onclick="printWithoutInvoices()">Print zonder facturen</button>
+        <button class="btn" onclick="pdfWithInvoices()">PDF met facturen</button>
+        <button class="btn btn-secondary" onclick="pdfWithoutInvoices()">PDF zonder facturen</button>
+        <button class="btn btn-secondary" onclick="closePrintChoice()">Sluiten</button>
+      </div>
+
+      <div class="muted" style="margin-top:12px;">
+        Met facturen = intern gebruik<br>
+        Zonder facturen = gemeente / extern gebruik
       </div>
     </div>
 
