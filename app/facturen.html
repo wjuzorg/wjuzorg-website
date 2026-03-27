@@ -372,9 +372,9 @@
       alert("Factuur aanpassen voor: " + client);
     }
 
-    function openClientCard(client){
-      alert("Cliëntenkaart openen voor: " + client);
-    }
+   function openClientCard(client){
+  window.location.href = "clientkaart.html?client=" + encodeURIComponent(client);
+}
 
     loadInvoices();
   </script>
