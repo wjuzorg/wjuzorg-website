@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Cliëntenkaart - WJU Zorg</title>
+
+<style>
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#f3f3f3;
+margin:0;
+color:#222;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+border:1px solid #e3e3e3;
+box-shadow:0 3px 8px rgba(0,0,0,0.06);
+}
+
+h2{
+margin-top:0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.label{
+color:#777;
+font-size:0.9rem;
+}
+
+.value{
+font-weight:bold;
+}
+
+.section-title{
+font-weight:bold;
+margin-bottom:10px;
+margin-top:10px;
+}
+
+.item{
+padding:8px 0;
+border-bottom:1px solid #eee;
+font-size:0.95rem;
+}
+
+.btn{
+background:#28a745;
+color:white;
+border:none;
+padding:12px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.btn-back{
+background:#eee;
+color:#333;
+text-decoration:none;
+padding:8px 14px;
+border-radius:8px;
+font-size:0.9rem;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<h2>Cliëntenkaart</h2>
+
+<a href="facturen.html" class="btn-back">
+← Terug naar facturen
+</a>
+</div>
+
+<div id="clientCard"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+
+const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+
+const supabaseClient = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+function euro(amount){
+return Number(amount || 0).toLocaleString("nl-NL",{
+style:"currency",
+currency:"EUR"
+});
+}
+
+async function loadClientCard(){
+
+const client = new URLSearchParams(window.location.search).get("client");
+
+if(!client){
+document.getElementById("clientCard").innerHTML = "Geen cliënt gevonden.";
+return;
+}
+
+document.title = "Cliëntenkaart - " + client;
+
+const { data, error } = await supabaseClient
+.from("invoice_items")
+.select("*")
+.eq("client_name", client)
+.order("created_at",{ascending:false});
+
+if(error){
+document.getElementById("clientCard").innerHTML = "Fout: " + error.message;
+return;
+}
+
+if(!data || data.length === 0){
+document.getElementById("clientCard").innerHTML = "Nog geen gegevens.";
+return;
+}
+
+let totalAppointments = data.length;
+
+let serviceCount = {};
+let totalMinutes = 0;
+
+data.forEach(item=>{
+totalMinutes += item.duration_minutes || 0;
+
+let service = item.service_type || "Onbekend";
+
+if(!serviceCount[service]){
+serviceCount[service] = 0;
+}
+
+serviceCount[service]++;
+});
+
+let servicesHtml = "";
+
+for(const service in serviceCount){
+
+servicesHtml += `
+<div class="item">
+${service} — ${serviceCount[service]} keer
+</div>
+`;
+
+}
+
+let appointmentsHtml = "";
+
+data.slice(0,10).forEach(item=>{
+
+appointmentsHtml += `
+<div class="item">
+${item.service_type} • ${item.duration_minutes} min
+</div>
+`;
+
+});
+
+document.getElementById("clientCard").innerHTML = `
+
+<div class="card">
+
+<div class="row">
+<div class="label">Cliënt</div>
+<div class="value">${client}</div>
+</div>
+
+<div class="row">
+<div class="label">Totaal afspraken</div>
+<div class="value">${totalAppointments}</div>
+</div>
+
+<div class="row">
+<div class="label">Totaal minuten hulp</div>
+<div class="value">${totalMinutes}</div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Soorten hulp</div>
+
+${servicesHtml}
+
+</div>
+
+<div class="card">
+
+<div class="section-title">Laatste afspraken</div>
+
+${appointmentsHtml}
+
+</div>
+
+`;
+
+}
+
+loadClientCard();
+
+</script>
+
+</body>
+</html>
