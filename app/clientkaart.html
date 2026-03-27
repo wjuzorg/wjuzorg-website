@@ -301,10 +301,9 @@
         signalHtml = `<div class="item">Nog geen interne signaleringen opgeslagen.</div>`;
       }
 
-      const wijk =
-        latestRequest?.preferred_area ||
-        latestRequest?.org_id ||
-        "-";
+     const wijk =
+  latestRequest?.wijk ||
+  "-";
 
       cardEl.innerHTML = `
         <div class="card">
