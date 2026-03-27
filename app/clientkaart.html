@@ -180,7 +180,8 @@
 
       <div class="actions">
         <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
-       <button class="btn" onclick="openPrintChoice()">Uitprinten</button>
+      <button class="btn" onclick="openPrintChoice()">Uitprinten</button>
+<button class="btn btn-secondary" onclick="savePDF()">Opslaan PDF</button>
       </div>
     </div>
 
@@ -341,6 +342,11 @@
             <div class="label">Geboortedatum</div>
             <div class="value">${formatDate(latestRequest?.birthdate)}</div>
           </div>
+          
+          <div class="row">
+  <div class="label">Telefoon</div>
+  <div class="value">${latestRequest?.phone || "-"}</div>
+</div>
 
           <div class="row">
   <div class="label">Wijk</div>
@@ -406,6 +412,10 @@ function printWithoutInvoices(){
   if (facturenBlok) {
     facturenBlok.style.display = "none";
   }
+  
+  function savePDF(){
+  window.print();
+}
 
   closePrintChoice();
   window.print();
