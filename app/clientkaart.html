@@ -158,7 +158,6 @@
   <img src="logofactuur.jpg" alt="WJU Zorg" style="max-width:220px;">
 </div>
 
-<h1>Cliëntenkaart</h1>
   <div class="container">
 
     <div class="topbar">
@@ -166,11 +165,29 @@
       <div id="printChoiceBox" class="card" style="display:none; max-width:420px;">
   <div class="section-title">Welke versie wilt u printen?</div>
 
-  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-    <button class="btn" onclick="printWithInvoices()">Met facturen</button>
-    <button class="btn btn-secondary" onclick="printWithoutInvoices()">Zonder facturen</button>
-    <button class="btn btn-secondary" onclick="closePrintChoice()">Sluiten</button>
-  </div>
+ <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+
+<button class="btn" onclick="printWithInvoices()">
+Print met facturen
+</button>
+
+<button class="btn btn-secondary" onclick="printWithoutInvoices()">
+Print zonder facturen
+</button>
+
+<button class="btn" onclick="pdfWithInvoices()">
+PDF met facturen
+</button>
+
+<button class="btn btn-secondary" onclick="pdfWithoutInvoices()">
+PDF zonder facturen
+</button>
+
+<button class="btn btn-secondary" onclick="closePrintChoice()">
+Sluiten
+</button>
+
+</div>
 
   <div class="muted" style="margin-top:12px;">
     Met facturen = intern gebruik<br>
@@ -181,7 +198,6 @@
       <div class="actions">
         <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
       <button class="btn" onclick="openPrintChoice()">Uitprinten</button>
-<button class="btn btn-secondary" onclick="savePDF()">Opslaan PDF</button>
       </div>
     </div>
 
@@ -352,6 +368,7 @@
   <div class="label">Wijk</div>
   <div class="value">${latestRequest?.wijk || "-"}</div>
 </div>
+</div>
 
         <div class="card">
           <div class="row">
@@ -427,7 +444,37 @@ function printWithoutInvoices(){
   }, 500);
 }
 
-  
+ function pdfWithInvoices(){
+
+const facturenBlok = document.getElementById("facturenBlok");
+
+if(facturenBlok){
+facturenBlok.style.display = "block";
+}
+
+closePrintChoice();
+window.print();
+
+}
+
+function pdfWithoutInvoices(){
+
+const facturenBlok = document.getElementById("facturenBlok");
+
+if(facturenBlok){
+facturenBlok.style.display = "none";
+}
+
+closePrintChoice();
+window.print();
+
+setTimeout(()=>{
+if(facturenBlok){
+facturenBlok.style.display = "block";
+}
+},500);
+
+} 
 
     loadClientCard();
   </script>
