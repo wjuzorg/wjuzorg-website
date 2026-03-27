@@ -1,199 +1,369 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Cliëntenkaart - WJU Zorg</title>
 
-<script>
-const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
-function euro(amount){
-  return Number(amount || 0).toLocaleString("nl-NL", {
-    style:"currency",
-    currency:"EUR"
-  });
-}
-
-function formatDate(value){
-  if(!value) return "-";
-  const d = new Date(value);
-  if (isNaN(d)) return value;
-  return d.toLocaleDateString("nl-NL");
-}
-
-async function loadClientCard(){
-
-  const client = new URLSearchParams(window.location.search).get("client");
-
-  if(!client){
-    document.getElementById("clientCard").innerHTML = "Geen cliënt gevonden.";
-    return;
-  }
-
-  document.title = "Cliëntenkaart - " + client;
-
-  // 1. Laatste request / cliëntbasis ophalen
-  const { data: requestData, error: requestError } = await supabaseClient
-    .from("requests")
-    .select("*")
-    .eq("full_name", client)
-    .order("created_at", { ascending:false });
-
-  if(requestError){
-    document.getElementById("clientCard").innerHTML = "Fout bij cliëntgegevens: " + requestError.message;
-    return;
-  }
-
-  // 2. Factuurregels / afsprakenhistorie ophalen
-  const { data: invoiceData, error: invoiceError } = await supabaseClient
-    .from("invoice_items")
-    .select("*")
-    .eq("client_name", client)
-    .order("created_at", { ascending:false });
-
-  if(invoiceError){
-    document.getElementById("clientCard").innerHTML = "Fout bij afspraakgegevens: " + invoiceError.message;
-    return;
-  }
-
-  const latestRequest = requestData && requestData.length > 0 ? requestData[0] : null;
-  const invoices = invoiceData || [];
-  const requests = requestData || [];
-
-  let totalAppointments = invoices.length;
-  let totalMinutes = 0;
-  let serviceCount = {};
-
-  invoices.forEach(item => {
-    totalMinutes += Number(item.duration_minutes || 0);
-
-    const service = item.service_type || "Onbekend";
-    if(!serviceCount[service]){
-      serviceCount[service] = 0;
+  <style>
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f3f3f3;
+      margin:0;
+      color:#222;
     }
-    serviceCount[service]++;
-  });
 
-  let servicesHtml = "";
-  for(const service in serviceCount){
-    servicesHtml += `
-      <div class="item">
-        ${service} — ${serviceCount[service]} keer
+    .container{
+      max-width:800px;
+      margin:auto;
+      padding:20px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      background:#28a745;
+      color:white;
+      border:none;
+      padding:10px 14px;
+      border-radius:8px;
+      cursor:pointer;
+      text-decoration:none;
+      font-size:0.95rem;
+      display:inline-block;
+    }
+
+    .btn-secondary{
+      background:#eee;
+      color:#333;
+    }
+
+    .card{
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+      border:1px solid #e3e3e3;
+      box-shadow:0 3px 8px rgba(0,0,0,0.06);
+    }
+
+    h2{
+      margin:0;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:8px 0;
+      border-bottom:1px solid #f0f0f0;
+    }
+
+    .row:last-child{
+      border-bottom:none;
+    }
+
+    .label{
+      color:#777;
+      font-size:0.95rem;
+    }
+
+    .value{
+      font-weight:bold;
+      text-align:right;
+    }
+
+    .section-title{
+      font-weight:bold;
+      margin-bottom:12px;
+      font-size:1.05rem;
+    }
+
+    .item{
+      padding:10px 0;
+      border-bottom:1px solid #eee;
+      line-height:1.5;
+    }
+
+    .item:last-child{
+      border-bottom:none;
+    }
+
+    .muted{
+      color:#777;
+      font-size:0.92rem;
+    }
+
+    .error{
+      background:#fff1f1;
+      color:#a40000;
+      border:1px solid #f1b5b5;
+      padding:12px;
+      border-radius:10px;
+    }
+
+    @media print{
+      .topbar{
+        display:none;
+      }
+
+      body{
+        background:white;
+      }
+
+      .container{
+        max-width:none;
+        padding:0;
+      }
+
+      .card{
+        box-shadow:none;
+        border:1px solid #ddd;
+        break-inside:avoid;
+      }
+    }
+
+    @media (max-width:640px){
+      .container{
+        padding:14px;
+      }
+
+      .row{
+        flex-direction:column;
+      }
+
+      .value{
+        text-align:left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="topbar">
+      <h2>Cliëntenkaart</h2>
+
+      <div class="actions">
+        <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
+        <button class="btn" onclick="window.print()">Uitprinten</button>
       </div>
-    `;
-  }
-
-  if(!servicesHtml){
-    servicesHtml = `<div class="item">Nog geen hulp geregistreerd.</div>`;
-  }
-
-  let appointmentsHtml = "";
-  invoices.slice(0,10).forEach(item => {
-    appointmentsHtml += `
-      <div class="item">
-        ${item.service_type || "-"} • ${item.duration_minutes || 0} min
-      </div>
-    `;
-  });
-
-  if(!appointmentsHtml){
-    appointmentsHtml = `<div class="item">Nog geen afspraken gevonden.</div>`;
-  }
-
-  let invoicesHtml = "";
-  invoices.forEach(item => {
-    invoicesHtml += `
-      <div class="item">
-        ${item.service_type || "-"} • ${euro(item.amount_snapshot || 0)} • ${item.status || "onbekend"}
-      </div>
-    `;
-  });
-
-  if(!invoicesHtml){
-    invoicesHtml = `<div class="item">Nog geen facturen of factuurregels.</div>`;
-  }
-
-  // Interne signaleringen uit meest recente cliëntrecord
-  const signalParts = [];
-
-  if(latestRequest?.risk_dropout) signalParts.push("Risico op uitval");
-  if(latestRequest?.needs_extra_support) signalParts.push("Heeft extra ondersteuning nodig");
-  if(latestRequest?.hard_to_reach) signalParts.push("Moeilijk bereikbaar / neemt niet op");
-  if(latestRequest?.observed_decline) signalParts.push("Zichtbare achteruitgang");
-  if(latestRequest?.no_signal_needed) signalParts.push("N.v.t. / geen bijzonderheden");
-
-  let signalHtml = "";
-
-  if(signalParts.length > 0){
-    signalHtml += signalParts.map(signal => `<div class="item">${signal}</div>`).join("");
-  }
-
-  if(latestRequest?.internal_signal_notes){
-    signalHtml += `<div class="item">${latestRequest.internal_signal_notes}</div>`;
-  }
-
-  if(!signalHtml){
-    signalHtml = `<div class="item">Nog geen interne signaleringen opgeslagen.</div>`;
-  }
-
-  document.getElementById("clientCard").innerHTML = `
-
-    <div class="card">
-
-      <div class="row">
-        <div class="label">Cliënt</div>
-        <div class="value">${client}</div>
-      </div>
-
-      <div class="row">
-        <div class="label">Adres</div>
-        <div class="value">${latestRequest?.address || "-"}</div>
-      </div>
-
-      <div class="row">
-        <div class="label">Geboortedatum</div>
-        <div class="value">${formatDate(latestRequest?.birthdate)}</div>
-      </div>
-
     </div>
 
-    <div class="card">
-
-      <div class="row">
-        <div class="label">Totaal afspraken</div>
-        <div class="value">${totalAppointments}</div>
-      </div>
-
-      <div class="row">
-        <div class="label">Totaal minuten hulp</div>
-        <div class="value">${totalMinutes}</div>
-      </div>
-
+    <div id="clientCard">
+      <div class="card">Gegevens laden...</div>
     </div>
 
-    <div class="card">
-      <div class="section-title">Soorten hulp</div>
-      ${servicesHtml}
-    </div>
+  </div>
 
-    <div class="card">
-      <div class="section-title">Laatste afspraken</div>
-      ${appointmentsHtml}
-    </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
 
-    <div class="card">
-      <div class="section-title">Facturen / gefactureerd</div>
-      ${invoicesHtml}
-    </div>
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-    <div class="card">
-      <div class="section-title">Interne signaleringen</div>
-      ${signalHtml}
-    </div>
-  `;
-}
+    function euro(amount){
+      return Number(amount || 0).toLocaleString("nl-NL", {
+        style: "currency",
+        currency: "EUR"
+      });
+    }
 
-loadClientCard();
-</script>
+    function formatDate(value){
+      if(!value) return "-";
+      const d = new Date(value);
+      if (isNaN(d)) return value;
+      return d.toLocaleDateString("nl-NL");
+    }
+
+    async function loadClientCard(){
+      const client = new URLSearchParams(window.location.search).get("client");
+      const cardEl = document.getElementById("clientCard");
+
+      if(!client){
+        cardEl.innerHTML = `<div class="error">Geen cliënt gevonden.</div>`;
+        return;
+      }
+
+      document.title = "Cliëntenkaart - " + client;
+
+      const { data: requestData, error: requestError } = await supabaseClient
+        .from("requests")
+        .select("*")
+        .eq("full_name", client)
+        .order("created_at", { ascending: false });
+
+      if(requestError){
+        cardEl.innerHTML = `<div class="error">Fout bij cliëntgegevens: ${requestError.message}</div>`;
+        return;
+      }
+
+      const { data: invoiceData, error: invoiceError } = await supabaseClient
+        .from("invoice_items")
+        .select("*")
+        .eq("client_name", client)
+        .order("created_at", { ascending: false });
+
+      if(invoiceError){
+        cardEl.innerHTML = `<div class="error">Fout bij factuurgegevens: ${invoiceError.message}</div>`;
+        return;
+      }
+
+      const requests = requestData || [];
+      const invoices = invoiceData || [];
+      const latestRequest = requests.length > 0 ? requests[0] : null;
+
+      let totalAppointments = invoices.length;
+      let totalMinutes = 0;
+      const serviceCount = {};
+
+      invoices.forEach(item => {
+        totalMinutes += Number(item.duration_minutes || 0);
+
+        const service = item.service_type || "Onbekend";
+        if(!serviceCount[service]){
+          serviceCount[service] = 0;
+        }
+        serviceCount[service]++;
+      });
+
+      let servicesHtml = "";
+      for(const service in serviceCount){
+        servicesHtml += `
+          <div class="item">
+            ${service} — ${serviceCount[service]} keer
+          </div>
+        `;
+      }
+      if(!servicesHtml){
+        servicesHtml = `<div class="item">Nog geen hulp geregistreerd.</div>`;
+      }
+
+      let appointmentsHtml = "";
+      invoices.slice(0, 10).forEach(item => {
+        appointmentsHtml += `
+          <div class="item">
+            <strong>${item.service_type || "-"}</strong><br>
+            <span class="muted">${item.duration_minutes || 0} min</span>
+          </div>
+        `;
+      });
+      if(!appointmentsHtml){
+        appointmentsHtml = `<div class="item">Nog geen afspraken gevonden.</div>`;
+      }
+
+      let invoicesHtml = "";
+      invoices.forEach(item => {
+        invoicesHtml += `
+          <div class="item">
+            <strong>${item.service_type || "-"}</strong> • ${euro(item.amount_snapshot || 0)}<br>
+            <span class="muted">Status: ${item.status || "onbekend"}</span>
+          </div>
+        `;
+      });
+      if(!invoicesHtml){
+        invoicesHtml = `<div class="item">Nog geen facturen of factuurregels.</div>`;
+      }
+
+      const signalParts = [];
+      if(latestRequest?.risk_dropout) signalParts.push("Risico op uitval");
+      if(latestRequest?.needs_extra_support) signalParts.push("Heeft extra ondersteuning nodig");
+      if(latestRequest?.hard_to_reach) signalParts.push("Moeilijk bereikbaar / neemt niet op");
+      if(latestRequest?.observed_decline) signalParts.push("Zichtbare achteruitgang");
+      if(latestRequest?.no_signal_needed) signalParts.push("N.v.t. / geen bijzonderheden");
+
+      let signalHtml = "";
+      if(signalParts.length > 0){
+        signalHtml += signalParts.map(s => `<div class="item">${s}</div>`).join("");
+      }
+      if(latestRequest?.internal_signal_notes){
+        signalHtml += `<div class="item">${latestRequest.internal_signal_notes}</div>`;
+      }
+      if(!signalHtml){
+        signalHtml = `<div class="item">Nog geen interne signaleringen opgeslagen.</div>`;
+      }
+
+      const wijk =
+        latestRequest?.preferred_area ||
+        latestRequest?.org_id ||
+        "-";
+
+      cardEl.innerHTML = `
+        <div class="card">
+          <div class="row">
+            <div class="label">Cliënt</div>
+            <div class="value">${client}</div>
+          </div>
+
+          <div class="row">
+            <div class="label">Adres</div>
+            <div class="value">${latestRequest?.address || "-"}</div>
+          </div>
+
+          <div class="row">
+            <div class="label">Geboortedatum</div>
+            <div class="value">${formatDate(latestRequest?.birthdate)}</div>
+          </div>
+
+          <div class="row">
+            <div class="label">Wijk</div>
+            <div class="value">${wijk}</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row">
+            <div class="label">Totaal afspraken</div>
+            <div class="value">${totalAppointments}</div>
+          </div>
+
+          <div class="row">
+            <div class="label">Totaal minuten hulp</div>
+            <div class="value">${totalMinutes}</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Soorten hulp</div>
+          ${servicesHtml}
+        </div>
+
+        <div class="card">
+          <div class="section-title">Laatste afspraken</div>
+          ${appointmentsHtml}
+        </div>
+
+        <div class="card">
+          <div class="section-title">Facturen / gefactureerd</div>
+          ${invoicesHtml}
+        </div>
+
+        <div class="card">
+          <div class="section-title">Interne signaleringen</div>
+          ${signalHtml}
+        </div>
+      `;
+    }
+
+    loadClientCard();
+  </script>
+</body>
+</html>
