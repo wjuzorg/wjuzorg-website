@@ -160,7 +160,7 @@
 
       <div class="actions">
         <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
-        <button class="btn" onclick="window.print()">Uitprinten</button>
+       <button class="btn" onclick="choosePrintVersion()">Uitprinten</button>
       </div>
     </div>
 
@@ -350,10 +350,10 @@
           ${appointmentsHtml}
         </div>
 
-        <div class="card">
-          <div class="section-title">Facturen / gefactureerd</div>
-          ${invoicesHtml}
-        </div>
+      <div class="card" id="facturenBlok">
+  <div class="section-title">Facturen / gefactureerd</div>
+  ${invoicesHtml}
+</div>
 
         <div class="card">
           <div class="section-title">Interne signaleringen</div>
@@ -361,6 +361,32 @@
         </div>
       `;
     }
+
+function choosePrintVersion(){
+  const withInvoices = confirm(
+    "Wilt u printen MET facturen?\n\n" +
+    "OK = met facturen (intern)\n" +
+    "Annuleren = zonder facturen (gemeente)"
+  );
+
+  const facturenBlok = document.getElementById("facturenBlok");
+
+  if (!facturenBlok) {
+    window.print();
+    return;
+  }
+
+  if (withInvoices) {
+    facturenBlok.style.display = "block";
+    window.print();
+  } else {
+    facturenBlok.style.display = "none";
+    window.print();
+    setTimeout(() => {
+      facturenBlok.style.display = "block";
+    }, 500);
+  }
+}
 
     loadClientCard();
   </script>
