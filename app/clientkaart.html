@@ -157,10 +157,24 @@
 
     <div class="topbar">
       <h2>Cliëntenkaart</h2>
+      <div id="printChoiceBox" class="card" style="display:none; max-width:420px;">
+  <div class="section-title">Welke versie wilt u printen?</div>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+    <button class="btn" onclick="printWithInvoices()">Met facturen</button>
+    <button class="btn btn-secondary" onclick="printWithoutInvoices()">Zonder facturen</button>
+    <button class="btn btn-secondary" onclick="closePrintChoice()">Sluiten</button>
+  </div>
+
+  <div class="muted" style="margin-top:12px;">
+    Met facturen = intern gebruik<br>
+    Zonder facturen = gemeente / extern gebruik
+  </div>
+</div>
 
       <div class="actions">
         <a href="facturen.html" class="btn btn-secondary">← Terug naar facturen</a>
-       <button class="btn" onclick="choosePrintVersion()">Uitprinten</button>
+       <button class="btn" onclick="openPrintChoice()">Uitprinten</button>
       </div>
     </div>
 
@@ -362,31 +376,43 @@
       `;
     }
 
-function choosePrintVersion(){
-  const withInvoices = confirm(
-    "Wilt u printen MET facturen?\n\n" +
-    "OK = met facturen (intern)\n" +
-    "Annuleren = zonder facturen (gemeente)"
-  );
+function openPrintChoice(){
+  document.getElementById("printChoiceBox").style.display = "block";
+}
 
+function closePrintChoice(){
+  document.getElementById("printChoiceBox").style.display = "none";
+}
+
+function printWithInvoices(){
   const facturenBlok = document.getElementById("facturenBlok");
 
-  if (!facturenBlok) {
-    window.print();
-    return;
+  if (facturenBlok) {
+    facturenBlok.style.display = "block";
   }
 
-  if (withInvoices) {
-    facturenBlok.style.display = "block";
-    window.print();
-  } else {
-    facturenBlok.style.display = "none";
-    window.print();
-    setTimeout(() => {
-      facturenBlok.style.display = "block";
-    }, 500);
-  }
+  closePrintChoice();
+  window.print();
 }
+
+function printWithoutInvoices(){
+  const facturenBlok = document.getElementById("facturenBlok");
+
+  if (facturenBlok) {
+    facturenBlok.style.display = "none";
+  }
+
+  closePrintChoice();
+  window.print();
+
+  setTimeout(() => {
+    if (facturenBlok) {
+      facturenBlok.style.display = "block";
+    }
+  }, 500);
+}
+
+  
 
     loadClientCard();
   </script>
