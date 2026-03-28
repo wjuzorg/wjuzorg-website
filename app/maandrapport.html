@@ -103,6 +103,15 @@ flex-wrap:wrap;
 
 <div class="topbar">
   <h2>Maandrapportage</h2>
+  
+  <div class="card" style="margin-top:10px;">
+  <div class="section-title">Kies maand</div>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+    <input type="month" id="reportMonth">
+    <button class="btn" onclick="loadRapport()">Rapport tonen</button>
+  </div>
+</div>
 
   <div style="display:flex; gap:10px; flex-wrap:wrap;">
     <button class="btn" onclick="window.print()">Rapport / PDF</button>
@@ -159,22 +168,31 @@ async function loadRapport(){
   const clientWijkMap = {};
 
   requests.forEach(item => {
-    const hasSignal =
-      item.risk_dropout ||
-      item.needs_extra_support ||
-      item.hard_to_reach ||
-      item.observed_decline ||
-      (item.internal_signal_notes && item.internal_signal_notes.trim() !== "");
+  if(!item.created_at) return;
 
-    if(hasSignal){
-      totalSignals++;
-    }
-    
-    if(item.full_name && item.wijk){
-  clientWijkMap[item.full_name] = item.wijk;
-}
+  const d = new Date(item.created_at);
+  const itemYear = String(d.getFullYear());
+  const itemMonth = String(d.getMonth() + 1).padStart(2, "0");
 
-  });
+  if(itemYear !== year || itemMonth !== month){
+    return;
+  }
+
+  const hasSignal =
+    item.risk_dropout ||
+    item.needs_extra_support ||
+    item.hard_to_reach ||
+    item.observed_decline ||
+    (item.internal_signal_notes && item.internal_signal_notes.trim() !== "");
+
+  if(hasSignal){
+    totalSignals++;
+  }
+
+  if(item.full_name && item.wijk){
+    clientWijkMap[item.full_name] = item.wijk;
+  }
+});
 
   invoices.forEach(item => {
     totalMinutes += Number(item.duration_minutes || 0);
@@ -328,6 +346,7 @@ async function loadRapport(){
   `;
 }
 
+setDefaultMonth();
 loadRapport();
 </script>
 
