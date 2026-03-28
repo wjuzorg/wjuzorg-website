@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Maandrapportage - WJU Zorg</title>
+
+<style>
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#f3f3f3;
+margin:0;
+color:#222;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+border:1px solid #e3e3e3;
+box-shadow:0 3px 8px rgba(0,0,0,0.06);
+}
+
+.section-title{
+font-weight:bold;
+margin-bottom:12px;
+font-size:1.1rem;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+border-bottom:1px solid #eee;
+}
+
+.row:last-child{
+border-bottom:none;
+}
+
+.btn{
+background:#28a745;
+color:white;
+border:none;
+padding:10px 14px;
+border-radius:8px;
+cursor:pointer;
+text-decoration:none;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div style="text-align:center; margin:30px 0 10px 0;">
+<img src="logofactuur.jpg" style="max-width:220px;">
+</div>
+
+<div class="topbar">
+<h2>Maandrapportage</h2>
+
+<a href="today.html" class="btn">← Terug naar Today</a>
+</div>
+
+<div id="rapport"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+<script>
+
+const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+
+const supabaseClient = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+async function loadRapport(){
+
+const rapportEl = document.getElementById("rapport");
+
+const { data, error } = await supabaseClient
+.from("invoice_items")
+.select("*");
+
+if(error){
+rapportEl.innerHTML = "Fout bij laden rapport";
+return;
+}
+
+let totalMinutes = 0;
+let totalAppointments = data.length;
+
+const wijkStats = {};
+const serviceStats = {};
+const clientSet = new Set();
+
+data.forEach(item => {
+
+totalMinutes += Number(item.duration_minutes || 0);
+
+clientSet.add(item.client_name);
+
+const wijk = item.wijk || "Onbekend";
+
+if(!wijkStats[wijk]){
+wijkStats[wijk] = {
+appointments:0,
+minutes:0
+};
+}
+
+wijkStats[wijk].appointments++;
+wijkStats[wijk].minutes += Number(item.duration_minutes || 0);
+
+const service = item.service_type || "Onbekend";
+
+if(!serviceStats[service]){
+serviceStats[service] = 0;
+}
+
+serviceStats[service]++;
+
+});
+
+let wijkHtml = "";
+
+for(const wijk in wijkStats){
+
+wijkHtml += `
+<div class="row">
+<div>${wijk}</div>
+<div>${wijkStats[wijk].appointments} afspraken • ${wijkStats[wijk].minutes} min</div>
+</div>
+`;
+
+}
+
+let serviceHtml = "";
+
+for(const service in serviceStats){
+
+serviceHtml += `
+<div class="row">
+<div>${service}</div>
+<div>${serviceStats[service]} keer</div>
+</div>
+`;
+
+}
+
+rapportEl.innerHTML = `
+
+<div class="card">
+<div class="section-title">Overzicht</div>
+
+<div class="row">
+<div>Cliënten geholpen</div>
+<div>${clientSet.size}</div>
+</div>
+
+<div class="row">
+<div>Afspraken</div>
+<div>${totalAppointments}</div>
+</div>
+
+<div class="row">
+<div>Totaal minuten hulp</div>
+<div>${totalMinutes}</div>
+</div>
+
+</div>
+
+<div class="card">
+<div class="section-title">Per wijk</div>
+${wijkHtml}
+</div>
+
+<div class="card">
+<div class="section-title">Soorten hulp</div>
+${serviceHtml}
+</div>
+
+`;
+
+}
+
+loadRapport();
+
+</script>
+
+</body>
+</html>
