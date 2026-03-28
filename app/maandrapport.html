@@ -133,6 +133,51 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
+function normalizeWijk(wijk){
+  if(!wijk) return null;
+
+  const w = wijk.toLowerCase().trim();
+
+  if(
+    w === "oost" ||
+    w === "utrecht oost" ||
+    w.includes("oost")
+  ) return "Utrecht Oost";
+
+  if(
+    w === "west" ||
+    w === "utrecht west" ||
+    w.includes("west")
+  ) return "Utrecht West";
+
+  if(
+    w === "noord" ||
+    w === "utrecht noord" ||
+    w.includes("noord")
+  ) return "Utrecht Noord";
+
+  if(
+    w === "zuid" ||
+    w === "utrecht zuid" ||
+    w.includes("zuid")
+  ) return "Utrecht Zuid";
+
+  if(
+    w === "binnenstad" ||
+    w.includes("binnenstad") ||
+    w.includes("centrum")
+  ) return "Binnenstad";
+
+  if(w.includes("leidsche rijn")) return "Leidsche Rijn";
+  if(w.includes("maarssenbroek")) return "Maarssenbroek";
+  if(w.includes("maarssen")) return "Maarssen";
+  if(w.includes("de bilt")) return "De Bilt";
+  if(w.includes("bilthoven")) return "Bilthoven";
+  if(w.includes("zeist")) return "Zeist";
+
+  return wijk.trim();
+}
+
 function setDefaultMonth(){
   const monthInput = document.getElementById("reportMonth");
   const now = new Date();
@@ -228,7 +273,7 @@ async function loadRapport(){
       clientSet.add(item.client_name);
     }
 
-    const wijk = clientWijkMap[item.client_name] || null;
+    const wijk = normalizeWijk(clientWijkMap[item.client_name] || null);
     const service = item.service_type && item.service_type.trim() !== "" ? item.service_type : null;
 
     if(wijk){
