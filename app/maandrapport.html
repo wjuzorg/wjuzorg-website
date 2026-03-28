@@ -252,6 +252,7 @@ async function loadRapport(){
   let totalAppointments = 0;
   let totalSignals = 0;
 
+const clientSet = new Set();
  const wijkStats = {};
 const gemeenteStats = {};
 const serviceStats = {};
@@ -373,6 +374,22 @@ if(gemeente && service){
   if(!wijkHtml){
     wijkHtml = `<div class="row"><div>Geen wijkgegevens gevonden</div><div>-</div></div>`;
   }
+  
+  let gemeenteHtml = "";
+const sortedGemeenten = Object.keys(gemeenteStats).sort();
+
+sortedGemeenten.forEach(gemeente => {
+  gemeenteHtml += `
+    <div class="row">
+      <div>${gemeente}</div>
+      <div>${gemeenteStats[gemeente].appointments} afspraken</div>
+    </div>
+  `;
+});
+
+if(!gemeenteHtml){
+  gemeenteHtml = `<div class="row"><div>Geen gemeentelijke gegevens gevonden</div><div>-</div></div>`;
+}
 
   let serviceHtml = "";
   const sortedServices = Object.keys(serviceStats).sort();
@@ -432,6 +449,50 @@ if(gemeente && service){
     `;
   }
 
+let gemeenteServiceHtml = "";
+const sortedGemeentenForServices = Object.keys(gemeenteServiceStats).sort();
+
+sortedGemeentenForServices.forEach(gemeente => {
+  gemeenteServiceHtml += `
+    <div class="card">
+      <div class="section-title">${gemeente}</div>
+  `;
+
+  const servicesInGemeente = Object.keys(gemeenteServiceStats[gemeente] || {}).sort();
+
+  if(servicesInGemeente.length === 0){
+    gemeenteServiceHtml += `
+      <div class="row">
+        <div>Geen hulpsoorten gevonden</div>
+        <div>-</div>
+      </div>
+    `;
+  } else {
+    servicesInGemeente.forEach(service => {
+      gemeenteServiceHtml += `
+        <div class="row">
+          <div>${service}</div>
+          <div>${gemeenteServiceStats[gemeente][service]} keer</div>
+        </div>
+      `;
+    });
+  }
+
+  gemeenteServiceHtml += `</div>`;
+});
+
+if(!gemeenteServiceHtml){
+  gemeenteServiceHtml = `
+    <div class="card">
+      <div class="section-title">Per gemeente - soorten hulp</div>
+      <div class="row">
+        <div>Geen gegevens gevonden</div>
+        <div>-</div>
+      </div>
+    </div>
+  `;
+}
+
   rapportEl.innerHTML = `
     <div class="card">
       <div class="section-title">Overzicht</div>
@@ -469,6 +530,8 @@ if(gemeente && service){
 
     <div class="section-title" style="margin:10px 0;">Per wijk - soorten hulp</div>
     ${wijkServiceHtml}
+    <div class="section-title" style="margin:10px 0;">Per gemeente - soorten hulp</div>
+${gemeenteServiceHtml}
   `;
 }
 
