@@ -133,15 +133,31 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
+function setDefaultMonth(){
+  const monthInput = document.getElementById("reportMonth");
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  monthInput.value = `${year}-${month}`;
+}
+
 async function loadRapport(){
   const rapportEl = document.getElementById("rapport");
+  const selectedMonth = document.getElementById("reportMonth").value;
+
+  if(!selectedMonth){
+    rapportEl.innerHTML = `<div class="card">Kies eerst een maand.</div>`;
+    return;
+  }
+
+  const [year, month] = selectedMonth.split("-");
 
   const { data: invoiceData, error: invoiceError } = await supabaseClient
     .from("invoice_items")
     .select("*");
 
   if(invoiceError){
-    rapportEl.innerHTML = "Fout bij laden rapport";
+    rapportEl.innerHTML = `<div class="card">Fout bij laden rapport</div>`;
     return;
   }
 
@@ -150,7 +166,7 @@ async function loadRapport(){
     .select("*");
 
   if(requestError){
-    rapportEl.innerHTML = "Fout bij laden signaleringen";
+    rapportEl.innerHTML = `<div class="card">Fout bij laden signaleringen</div>`;
     return;
   }
 
@@ -158,7 +174,7 @@ async function loadRapport(){
   const requests = requestData || [];
 
   let totalMinutes = 0;
-  let totalAppointments = invoices.length;
+  let totalAppointments = 0;
   let totalSignals = 0;
 
   const clientSet = new Set();
@@ -168,33 +184,44 @@ async function loadRapport(){
   const clientWijkMap = {};
 
   requests.forEach(item => {
-  if(!item.created_at) return;
+    if(item.full_name && item.wijk){
+      clientWijkMap[item.full_name] = item.wijk;
+    }
 
-  const d = new Date(item.created_at);
-  const itemYear = String(d.getFullYear());
-  const itemMonth = String(d.getMonth() + 1).padStart(2, "0");
+    if(!item.created_at) return;
 
-  if(itemYear !== year || itemMonth !== month){
-    return;
-  }
+    const d = new Date(item.created_at);
+    const itemYear = String(d.getFullYear());
+    const itemMonth = String(d.getMonth() + 1).padStart(2, "0");
 
-  const hasSignal =
-    item.risk_dropout ||
-    item.needs_extra_support ||
-    item.hard_to_reach ||
-    item.observed_decline ||
-    (item.internal_signal_notes && item.internal_signal_notes.trim() !== "");
+    if(itemYear !== year || itemMonth !== month){
+      return;
+    }
 
-  if(hasSignal){
-    totalSignals++;
-  }
+    const hasSignal =
+      item.risk_dropout ||
+      item.needs_extra_support ||
+      item.hard_to_reach ||
+      item.observed_decline ||
+      (item.internal_signal_notes && item.internal_signal_notes.trim() !== "");
 
-  if(item.full_name && item.wijk){
-    clientWijkMap[item.full_name] = item.wijk;
-  }
-});
+    if(hasSignal){
+      totalSignals++;
+    }
+  });
 
   invoices.forEach(item => {
+    if(!item.created_at) return;
+
+    const d = new Date(item.created_at);
+    const itemYear = String(d.getFullYear());
+    const itemMonth = String(d.getMonth() + 1).padStart(2, "0");
+
+    if(itemYear !== year || itemMonth !== month){
+      return;
+    }
+
+    totalAppointments++;
     totalMinutes += Number(item.duration_minutes || 0);
 
     if(item.client_name){
