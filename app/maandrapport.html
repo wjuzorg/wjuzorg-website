@@ -127,6 +127,7 @@ async function loadRapport(){
   const wijkStats = {};
   const serviceStats = {};
   const wijkServiceStats = {};
+  const clientWijkMap = {};
 
   requests.forEach(item => {
     const hasSignal =
@@ -139,6 +140,11 @@ async function loadRapport(){
     if(hasSignal){
       totalSignals++;
     }
+    
+    if(item.full_name && item.wijk){
+  clientWijkMap[item.full_name] = item.wijk;
+}
+
   });
 
   invoices.forEach(item => {
@@ -148,7 +154,7 @@ async function loadRapport(){
       clientSet.add(item.client_name);
     }
 
-    const wijk = item.wijk && item.wijk.trim() !== "" ? item.wijk : null;
+    const wijk = clientWijkMap[item.client_name] || null;
     const service = item.service_type && item.service_type.trim() !== "" ? item.service_type : null;
 
     if(wijk){
