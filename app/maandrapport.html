@@ -178,6 +178,36 @@ function normalizeWijk(wijk){
   return wijk.trim();
 }
 
+function normalizeGemeente(area){
+  if(!area) return null;
+
+  const a = area.toLowerCase().trim();
+
+  if(
+    a.includes("utrecht oost") ||
+    a.includes("utrecht west") ||
+    a.includes("utrecht noord") ||
+    a.includes("utrecht zuid") ||
+    a.includes("binnenstad") ||
+    a.includes("centrum") ||
+    a.includes("leidsche rijn") ||
+    a === "oost" ||
+    a === "west" ||
+    a === "noord" ||
+    a === "zuid"
+  ) return "Utrecht";
+
+  if(a.includes("zeist")) return "Zeist";
+
+  if(a.includes("de bilt") || a.includes("bilthoven")) return "De Bilt";
+
+  if(a.includes("maarssen") || a.includes("maarssenbroek")) return "Stichtse Vecht";
+
+  if(a.includes("houten")) return "Houten";
+
+  return area.trim();
+}
+
 function setDefaultMonth(){
   const monthInput = document.getElementById("reportMonth");
   const now = new Date();
