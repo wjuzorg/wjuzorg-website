@@ -252,11 +252,12 @@ async function loadRapport(){
   let totalAppointments = 0;
   let totalSignals = 0;
 
-  const clientSet = new Set();
-  const wijkStats = {};
-  const serviceStats = {};
-  const wijkServiceStats = {};
-  const clientWijkMap = {};
+ const wijkStats = {};
+const gemeenteStats = {};
+const serviceStats = {};
+const wijkServiceStats = {};
+const gemeenteServiceStats = {};
+const clientWijkMap = {};
 
   requests.forEach(item => {
     if(item.full_name && item.wijk){
@@ -305,14 +306,37 @@ async function loadRapport(){
 
     const wijk = normalizeWijk(clientWijkMap[item.client_name] || null);
     const service = item.service_type && item.service_type.trim() !== "" ? item.service_type : null;
+    const gemeente = normalizeGemeente(wijk);
 
     if(wijk){
       if(!wijkStats[wijk]){
         wijkStats[wijk] = { appointments: 0, minutes: 0 };
       }
+      
 
       wijkStats[wijk].appointments++;
       wijkStats[wijk].minutes += Number(item.duration_minutes || 0);
+      
+      if(gemeente){
+  if(!gemeenteStats[gemeente]){
+    gemeenteStats[gemeente] = { appointments: 0, minutes: 0 };
+  }
+
+  gemeenteStats[gemeente].appointments++;
+  gemeenteStats[gemeente].minutes += Number(item.duration_minutes || 0);
+}
+
+if(gemeente && service){
+  if(!gemeenteServiceStats[gemeente]){
+    gemeenteServiceStats[gemeente] = {};
+  }
+
+  if(!gemeenteServiceStats[gemeente][service]){
+    gemeenteServiceStats[gemeente][service] = 0;
+  }
+
+  gemeenteServiceStats[gemeente][service]++;
+}
 
       if(!wijkServiceStats[wijk]){
         wijkServiceStats[wijk] = {};
