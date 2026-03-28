@@ -524,13 +524,19 @@ if(!gemeenteServiceHtml){
     </div>
 
     <div class="card">
-      <div class="section-title">Soorten hulp</div>
-      ${serviceHtml}
-    </div>
+  <div class="section-title">Soorten hulp</div>
+  ${serviceHtml}
+</div>
 
-    <div class="section-title" style="margin:10px 0;">Per wijk - soorten hulp</div>
-    ${wijkServiceHtml}
-    <div class="section-title" style="margin:10px 0;">Per gemeente - soorten hulp</div>
+<div class="card">
+  <div class="section-title">Per gemeente</div>
+  ${gemeenteHtml}
+</div>
+
+<div class="section-title" style="margin:10px 0;">Per wijk - soorten hulp</div>
+${wijkServiceHtml}
+
+<div class="section-title" style="margin:10px 0;">Per gemeente - soorten hulp</div>
 ${gemeenteServiceHtml}
   `;
 }
