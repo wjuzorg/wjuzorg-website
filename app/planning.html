@@ -141,6 +141,51 @@
     const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    function normalizeWijk(wijk){
+  if(!wijk) return null;
+
+  const w = wijk.toLowerCase().trim();
+
+  if(
+    w === "oost" ||
+    w === "utrecht oost" ||
+    w.includes("oost")
+  ) return "Utrecht Oost";
+
+  if(
+    w === "west" ||
+    w === "utrecht west" ||
+    w.includes("west")
+  ) return "Utrecht West";
+
+  if(
+    w === "noord" ||
+    w === "utrecht noord" ||
+    w.includes("noord")
+  ) return "Utrecht Noord";
+
+  if(
+    w === "zuid" ||
+    w === "utrecht zuid" ||
+    w.includes("zuid")
+  ) return "Utrecht Zuid";
+
+  if(
+    w === "binnenstad" ||
+    w.includes("binnenstad") ||
+    w.includes("centrum")
+  ) return "Binnenstad";
+
+  if(w.includes("leidsche rijn")) return "Leidsche Rijn";
+  if(w.includes("maarssenbroek")) return "Maarssenbroek";
+  if(w.includes("maarssen")) return "Maarssen";
+  if(w.includes("de bilt")) return "De Bilt";
+  if(w.includes("bilthoven")) return "Bilthoven";
+  if(w.includes("zeist")) return "Zeist";
+
+  return wijk.trim();
+}
 
     function getStartOfWeek(date) {
       const d = new Date(date);
@@ -262,13 +307,15 @@
         weekPlanning.appendChild(card);
       });
 
-      // Wijkoverzicht
-      const areaCounts = {};
+     // Wijkoverzicht
+const areaCounts = {};
 
-      (appointments || []).forEach(item => {
-        const area = getArea(item);
-        areaCounts[area] = (areaCounts[area] || 0) + 1;
-      });
+(appointments || []).forEach(item => {
+  const rawArea = getArea(item);
+  const area = normalizeWijk(rawArea) || "-";
+
+  areaCounts[area] = (areaCounts[area] || 0) + 1;
+});
 
       const sortedAreas = Object.entries(areaCounts).sort((a, b) => b[1] - a[1]);
 
