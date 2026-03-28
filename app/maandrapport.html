@@ -85,130 +85,214 @@ flex-wrap:wrap;
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-
 <script>
-
 const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
 
 const supabaseClient = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
 );
 
 async function loadRapport(){
+  const rapportEl = document.getElementById("rapport");
 
-const rapportEl = document.getElementById("rapport");
+  const { data: invoiceData, error: invoiceError } = await supabaseClient
+    .from("invoice_items")
+    .select("*");
 
-const { data, error } = await supabaseClient
-.from("invoice_items")
-.select("*");
+  if(invoiceError){
+    rapportEl.innerHTML = "Fout bij laden rapport";
+    return;
+  }
 
-if(error){
-rapportEl.innerHTML = "Fout bij laden rapport";
-return;
-}
+  const { data: requestData, error: requestError } = await supabaseClient
+    .from("requests")
+    .select("*");
 
-let totalMinutes = 0;
-let totalAppointments = data.length;
+  if(requestError){
+    rapportEl.innerHTML = "Fout bij laden signaleringen";
+    return;
+  }
 
-const wijkStats = {};
-const serviceStats = {};
-const clientSet = new Set();
+  const invoices = invoiceData || [];
+  const requests = requestData || [];
 
-data.forEach(item => {
+  let totalMinutes = 0;
+  let totalAppointments = invoices.length;
+  let totalSignals = 0;
 
-totalMinutes += Number(item.duration_minutes || 0);
+  const clientSet = new Set();
+  const wijkStats = {};
+  const serviceStats = {};
+  const wijkServiceStats = {};
 
-clientSet.add(item.client_name);
+  requests.forEach(item => {
+    const hasSignal =
+      item.risk_dropout ||
+      item.needs_extra_support ||
+      item.hard_to_reach ||
+      item.observed_decline ||
+      (item.internal_signal_notes && item.internal_signal_notes.trim() !== "");
 
-const wijk = item.wijk || "Onbekend";
+    if(hasSignal){
+      totalSignals++;
+    }
+  });
 
-if(!wijkStats[wijk]){
-wijkStats[wijk] = {
-appointments:0,
-minutes:0
-};
-}
+  invoices.forEach(item => {
+    totalMinutes += Number(item.duration_minutes || 0);
 
-wijkStats[wijk].appointments++;
-wijkStats[wijk].minutes += Number(item.duration_minutes || 0);
+    if(item.client_name){
+      clientSet.add(item.client_name);
+    }
 
-const service = item.service_type || "Onbekend";
+    const wijk = item.wijk && item.wijk.trim() !== "" ? item.wijk : null;
+    const service = item.service_type && item.service_type.trim() !== "" ? item.service_type : null;
 
-if(!serviceStats[service]){
-serviceStats[service] = 0;
-}
+    if(wijk){
+      if(!wijkStats[wijk]){
+        wijkStats[wijk] = { appointments: 0, minutes: 0 };
+      }
 
-serviceStats[service]++;
+      wijkStats[wijk].appointments++;
+      wijkStats[wijk].minutes += Number(item.duration_minutes || 0);
 
-});
+      if(!wijkServiceStats[wijk]){
+        wijkServiceStats[wijk] = {};
+      }
 
-let wijkHtml = "";
+      if(service){
+        if(!wijkServiceStats[wijk][service]){
+          wijkServiceStats[wijk][service] = 0;
+        }
+        wijkServiceStats[wijk][service]++;
+      }
+    }
 
-for(const wijk in wijkStats){
+    if(service){
+      if(!serviceStats[service]){
+        serviceStats[service] = 0;
+      }
+      serviceStats[service]++;
+    }
+  });
 
-wijkHtml += `
-<div class="row">
-<div>${wijk}</div>
-<div>${wijkStats[wijk].appointments} afspraken • ${wijkStats[wijk].minutes} min</div>
-</div>
-`;
+  let wijkHtml = "";
+  const sortedWijken = Object.keys(wijkStats).sort();
 
-}
+  sortedWijken.forEach(wijk => {
+    wijkHtml += `
+      <div class="row">
+        <div>${wijk}</div>
+        <div>${wijkStats[wijk].appointments} afspraken</div>
+      </div>
+    `;
+  });
 
-let serviceHtml = "";
+  if(!wijkHtml){
+    wijkHtml = `<div class="row"><div>Geen wijkgegevens gevonden</div><div>-</div></div>`;
+  }
 
-for(const service in serviceStats){
+  let serviceHtml = "";
+  const sortedServices = Object.keys(serviceStats).sort();
 
-serviceHtml += `
-<div class="row">
-<div>${service}</div>
-<div>${serviceStats[service]} keer</div>
-</div>
-`;
+  sortedServices.forEach(service => {
+    serviceHtml += `
+      <div class="row">
+        <div>${service}</div>
+        <div>${serviceStats[service]} keer</div>
+      </div>
+    `;
+  });
 
-}
+  if(!serviceHtml){
+    serviceHtml = `<div class="row"><div>Geen hulpsoorten gevonden</div><div>-</div></div>`;
+  }
 
-rapportEl.innerHTML = `
+  let wijkServiceHtml = "";
+  sortedWijken.forEach(wijk => {
+    wijkServiceHtml += `
+      <div class="card">
+        <div class="section-title">${wijk}</div>
+    `;
 
-<div class="card">
-<div class="section-title">Overzicht</div>
+    const servicesInWijk = Object.keys(wijkServiceStats[wijk] || {}).sort();
 
-<div class="row">
-<div>Cliënten geholpen</div>
-<div>${clientSet.size}</div>
-</div>
+    if(servicesInWijk.length === 0){
+      wijkServiceHtml += `
+        <div class="row">
+          <div>Geen hulpsoorten gevonden</div>
+          <div>-</div>
+        </div>
+      `;
+    } else {
+      servicesInWijk.forEach(service => {
+        wijkServiceHtml += `
+          <div class="row">
+            <div>${service}</div>
+            <div>${wijkServiceStats[wijk][service]} keer</div>
+          </div>
+        `;
+      });
+    }
 
-<div class="row">
-<div>Afspraken</div>
-<div>${totalAppointments}</div>
-</div>
+    wijkServiceHtml += `</div>`;
+  });
 
-<div class="row">
-<div>Totaal minuten hulp</div>
-<div>${totalMinutes}</div>
-</div>
+  if(!wijkServiceHtml){
+    wijkServiceHtml = `
+      <div class="card">
+        <div class="section-title">Per wijk - soorten hulp</div>
+        <div class="row">
+          <div>Geen gegevens gevonden</div>
+          <div>-</div>
+        </div>
+      </div>
+    `;
+  }
 
-</div>
+  rapportEl.innerHTML = `
+    <div class="card">
+      <div class="section-title">Overzicht</div>
 
-<div class="card">
-<div class="section-title">Per wijk</div>
-${wijkHtml}
-</div>
+      <div class="row">
+        <div>Cliënten geholpen</div>
+        <div>${clientSet.size}</div>
+      </div>
 
-<div class="card">
-<div class="section-title">Soorten hulp</div>
-${serviceHtml}
-</div>
+      <div class="row">
+        <div>Afspraken</div>
+        <div>${totalAppointments}</div>
+      </div>
 
-`;
+      <div class="row">
+        <div>Totaal minuten hulp</div>
+        <div>${totalMinutes}</div>
+      </div>
 
+      <div class="row">
+        <div>Interne signaleringen</div>
+        <div>${totalSignals}</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Per wijk</div>
+      ${wijkHtml}
+    </div>
+
+    <div class="card">
+      <div class="section-title">Soorten hulp</div>
+      ${serviceHtml}
+    </div>
+
+    <div class="section-title" style="margin:10px 0;">Per wijk - soorten hulp</div>
+    ${wijkServiceHtml}
+  `;
 }
 
 loadRapport();
-
 </script>
 
 </body>
