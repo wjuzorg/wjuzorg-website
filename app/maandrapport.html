@@ -7,6 +7,32 @@
 
 <style>
 
+@media print{
+  .btn{
+    display:none;
+  }
+
+  body{
+    background:white;
+  }
+
+  .container{
+    max-width:none;
+    padding:0;
+  }
+
+  .card{
+    box-shadow:none;
+    border:1px solid #ddd;
+    break-inside:avoid;
+  }
+
+  .topbar{
+    display:block;
+    margin-bottom:20px;
+  }
+}
+
 body{
 font-family:Arial, Helvetica, sans-serif;
 background:#f3f3f3;
@@ -76,9 +102,12 @@ flex-wrap:wrap;
 </div>
 
 <div class="topbar">
-<h2>Maandrapportage</h2>
+  <h2>Maandrapportage</h2>
 
-<a href="today.html" class="btn">← Terug naar Today</a>
+  <div style="display:flex; gap:10px; flex-wrap:wrap;">
+    <button class="btn" onclick="window.print()">Rapport / PDF</button>
+    <a href="today.html" class="btn">← Terug naar Today</a>
+  </div>
 </div>
 
 <div id="rapport"></div>
