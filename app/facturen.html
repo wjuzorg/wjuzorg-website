@@ -509,15 +509,43 @@ data.forEach(item => {
       window.location.href = "factuur-pdf.html?client=" + encodeURIComponent(client);
     }
 
-    function editInvoice(client){
-      alert("Factuur aanpassen voor: " + client);
-    }
+   
 
-   function openClientCard(client){
-  window.location.href = "clientkaart.html?client=" + encodeURIComponent(client);
+   async function editInvoice(client){
+  const itemsForClient = invoiceItemsData.filter(item => item.client_name === client);
+
+  if (!itemsForClient || itemsForClient.length === 0) {
+    alert("Geen factuurregels gevonden voor " + client);
+    return;
+  }
+
+  const item = itemsForClient[0];
+
+  const newService = prompt("Nieuwe soort hulp:", item.service_type || "");
+  if (newService === null) return;
+
+  const newMinutes = prompt("Nieuwe minuten:", item.duration_minutes || 0);
+  if (newMinutes === null) return;
+
+  const newAmount = prompt("Nieuw bedrag:", item.amount_snapshot || 0);
+  if (newAmount === null) return;
+
+  const { error } = await supabaseClient
+    .from("invoice_items")
+    .update({
+      service_type: newService,
+      duration_minutes: Number(newMinutes),
+      amount_snapshot: Number(newAmount)
+    })
+    .eq("id", item.id);
+
+  if (error) {
+    alert("Fout bij aanpassen: " + error.message);
+    return;
+  }
+
+  loadInvoices();
 }
-
-    loadInvoices();
   </script>
 </body>
 </html>
