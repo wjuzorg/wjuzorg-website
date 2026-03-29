@@ -114,6 +114,17 @@
       padding:12px;
       border-radius:10px;
     }
+    
+    .alert-danger{
+  background:#fff1f1;
+  border:2px solid #c40000;
+  color:#8a0000;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:20px;
+  font-weight:bold;
+  line-height:1.5;
+}
 
     @media print{
       .topbar{
@@ -311,6 +322,11 @@
       if(latestRequest?.hard_to_reach) signalParts.push("Moeilijk bereikbaar / neemt niet op");
       if(latestRequest?.observed_decline) signalParts.push("Zichtbare achteruitgang");
       if(latestRequest?.no_signal_needed) signalParts.push("N.v.t. / geen bijzonderheden");
+      const signalCount =
+  (latestRequest?.risk_dropout ? 1 : 0) +
+  (latestRequest?.needs_extra_support ? 1 : 0) +
+  (latestRequest?.hard_to_reach ? 1 : 0) +
+  (latestRequest?.observed_decline ? 1 : 0);
 
       let signalHtml = "";
       if(signalParts.length > 0){
@@ -328,7 +344,18 @@
   "-";
 
       cardEl.innerHTML = `
-        <div class="card">
+  ${
+    signalCount >= 2
+      ? `
+        <div class="alert-danger">
+          ⚠ Let op: er zijn meerdere signaleringen geregistreerd bij deze cliënt.<br>
+          Overweeg contact met mantelzorger, huisarts of buurtteam.
+        </div>
+      `
+      : ``
+  }
+
+  <div class="card">
           <div class="row">
             <div class="label">Cliënt</div>
             <div class="value">${client}</div>
