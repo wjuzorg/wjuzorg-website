@@ -257,6 +257,55 @@
         currency: "EUR"
       });
     }
+    
+    function formatDate(value){
+  if(!value) return "-";
+  const d = new Date(value);
+  if (isNaN(d)) return "-";
+  return d.toLocaleDateString("nl-NL");
+}
+
+function daysSince(dateString){
+  if(!dateString) return 0;
+  const sent = new Date(dateString);
+  if (isNaN(sent)) return 0;
+
+  const diffMs = new Date() - sent;
+  return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+}
+
+async function markPaid(id){
+  const { error } = await supabaseClient
+    .from("invoice_items")
+    .update({
+      status: "betaald",
+      paid_at: new Date().toISOString()
+    })
+    .eq("id", id);
+
+  if(error){
+    alert("Fout bij opslaan als betaald: " + error.message);
+    return;
+  }
+
+  loadInvoices();
+}
+
+async function sendReminder(id){
+  const { error } = await supabaseClient
+    .from("invoice_items")
+    .update({
+      status: "herinnering_verstuurd"
+    })
+    .eq("id", id);
+
+  if(error){
+    alert("Fout bij herinnering: " + error.message);
+    return;
+  }
+
+  loadInvoices();
+}
 
     async function loadInvoices() {
       const statusEl = document.getElementById("status");
@@ -268,10 +317,10 @@
       totalEl.textContent = "€0,00";
 
       const { data, error } = await supabaseClient
-        .from("invoice_items")
-        .select("*")
-        .eq("status", "open")
-        .order("created_at", { ascending: false });
+  .from("invoice_items")
+  .select("*")
+  .in("status", ["open", "verzonden", "herinnering_verstuurd", "betaald"])
+  .order("created_at", { ascending: false });
 
       if (error) {
         statusEl.innerHTML = `<div class="error">Fout: ${error.message}</div>`;
@@ -322,22 +371,50 @@
             <div class="invoice-lines">
         `;
 
-        grouped[client].forEach(item => {
-          const amount = Number(item.amount_snapshot || 0);
-          total += amount;
-          clientTotal += amount;
+       grouped[client].forEach(item => {
+  const amount = Number(item.amount_snapshot || 0);
+  const itemStatus = item.status || "open";
+  const sentDays = daysSince(item.sent_at);
+  const reminderNeeded =
+    (itemStatus === "verzonden" || itemStatus === "herinnering_verstuurd") &&
+    sentDays >= 16 &&
+    itemStatus !== "betaald";
 
-          listEl.innerHTML += `
-            <div class="invoice-line">
-              <div class="line-left">
-                <div class="line-service">${item.service_type || "-"}</div>
-                <div class="line-meta">${item.duration_minutes || 0} min</div>
-              </div>
+  total += amount;
+  clientTotal += amount;
 
-              <div class="line-amount">${euro(amount)}</div>
-            </div>
-          `;
-        });
+  listEl.innerHTML += `
+    <div class="invoice-line">
+      <div class="line-left">
+        <div class="line-service">${item.service_type || "-"}</div>
+        <div class="line-meta">${item.duration_minutes || 0} min</div>
+        <div class="line-meta">Status: ${itemStatus}</div>
+        <div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
+        ${
+          reminderNeeded
+            ? `<div class="line-meta" style="color:#c40000; font-weight:bold;">Herinnering nodig</div>`
+            : ``
+        }
+
+        <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+          ${
+            itemStatus !== "betaald"
+              ? `<button class="btn-small" onclick="markPaid('${item.id}')">Betaald</button>`
+              : ``
+          }
+
+          ${
+            reminderNeeded
+              ? `<button class="btn-small" onclick="sendReminder('${item.id}')">Herinnering</button>`
+              : ``
+          }
+        </div>
+      </div>
+
+      <div class="line-amount">${euro(amount)}</div>
+    </div>
+  `;
+});
 
         listEl.innerHTML += `
             </div>

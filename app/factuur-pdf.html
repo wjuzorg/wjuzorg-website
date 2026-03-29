@@ -139,13 +139,26 @@
       document.getElementById("invoiceTotal").textContent = euro(total);
     }
 
-    async function printInvoice() {
-      const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
-      if (itemIds.length > 0) {
-        await supabaseClient.from("invoice_items").update({ status: "gefactureerd" }).in("id", itemIds);
-      }
-      window.print();
+ async function printInvoice() {
+  const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
+
+  if (itemIds.length > 0) {
+    const { error } = await supabaseClient
+      .from("invoice_items")
+      .update({
+        status: "verzonden",
+        sent_at: new Date().toISOString()
+      })
+      .in("id", itemIds);
+
+    if (error) {
+      alert("Fout bij opslaan als verzonden: " + error.message);
+      return;
     }
+  }
+
+  window.print();
+}
     loadInvoicePdf();
   </script>
 </body>
