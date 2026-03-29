@@ -227,16 +227,21 @@
     </div>
 
     <div id="status" class="status">Factuurregels laden...</div>
-    <div id="invoiceList"></div>
 
-    <div class="card">
-      <div class="total">Totaal: <span id="totalAmount">€0,00</span></div>
+<h3>Actieve facturen</h3>
+<div id="invoiceList"></div>
 
-      <div class="small">
-        BTW vrijgesteld van omzetbelasting volgens artikel 11 lid 1 onderdeel g Wet OB.<br>
-        Betaling binnen 14 dagen.
-      </div>
-    </div>
+<h3 style="margin-top:28px;">Betaalde facturen</h3>
+<div id="paidInvoiceList"></div>
+
+<div class="card">
+  <div class="total">Actief totaal: <span id="totalAmount">€0,00</span></div>
+
+  <div class="small">
+    BTW vrijgesteld van omzetbelasting volgens artikel 11 lid 1 onderdeel g Wet OB.<br>
+    Betaling binnen 14 dagen.
+  </div>
+</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -309,12 +314,14 @@ async function sendReminder(id){
 
     async function loadInvoices() {
       const statusEl = document.getElementById("status");
-      const listEl = document.getElementById("invoiceList");
-      const totalEl = document.getElementById("totalAmount");
+const listEl = document.getElementById("invoiceList");
+const paidListEl = document.getElementById("paidInvoiceList");
+const totalEl = document.getElementById("totalAmount");
 
       statusEl.textContent = "Factuurregels laden...";
       listEl.innerHTML = "";
-      totalEl.textContent = "€0,00";
+paidListEl.innerHTML = "";
+totalEl.textContent = "€0,00";
 
       const { data, error } = await supabaseClient
   .from("invoice_items")
@@ -337,15 +344,23 @@ async function sendReminder(id){
       statusEl.textContent = "";
 
       let total = 0;
-      const grouped = {};
 
-      data.forEach(item => {
-        const client = item.client_name || "Onbekende cliënt";
-        if (!grouped[client]) grouped[client] = [];
-        grouped[client].push(item);
-      });
+const activeGrouped = {};
+const paidGrouped = {};
 
-      for (const client in grouped) {
+data.forEach(item => {
+  const client = item.client_name || "Onbekende cliënt";
+
+  if (item.status === "betaald") {
+    if (!paidGrouped[client]) paidGrouped[client] = [];
+    paidGrouped[client].push(item);
+  } else {
+    if (!activeGrouped[client]) activeGrouped[client] = [];
+    activeGrouped[client].push(item);
+  }
+});
+
+      for (const client in activeGrouped) {
         let clientTotal = 0;
 
         listEl.innerHTML += `
@@ -371,7 +386,7 @@ async function sendReminder(id){
             <div class="invoice-lines">
         `;
 
-       grouped[client].forEach(item => {
+       activeGrouped[client].forEach(item => {
   const amount = Number(item.amount_snapshot || 0);
   const itemStatus = item.status || "open";
   const sentDays = daysSince(item.sent_at);
@@ -426,6 +441,55 @@ async function sendReminder(id){
           </div>
         `;
       }
+      
+      for (const client in paidGrouped) {
+  let clientTotal = 0;
+
+  paidListEl.innerHTML += `
+    <div class="card">
+      <div class="client-header">
+        <div class="client-name">${client}</div>
+
+        <div class="client-actions">
+          <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+            Cliëntenkaart
+          </button>
+        </div>
+      </div>
+
+      <div class="invoice-lines">
+  `;
+
+  paidGrouped[client].forEach(item => {
+    const amount = Number(item.amount_snapshot || 0);
+    const itemStatus = item.status || "betaald";
+    clientTotal += amount;
+
+    paidListEl.innerHTML += `
+      <div class="invoice-line">
+        <div class="line-left">
+          <div class="line-service">${item.service_type || "-"}</div>
+          <div class="line-meta">${item.duration_minutes || 0} min</div>
+          <div class="line-meta">Status: ${itemStatus}</div>
+          <div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
+          <div class="line-meta">Betaald op: ${formatDate(item.paid_at)}</div>
+        </div>
+
+        <div class="line-amount">${euro(amount)}</div>
+      </div>
+    `;
+  });
+
+  paidListEl.innerHTML += `
+      </div>
+
+      <div class="client-subtotal">
+        <span>Subtotaal ${client}</span>
+        <span>${euro(clientTotal)}</span>
+      </div>
+    </div>
+  `;
+}
 
       totalEl.textContent = euro(total);
     }
