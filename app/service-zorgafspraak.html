@@ -104,6 +104,35 @@ U vult uw gegevens in. Daarna nemen wij contact met u op.
       veilig rijden en de reistijd beperken.
     </div>
   </div>
+  
+  <div class="form-group">
+  <label>Extra contact bij zorgen (optioneel)</label>
+
+  <div class="hint" style="margin-bottom:10px;">
+    Als wij merken dat het wat minder goed met u gaat,
+    is er iemand die wij dan mogen bellen?
+    Bijvoorbeeld een mantelzorger, dochter, zoon,
+    huisarts of buurtteam.
+  </div>
+
+  <input type="text"
+         name="contact_person_name"
+         placeholder="Naam contactpersoon">
+
+  <input type="text"
+         name="contact_person_phone"
+         placeholder="Telefoonnummer"
+         style="margin-top:10px;">
+
+  <input type="text"
+         name="contact_person_role"
+         placeholder="Bijv. mantelzorger, dochter, huisarts of buurtteam"
+         style="margin-top:10px;">
+
+  <div class="hint" style="margin-top:10px;">
+    Alleen invullen als u wilt dat wij in zo’n situatie iemand mogen benaderen.
+  </div>
+</div>
 
   <div class="form-group">
     <label for="pgb">
@@ -199,6 +228,9 @@ U vult uw gegevens in. Daarna nemen wij contact met u op.
   preferred_area: formData.get('preferred_area') || null,
   funding_type: formData.get('pgb') || null,
   message: formData.get('message') || null,
+  contact_person_name: formData.get('contact_person_name') || null,
+contact_person_phone: formData.get('contact_person_phone') || null,
+contact_person_role: formData.get('contact_person_role') || null,
   service: 'naar_afspraak',
   type: 'service',
   help_topic: 'vervoer_zorgafspraak',
