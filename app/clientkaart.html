@@ -389,28 +389,33 @@
         
         <div class="card">
   <div class="section-title">Contact bij zorgen</div>
- ${
+  ${
     (latestRequest?.contact_person_name ||
      latestRequest?.contact_person_phone ||
      latestRequest?.contact_person_role)
       ? `
-  <div class="row">
-    <div class="label">Naam</div>
-    <div class="value">${latestRequest?.contact_person_name || "-"}</div>
-  </div>
+        <div class="row">
+          <div class="label">Naam</div>
+          <div class="value">${latestRequest?.contact_person_name || "-"}</div>
+        </div>
 
-  <div class="row">
-    <div class="label">Telefoon</div>
-    <div class="value">${latestRequest?.contact_person_phone || "-"}</div>
-  </div>
+        <div class="row">
+          <div class="label">Telefoon</div>
+          <div class="value">${latestRequest?.contact_person_phone || "-"}</div>
+        </div>
 
-  <div class="row">
-    <div class="label">Relatie / organisatie</div>
-    <div class="value">${latestRequest?.contact_person_role || "-"}</div>
-  </div>
+        <div class="row">
+          <div class="label">Relatie / organisatie</div>
+          <div class="value">${latestRequest?.contact_person_role || "-"}</div>
+        </div>
+      `
+      : `
+        <div class="hint">
+          Nog geen contactpersoon opgegeven.
+        </div>
+      `
+  }
 </div>
-      `;
-    }
 
 function openPrintChoice(){
   document.getElementById("printChoiceBox").style.display = "block";
@@ -438,10 +443,6 @@ function printWithoutInvoices(){
     facturenBlok.style.display = "none";
   }
   
-  function savePDF(){
-  window.print();
-}
-
   closePrintChoice();
   window.print();
 
