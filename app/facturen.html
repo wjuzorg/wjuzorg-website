@@ -389,10 +389,17 @@ data.forEach(item => {
         <div class="line-service">${item.service_type || "-"}</div>
         <div class="line-meta">${item.duration_minutes || 0} min</div>
         <div class="line-meta">Status: ${itemStatus}</div>
-        <div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
-       ${
+<div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
+
+${
+  itemStatus === "herinnering_verstuurd"
+    ? `<div class="line-meta">Herinnering verstuurd op: ${formatDate(item.reminder_sent_at)}</div>`
+    : ``
+}
+
+${
   reminderNeeded
-    ? `<button class="btn-small" onclick="openReminder('${client.replace(/'/g, "\\'")}')">Herinnering</button>`
+    ? `<div class="line-meta" style="color:#c40000; font-weight:bold;">Let op: factuur nog niet betaald</div>`
     : ``
 }
 
@@ -402,12 +409,12 @@ data.forEach(item => {
               ? `<button class="btn-small" onclick="markPaid('${item.id}')">Betaald</button>`
               : ``
           }
-
+          
           ${
-            reminderNeeded
-              ? `<button class="btn-small" onclick="sendReminder('${item.id}')">Herinnering</button>`
-              : ``
-          }
+    reminderNeeded
+      ? `<button class="btn-small" onclick="openReminder('${client.replace(/'/g, "\\'")}')">Herinnering</button>`
+      : ``
+  }
         </div>
       </div>
 
