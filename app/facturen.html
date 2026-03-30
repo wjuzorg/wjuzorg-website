@@ -546,6 +546,12 @@ data.forEach(item => {
 
   loadInvoices();
 }
+
+function openClientCard(client){
+  window.location.href = "clientkaart.html?client=" + encodeURIComponent(client);
+}
+
+loadInvoices();
   </script>
 </body>
 </html>
