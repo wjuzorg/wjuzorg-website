@@ -296,21 +296,6 @@ async function markPaid(id){
   loadInvoices();
 }
 
-async function sendReminder(id){
-  const { error } = await supabaseClient
-    .from("invoice_items")
-    .update({
-      status: "herinnering_verstuurd"
-    })
-    .eq("id", id);
-
-  if(error){
-    alert("Fout bij herinnering: " + error.message);
-    return;
-  }
-
-  loadInvoices();
-}
 
     async function loadInvoices() {
       const statusEl = document.getElementById("status");
@@ -405,11 +390,11 @@ data.forEach(item => {
         <div class="line-meta">${item.duration_minutes || 0} min</div>
         <div class="line-meta">Status: ${itemStatus}</div>
         <div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
-        ${
-          reminderNeeded
-            ? `<div class="line-meta" style="color:#c40000; font-weight:bold;">Herinnering nodig</div>`
-            : ``
-        }
+       ${
+  reminderNeeded
+    ? `<button class="btn-small" onclick="openReminder('${client.replace(/'/g, "\\'")}')">Herinnering</button>`
+    : ``
+}
 
         <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
           ${
@@ -509,43 +494,6 @@ data.forEach(item => {
       window.location.href = "factuur-pdf.html?client=" + encodeURIComponent(client);
     }
 
-   
-
-   async function editInvoice(client){
-  const itemsForClient = invoiceItemsData.filter(item => item.client_name === client);
-
-  if (!itemsForClient || itemsForClient.length === 0) {
-    alert("Geen factuurregels gevonden voor " + client);
-    return;
-  }
-
-  const item = itemsForClient[0];
-
-  const newService = prompt("Nieuwe soort hulp:", item.service_type || "");
-  if (newService === null) return;
-
-  const newMinutes = prompt("Nieuwe minuten:", item.duration_minutes || 0);
-  if (newMinutes === null) return;
-
-  const newAmount = prompt("Nieuw bedrag:", item.amount_snapshot || 0);
-  if (newAmount === null) return;
-
-  const { error } = await supabaseClient
-    .from("invoice_items")
-    .update({
-      service_type: newService,
-      duration_minutes: Number(newMinutes),
-      amount_snapshot: Number(newAmount)
-    })
-    .eq("id", item.id);
-
-  if (error) {
-    alert("Fout bij aanpassen: " + error.message);
-    return;
-  }
-
-  loadInvoices();
-}
 
 function openClientCard(client){
   window.location.href = "clientkaart.html?client=" + encodeURIComponent(client);
@@ -553,6 +501,24 @@ function openClientCard(client){
 
 function openInvoiceEdit(client){
   window.location.href = "factuur-aanpassen.html?client=" + encodeURIComponent(client);
+}
+
+function openReminder(client){
+  const itemsForClient = invoiceItemsData.filter(item =>
+    item.client_name === client &&
+    (item.status === "verzonden" || item.status === "herinnering_verstuurd")
+  );
+
+  if (!itemsForClient || itemsForClient.length === 0) {
+    alert("Geen herinnerbare factuurregels gevonden voor " + client);
+    return;
+  }
+
+  localStorage.setItem("wju_invoice_client", client);
+  localStorage.setItem("wju_invoice_items", JSON.stringify(itemsForClient));
+  localStorage.setItem("wju_invoice_item_ids", JSON.stringify(itemsForClient.map(item => item.id)));
+
+  window.location.href = "factuur-herinnering.html?client=" + encodeURIComponent(client);
 }
 
 loadInvoices();
