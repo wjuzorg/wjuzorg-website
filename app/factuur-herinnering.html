@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Factuur herinnering - WJU Zorg</title>
+
+  <style>
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:#f3f3f3;
+      margin:0;
+      color:#222;
+    }
+
+    .container{
+      max-width:900px;
+      margin:auto;
+      padding:24px;
+    }
+
+    .card{
+      background:white;
+      padding:34px;
+      border-radius:14px;
+      border:1px solid #e3e3e3;
+      box-shadow:0 3px 8px rgba(0,0,0,0.06);
+    }
+
+    .top-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+
+    .btn{
+      background:#28a745;
+      color:white;
+      border:none;
+      padding:12px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-block;
+      font-size:1rem;
+    }
+
+    .btn-secondary{
+      background:#e9ecef;
+      color:#333;
+    }
+
+    .header-logo{
+      margin-bottom:22px;
+    }
+
+    .header-logo img{
+      max-width:140px;
+      height:auto;
+    }
+
+    .doc-top{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-start;
+      margin-bottom:28px;
+      flex-wrap:wrap;
+    }
+
+    .title{
+      font-size:2rem;
+      font-weight:bold;
+      margin:0 0 18px 0;
+    }
+
+    .company-block{
+      line-height:1.45;
+      font-size:0.98rem;
+    }
+
+    .topbar-right{
+      text-align:right;
+      line-height:1.7;
+      font-size:1rem;
+      min-width:220px;
+    }
+
+    .client-block{
+      margin:22px 0 26px 0;
+      line-height:1.5;
+      font-size:1rem;
+    }
+
+    .client-name{
+      font-weight:bold;
+      font-size:1.05rem;
+    }
+
+    .text-block{
+      margin:26px 0;
+      line-height:1.7;
+      font-size:1rem;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:18px;
+    }
+
+    th, td{
+      padding:12px 8px;
+      border-bottom:1px solid #ddd;
+      text-align:left;
+      vertical-align:top;
+    }
+
+    th.right, td.right{
+      text-align:right;
+    }
+
+    .total-row td{
+      border-top:2px solid #bbb;
+      border-bottom:none;
+      font-weight:bold;
+      font-size:1.1rem;
+      padding-top:14px;
+    }
+
+    .footer-note{
+      margin-top:26px;
+      line-height:1.6;
+      font-size:0.98rem;
+    }
+
+    .muted{
+      color:#666;
+    }
+
+    .warning-box{
+      background:#fff8e8;
+      border:1px solid #f0d58b;
+      color:#7a5b00;
+      padding:14px;
+      border-radius:10px;
+      margin-bottom:18px;
+      line-height:1.5;
+    }
+
+    @media print{
+      body{
+        background:white;
+      }
+
+      .container{
+        max-width:none;
+        padding:0;
+      }
+
+      .top-actions{
+        display:none;
+      }
+
+      .card{
+        box-shadow:none;
+        border:none;
+        border-radius:0;
+        padding:0;
+      }
+    }
+
+    @media (max-width:640px){
+      .card{
+        padding:20px;
+      }
+
+      .doc-top{
+        flex-direction:column;
+      }
+
+      .topbar-right{
+        text-align:left;
+      }
+
+      .title{
+        font-size:1.7rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+
+      <div class="header-logo">
+        <img src="logofactuur.jpg" alt="WJU Zorg logo">
+      </div>
+
+      <div class="top-actions">
+        <a href="facturen.html" class="btn btn-secondary">← Terug</a>
+        <button class="btn" onclick="window.print()">Print / Opslaan als PDF</button>
+        <button class="btn" onclick="markReminderSent()">Markeer als herinnering verstuurd</button>
+      </div>
+
+      <div class="warning-box">
+        Dit document is een betalingsherinnering. Controleer altijd even of de factuur nog openstaat voordat u deze verstuurt.
+      </div>
+
+      <div class="doc-top">
+        <div>
+          <h1 class="title">Betalingsherinnering</h1>
+
+          <div class="company-block">
+            <strong>WJU Zorg</strong><br>
+            Zenithstraat 21, 3582 PK Utrecht<br>
+            wjuzorg@gmail.com | KVK: 42018479
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div><strong>Datum:</strong> <span id="docDate">-</span></div>
+          <div><strong>Betaaltermijn herinnering:</strong> binnen 7 dagen</div>
+        </div>
+      </div>
+
+      <div class="client-block">
+        <div class="client-name" id="clientName">-</div>
+        <div id="clientAddress">-</div>
+      </div>
+
+      <div class="text-block">
+        Geachte heer / mevrouw,
+        <br><br>
+        Volgens onze administratie staat onderstaande factuur nog open.
+        Wij verzoeken u vriendelijk om het openstaande bedrag alsnog binnen 7 dagen te voldoen.
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Dienst</th>
+            <th class="right">Min.</th>
+            <th class="right">Bedrag</th>
+          </tr>
+        </thead>
+        <tbody id="invoiceTableBody"></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="2" class="right">Totaal openstaand:</td>
+            <td class="right" id="invoiceTotal">€0,00</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="text-block">
+        Mocht de betaling inmiddels onderweg zijn, dan kunt u deze herinnering als niet verzonden beschouwen.
+      </div>
+
+      <div class="footer-note">
+        Graag voldoen op:<br>
+        <strong>WJU Zorg</strong><br>
+        IBAN: <strong>NL05INGB 0115 6069 55</strong>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
+
+    function euro(amount){
+      return Number(amount || 0).toLocaleString("nl-NL", {
+        style: "currency",
+        currency: "EUR"
+      });
+    }
+
+    function formatDate(date){
+      const d = date ? new Date(date) : new Date();
+      if (isNaN(d)) return "-";
+      return d.toLocaleDateString("nl-NL");
+    }
+
+    function loadReminderPdf(){
+      const client = localStorage.getItem("wju_invoice_client") || "-";
+      const items = JSON.parse(localStorage.getItem("wju_invoice_items") || "[]");
+
+      document.getElementById("docDate").textContent = formatDate(new Date());
+      document.getElementById("clientName").textContent = client;
+
+      let address = "-";
+      if(items.length > 0){
+        address = items[0].client_address || items[0].address || "-";
+      }
+      document.getElementById("clientAddress").textContent = address;
+
+      const tbody = document.getElementById("invoiceTableBody");
+      tbody.innerHTML = "";
+
+      let total = 0;
+
+      items.forEach(item => {
+        const amount = Number(item.amount_snapshot || 0);
+        total += amount;
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.service_type || "-"}</td>
+            <td class="right">${item.duration_minutes || 0}</td>
+            <td class="right">${euro(amount)}</td>
+          </tr>
+        `;
+      });
+
+      document.getElementById("invoiceTotal").textContent = euro(total);
+    }
+
+    async function markReminderSent(){
+      const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
+
+      if(itemIds.length > 0){
+        const { error } = await supabaseClient
+          .from("invoice_items")
+          .update({
+            status: "herinnering_verstuurd"
+          })
+          .in("id", itemIds);
+
+        if(error){
+          alert("Fout bij opslaan herinnering: " + error.message);
+          return;
+        }
+      }
+
+      alert("Herinnering gemarkeerd als verstuurd.");
+      window.location.href = "facturen.html";
+    }
+
+    loadReminderPdf();
+  </script>
+</body>
+</html>
