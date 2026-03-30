@@ -345,56 +345,95 @@ data.forEach(item => {
   }
 });
 
-      for (const client in activeGrouped) {
-        let clientTotal = 0;
+for (const client in activeGrouped) {
+  let clientTotal = 0;
 
-        listEl.innerHTML += `
-          <div class="card">
-            <div class="client-header">
-              <div class="client-name">${client}</div>
+  let clientHtml = `
+    <div class="card">
+      <div class="client-header">
+        <div class="client-name">${client}</div>
 
-              <div class="client-actions">
-                <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
-                  Factuur
-                </button>
+        <div class="client-actions">
+          <button class="btn-small" onclick="generateInvoice('${client.replace(/'/g, "\\'")}')">
+            Factuur
+          </button>
 
-                <button class="btn-small" onclick="openInvoiceEdit('${client.replace(/'/g, "\\'")}')">
-  Aanpassen
-</button>
+          <button class="btn-small" onclick="openInvoiceEdit('${client.replace(/'/g, "\\'")}')">
+            Aanpassen
+          </button>
 
-                <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
-                  Cliëntenkaart
-                </button>
-              </div>
-            </div>
+          <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
+            Cliëntenkaart
+          </button>
+        </div>
+      </div>
 
-            <div class="invoice-lines">
-        `;
+      <div class="invoice-lines">
+  `;
 
-       activeGrouped[client].forEach(item => {
-  const amount = Number(item.amount_snapshot || 0);
-  const itemStatus = item.status || "open";
-  const sentDays = daysSince(item.sent_at);
-  const reminderNeeded =
-    (itemStatus === "verzonden" || itemStatus === "herinnering_verstuurd") &&
-    sentDays >= 16 &&
-    itemStatus !== "betaald";
+  activeGrouped[client].forEach(item => {
+    const amount = Number(item.amount_snapshot || 0);
+    const itemStatus = item.status || "open";
+    const sentDays = daysSince(item.sent_at);
+    const reminderNeeded =
+      (itemStatus === "verzonden" || itemStatus === "herinnering_verstuurd") &&
+      sentDays >= 16 &&
+      itemStatus !== "betaald";
 
-  total += amount;
-  clientTotal += amount;
+    total += amount;
+    clientTotal += amount;
 
-  listEl.innerHTML += `
-    <div class="invoice-line">
-      <div class="line-left">
-        <div class="line-service">${item.service_type || "-"}</div>
-        <div class="line-meta">${item.duration_minutes || 0} min</div>
-        <div class="line-meta">Status: ${itemStatus}</div>
-<div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
+    clientHtml += `
+      <div class="invoice-line">
+        <div class="line-left">
+          <div class="line-service">${item.service_type || "-"}</div>
+          <div class="line-meta">${item.duration_minutes || 0} min</div>
+          <div class="line-meta">Status: ${itemStatus}</div>
+          <div class="line-meta">Verzonden op: ${formatDate(item.sent_at)}</div>
 
-${
-  itemStatus === "herinnering_verstuurd"
-    ? `<div class="line-meta">Herinnering verstuurd op: ${formatDate(item.reminder_sent_at)}</div>`
-    : ``
+          ${
+            itemStatus === "herinnering_verstuurd"
+              ? `<div class="line-meta">Herinnering verstuurd op: ${formatDate(item.reminder_sent_at)}</div>`
+              : ``
+          }
+
+          ${
+            reminderNeeded
+              ? `<div class="line-meta" style="color:#c40000; font-weight:bold;">Let op: factuur nog niet betaald</div>`
+              : ``
+          }
+
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+            ${
+              itemStatus !== "betaald"
+                ? `<button class="btn-small" onclick="markPaid('${item.id}')">Betaald</button>`
+                : ``
+            }
+
+            ${
+              reminderNeeded
+                ? `<button class="btn-small" onclick="openReminder('${client.replace(/'/g, "\\'")}')">Herinnering</button>`
+                : ``
+            }
+          </div>
+        </div>
+
+        <div class="line-amount">${euro(amount)}</div>
+      </div>
+    `;
+  });
+
+  clientHtml += `
+      </div>
+
+      <div class="client-subtotal">
+        <span>Subtotaal ${client}</span>
+        <span>${euro(clientTotal)}</span>
+      </div>
+    </div>
+  `;
+
+  listEl.innerHTML += clientHtml;
 }
 
 ${
@@ -437,7 +476,7 @@ ${
       for (const client in paidGrouped) {
   let clientTotal = 0;
 
-  paidListEl.innerHTML += `
+  let paidHtml = `
     <div class="card">
       <div class="client-header">
         <div class="client-name">${client}</div>
@@ -457,7 +496,7 @@ ${
     const itemStatus = item.status || "betaald";
     clientTotal += amount;
 
-    paidListEl.innerHTML += `
+    paidHtml += `
       <div class="invoice-line">
         <div class="line-left">
           <div class="line-service">${item.service_type || "-"}</div>
@@ -472,7 +511,7 @@ ${
     `;
   });
 
-  paidListEl.innerHTML += `
+  paidHtml += `
       </div>
 
       <div class="client-subtotal">
@@ -481,6 +520,8 @@ ${
       </div>
     </div>
   `;
+
+  paidListEl.innerHTML += paidHtml;
 }
 
       totalEl.textContent = euro(total);
