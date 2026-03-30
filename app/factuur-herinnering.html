@@ -326,25 +326,26 @@
     }
 
     async function markReminderSent(){
-      const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
+  const itemIds = JSON.parse(localStorage.getItem("wju_invoice_item_ids") || "[]");
 
-      if(itemIds.length > 0){
-        const { error } = await supabaseClient
-          .from("invoice_items")
-          .update({
-            status: "herinnering_verstuurd"
-          })
-          .in("id", itemIds);
+  if(itemIds.length > 0){
+    const { error } = await supabaseClient
+      .from("invoice_items")
+      .update({
+        status: "herinnering_verstuurd",
+        reminder_sent_at: new Date().toISOString()
+      })
+      .in("id", itemIds);
 
-        if(error){
-          alert("Fout bij opslaan herinnering: " + error.message);
-          return;
-        }
-      }
-
-      alert("Herinnering gemarkeerd als verstuurd.");
-      window.location.href = "facturen.html";
+    if(error){
+      alert("Fout bij opslaan herinnering: " + error.message);
+      return;
     }
+  }
+
+  alert("Herinnering gemarkeerd als verstuurd.");
+  window.location.href = "facturen.html";
+}
 
     loadReminderPdf();
   </script>
