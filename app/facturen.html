@@ -373,9 +373,9 @@ data.forEach(item => {
                   Factuur
                 </button>
 
-                <button class="btn-small" onclick="editInvoice('${client.replace(/'/g, "\\'")}')">
-                  Aanpassen
-                </button>
+                <button class="btn-small" onclick="openInvoiceEdit('${client.replace(/'/g, "\\'")}')">
+  Aanpassen
+</button>
 
                 <button class="btn-small" onclick="openClientCard('${client.replace(/'/g, "\\'")}')">
                   Cliëntenkaart
@@ -549,6 +549,10 @@ data.forEach(item => {
 
 function openClientCard(client){
   window.location.href = "clientkaart.html?client=" + encodeURIComponent(client);
+}
+
+function openInvoiceEdit(client){
+  window.location.href = "factuur-aanpassen.html?client=" + encodeURIComponent(client);
 }
 
 loadInvoices();
