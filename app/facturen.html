@@ -436,42 +436,6 @@ for (const client in activeGrouped) {
   listEl.innerHTML += clientHtml;
 }
 
-${
-  reminderNeeded
-    ? `<div class="line-meta" style="color:#c40000; font-weight:bold;">Let op: factuur nog niet betaald</div>`
-    : ``
-}
-
-        <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
-          ${
-            itemStatus !== "betaald"
-              ? `<button class="btn-small" onclick="markPaid('${item.id}')">Betaald</button>`
-              : ``
-          }
-          
-          ${
-    reminderNeeded
-      ? `<button class="btn-small" onclick="openReminder('${client.replace(/'/g, "\\'")}')">Herinnering</button>`
-      : ``
-  }
-        </div>
-      </div>
-
-      <div class="line-amount">${euro(amount)}</div>
-    </div>
-  `;
-});
-
-        listEl.innerHTML += `
-            </div>
-
-            <div class="client-subtotal">
-              <span>Subtotaal ${client}</span>
-              <span>${euro(clientTotal)}</span>
-            </div>
-          </div>
-        `;
-      }
       
       for (const client in paidGrouped) {
   let clientTotal = 0;
