@@ -98,79 +98,71 @@ if (btnRead) {
     // 4. FORMULIER LOGICA (Supabase)
     const form = FORM_IDS.map(id => document.getElementById(id)).find(f => f !== null) || document.querySelector("form");
     
-    if (form) {
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+   if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        // Check of de library er is
-        if (!window.supabase) {
-          alert("Fout: Supabase library niet geladen. Controleer je HTML script tags.");
-          return;
-        }
+    if (!window.supabase) {
+      alert("Fout: Supabase library niet geladen. Controleer je HTML script tags.");
+      return;
+    }
 
-        // Maak de client aan
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        const btn = form.querySelector('button[type="submit"]');
-        const oldBtnText = btn ? btn.textContent : "Versturen";
-        if (btn) { btn.disabled = true; btn.textContent = "Even geduld..."; }
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        try {
-          const formData = new FormData(form);
-          const data = Object.fromEntries(formData.entries());
-          // Bel-mij-terug formulier: callback_reason omzetten naar message voor dashboard
-if (data.callback_reason && !data.message) {
-  data.message = data.callback_reason;
-  delete data.callback_reason;
-}
-          // Zet 'when' om naar 'appointment_time' (en verwijder 'when' zodat Supabase niet klaagt)
-if (data.when && !data.appointment_time) {
-  data.appointment_time = data.when;
-  delete data.when;
-}
+    const btn = form.querySelector('button[type="submit"]');
+    const oldBtnText = btn ? btn.textContent : "Versturen";
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Even geduld...";
+    }
 
-         // Vaste velden toevoegen
-data.org_id = ORG_ID;
+    try {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-const params = new URLSearchParams(window.location.search);
-const isAdmin = params.get("admin") === "1";
+      if (data.callback_reason && !data.message) {
+        data.message = data.callback_reason;
+        delete data.callback_reason;
+      }
 
-// Voor nu alles veilig en stabiel opslaan als nieuw
-if (!data.status) {
-  data.status = "nieuw";
-}
+      if (data.when && !data.appointment_time) {
+        data.appointment_time = data.when;
+        delete data.when;
+      }
 
-          // --- BELANGRIJKE VALIDATIE ---
-          // Supabase tabel 'requests' heeft een CHECK constraint op 'type'.
-          // Toegestane waarden: kennismaken, bekend, mantelzorger, zondag, contact, belmijterug
-          const validTypes = ['kennismaken', 'bekend', 'mantelzorger', 'zondag', 'contact', 'belmijterug','service'];
-          if (!data.type || !validTypes.includes(data.type)) {
-            // Als het type ongeldig is voor de DB, zet hem op een veilige default
-            data.type = "kennismaken"; 
-          }
+      data.org_id = ORG_ID;
 
-          const { error } = await supabaseClient
-            .from("requests")
-            .insert([data]);
+      const params = new URLSearchParams(window.location.search);
+      const isAdmin = params.get("admin") === "1";
 
-          if (error) throw error;
+      if (!data.status) {
+        data.status = "nieuw";
+      }
 
-          // Succes!
-const params = new URLSearchParams(window.location.search);
-const isAdmin = params.get("admin") === "1";
+      const validTypes = ['kennismaken', 'bekend', 'mantelzorger', 'zondag', 'contact', 'belmijterug', 'service'];
+      if (!data.type || !validTypes.includes(data.type)) {
+        data.type = "kennismaken";
+      }
 
-if (isAdmin) {
-  window.location.href = "today.html";
-} else {
-  window.location.href = "bedankt.html";
-}
+      const { error } = await supabaseClient
+        .from("requests")
+        .insert([data]);
 
-        } catch (err) {
-          console.error("Verzendfout:", err);
-          alert("❌ Er ging iets mis bij het verzenden: " + (err.message || "Onbekende fout"));
-          if (btn) { btn.disabled = false; btn.textContent = oldBtnText; }
-        }
-      });
+      if (error) throw error;
+
+      if (isAdmin) {
+        window.location.href = "today.html";
+      } else {
+        window.location.href = "bedankt.html";
+      }
+
+    } catch (err) {
+      console.error("Verzendfout:", err);
+      alert("❌ Er ging iets mis bij het verzenden: " + (err.message || "Onbekende fout"));
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = oldBtnText;
+      }
     }
   });
-})();
+}
