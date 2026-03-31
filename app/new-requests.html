@@ -122,7 +122,7 @@
 
     <div class="top-actions">
       <a href="today.html" class="toplink">← Terug naar Today</a>
-      <button class="small-btn" type="button" onclick="loadRequests()">Opnieuw laden</button>
+     
     </div>
 
     <div id="statusBox" class="status-box">Pagina start...</div>
@@ -261,27 +261,43 @@
       }
     }
 
-    async function updateStatus(id, status) {
-  const { error } = await supabaseClient
-    .from("requests")
-    .update({ status: status })
-    .eq("id", id)
-    .eq("org_id", MIJN_ORG_ID);
+   async function updateStatus(id, status) {
+  try {
+    const { data, error } = await supabaseClient
+      .from("requests")
+      .update({ status: status })
+      .eq("id", id)
+      .eq("org_id", MIJN_ORG_ID)
+      .select();
 
-  if (error) {
-    alert("Fout bij updaten: " + error.message);
-    console.error("Updatefout:", error);
-    return;
+    if (error) {
+      alert("Fout bij updaten: " + error.message);
+      console.error("Updatefout:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      alert("De status is niet aangepast. Waarschijnlijk blokkeert Supabase de update of matcht de rij niet.");
+      console.error("Geen rijen aangepast bij updateStatus", { id, status });
+      return;
+    }
+
+    if (status === "terugbellen") {
+      alert("Doorgezet naar Nog terug te bellen.");
+      window.location.href = "today.html?v=" + Date.now();
+      return;
+    }
+
+    if (status === "gesloten") {
+      alert("Aanvraag afgesloten.");
+    }
+
+    loadRequests();
+  } catch (err) {
+    alert("Onverwachte fout bij updaten.");
+    console.error(err);
   }
-
-  if (status === "terugbellen") {
-    window.location.href = "today.html?v=" + Date.now();
-    return;
-  }
-
-  loadRequests();
 }
-
     async function planRequest(id) {
       setStatus("Aanvraag wordt ingepland...");
 
