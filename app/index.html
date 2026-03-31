@@ -107,7 +107,7 @@
     <a class="fbtn" href="contact.html">Contact</a>
   </div>
 </div>
-<script>
+
 <script>
 function openAdmin() {
   const code = prompt("Voer admin code in");
@@ -120,14 +120,12 @@ function openAdmin() {
     alert("Onjuiste code");
   }
 }
-</script>
 
-<script>
 const logo = document.getElementById("logo");
 let pressTimer = null;
 let longPressTriggered = false;
 
-function startPress(e) {
+function startPress() {
   if (!logo) return;
   longPressTriggered = false;
 
