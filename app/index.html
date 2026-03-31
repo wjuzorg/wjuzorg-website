@@ -17,7 +17,7 @@
       <div class="brand-title">WJU Zorg</div>
       <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
     </div>
-    <img class="logo" src="logo.png" alt="WJU Zorg logo" onclick="openAdmin()" style="cursor:pointer;">
+    <img src="logo.png" id="logo" class="logo" alt="WJU Zorg logo" style="cursor:pointer; user-select:none; -webkit-user-select:none;" draggable="false">
   </div>
 
   <div class="header-actions" aria-label="Toegankelijkheid" style="display:flex; flex-wrap:nowrap; gap:6px; padding:8px 8px 10px;">
@@ -142,6 +142,10 @@ logo.addEventListener("mouseleave", cancelPress);
 // Telefoon
 logo.addEventListener("touchstart", startPress);
 logo.addEventListener("touchend", cancelPress);
+
+logo.addEventListener("contextmenu", function(e) {
+  e.preventDefault();
+});
 
 </script>
 }
