@@ -212,71 +212,72 @@
     }
 
     async function planRequest(id) {
-      try {
-        const { data: row, error: readError } = await supabaseClient
-          .from("requests")
-          .select("appointment_time, planned_date, planned_time_block")
-          .eq("id", id)
-          .eq("org_id", MIJN_ORG_ID)
-          .single();
+  try {
+    const { data: row, error: readError } = await supabaseClient
+      .from("requests")
+      .select("appointment_time, planned_date, planned_time_block, full_name")
+      .eq("id", id)
+      .eq("org_id", MIJN_ORG_ID)
+      .single();
 
-        if (readError) {
-          alert("Fout bij ophalen van aanvraag: " + readError.message);
-          console.error("Leesfout:", readError);
-          return;
-        }
+    if (readError) {
+      alert("Fout bij ophalen van aanvraag: " + readError.message);
+      console.error("Leesfout:", readError);
+      return;
+    }
 
-        let afspraakTijd = null;
+    let afspraakTijd = null;
 
-        if (row.appointment_time) {
-          afspraakTijd = row.appointment_time;
-        }
+    if (row.appointment_time) {
+      afspraakTijd = row.appointment_time;
+    }
 
-        if (!afspraakTijd && row.planned_date && row.planned_time_block) {
-          let tijd = null;
+    if (!afspraakTijd && row.planned_date && row.planned_time_block) {
+      let tijd = null;
 
-          if (row.planned_time_block === "ochtend") tijd = "09:00:00";
-          if (row.planned_time_block === "middag") tijd = "13:00:00";
-          if (row.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
-          if (row.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
+      if (row.planned_time_block === "ochtend") tijd = "09:00:00";
+      if (row.planned_time_block === "middag") tijd = "13:00:00";
+      if (row.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
+      if (row.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
 
-          if (tijd) {
-            afspraakTijd = `${row.planned_date}T${tijd}`;
-          }
-        }
-
-        const updatePayload = { status: "ingepland" };
-        if (afspraakTijd) {
-          updatePayload.appointment_time = afspraakTijd;
-        }
-
-        const { data, error } = await supabaseClient
-          .from("requests")
-          .update(updatePayload)
-          .eq("id", id)
-          .eq("org_id", MIJN_ORG_ID)
-          .select();
-
-        if (error) {
-          alert("Fout bij inplannen: " + error.message);
-          console.error("Planfout:", error);
-          return;
-        }
-
-        if (!data || data.length === 0) {
-          alert("Inplannen is niet gelukt. De update wordt nu nog geblokkeerd in Supabase.");
-          console.error("Geen rijen aangepast bij planRequest", { id });
-          return;
-        }
-
-        alert("Aanvraag ingepland.");
-        loadRequests();
-      } catch (err) {
-        alert("Onverwachte fout bij inplannen.");
-        console.error(err);
+      if (tijd) {
+        afspraakTijd = `${row.planned_date}T${tijd}`;
       }
     }
 
+    if (!afspraakTijd) {
+      alert("Deze aanvraag heeft nog geen echte datum en tijd. Kies eerst Terugbellen of vul eerst een afspraakmoment in.");
+      return;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("requests")
+      .update({
+        status: "ingepland",
+        appointment_time: afspraakTijd
+      })
+      .eq("id", id)
+      .eq("org_id", MIJN_ORG_ID)
+      .select();
+
+    if (error) {
+      alert("Fout bij inplannen: " + error.message);
+      console.error("Planfout:", error);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      alert("Inplannen is niet gelukt.");
+      return;
+    }
+
+    alert("Aanvraag ingepland.");
+    loadRequests();
+  } catch (err) {
+    alert("Onverwachte fout bij inplannen.");
+    console.error(err);
+  }
+}
     loadRequests();
   </script>
 </body>
