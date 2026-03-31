@@ -4,241 +4,258 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nieuwe aanvragen - WJU Zorg</title>
-
   <link rel="stylesheet" href="app.css?v=2">
-
-<div class="container">
-  <h2>🆕 Nieuwe aanvragen</h2>
-
-  <div style="margin-bottom:15px;">
-    <a href="today.html" style="display:inline-block; text-decoration:none; color:#111; font-weight:bold;">
-      ← Terug naar Today
-    </a>
-  </div>
-
-  <div id="list"></div>
-</div>
 
   <style>
     body {
-      background:#f6f6f6;
+      background: #f6f6f6;
       font-family: Arial, sans-serif;
+      margin: 0;
     }
 
     .container {
-      padding:20px;
-      max-width:600px;
-      margin:auto;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .toplink {
+      display: inline-block;
+      text-decoration: none;
+      color: #111;
+      font-weight: bold;
+      margin-bottom: 15px;
     }
 
     .card {
-      background:white;
-      padding:15px;
-      border-radius:12px;
-      margin-bottom:15px;
-      border:1px solid #eee;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #eee;
     }
 
     .name {
-      font-weight:bold;
-      font-size:18px;
-      margin-bottom:5px;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 8px;
     }
 
     .info {
-      font-size:14px;
-      margin-bottom:5px;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #222;
     }
 
     .buttons {
-      margin-top:10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .btn {
-      padding:8px 12px;
-      border-radius:8px;
-      border:none;
-      cursor:pointer;
-      font-size:14px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
     }
 
     .btn-call {
-      background:#f59e0b;
-      color:white;
+      background: #f59e0b;
+      color: white;
     }
 
     .btn-plan {
-      background:#10b981;
-      color:white;
+      background: #10b981;
+      color: white;
     }
 
     .btn-close {
-      background:#ef4444;
-      color:white;
+      background: #ef4444;
+      color: white;
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h2>🆕 Nieuwe aanvragen</h2>
+  <div class="container">
+    <h2>🆕 Nieuwe aanvragen</h2>
 
-  <div id="list"></div>
-</div>
+    <div style="margin-bottom:15px;">
+      <a href="today.html" class="toplink">← Terug naar Today</a>
+    </div>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <div id="list"><p>Laden...</p></div>
+  </div>
 
-<script>
-const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
-const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+    const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
 
-async function loadRequests() {
-  const list = document.getElementById("list");
-  list.innerHTML = "<p>Laden...</p>";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const { data, error } = await supabaseClient
-    .from("requests")
-    .select("*")
-    .eq("org_id", MIJN_ORG_ID)
-    .eq("status", "nieuw")
-    .order("created_at", { ascending: false });
+    async function loadRequests() {
+      const list = document.getElementById("list");
+      list.innerHTML = "<p>Laden...</p>";
 
-  if (error) {
-    console.error("Laadfout:", error);
-    list.innerHTML = "<p style='color:red;'>Fout bij laden: " + error.message + "</p>";
-    return;
-  }
+      const { data, error } = await supabaseClient
+        .from("requests")
+        .select("*")
+        .eq("org_id", MIJN_ORG_ID)
+        .eq("status", "nieuw")
+        .order("created_at", { ascending: false });
 
-  if (!data || data.length === 0) {
-    list.innerHTML = "<p>Geen nieuwe aanvragen gevonden.</p>";
-    return;
-  }
+      if (error) {
+        console.error("Laadfout:", error);
+        list.innerHTML = "<p style='color:red;'>Fout bij laden: " + error.message + "</p>";
+        return;
+      }
 
-  list.innerHTML = "";
+      if (!data || data.length === 0) {
+        list.innerHTML = "<p>Geen nieuwe aanvragen gevonden.</p>";
+        return;
+      }
 
-  data.forEach((r) => {
-    const div = document.createElement("div");
-    div.className = "card";
+      list.innerHTML = "";
 
-    div.innerHTML = `
-      <div class="name">${r.full_name || "Onbekend"}</div>
-      <div class="info">📞 ${r.phone || "-"}</div>
-      ${r.service === "naar_afspraak" ? "Zorgafspraak" : r.service}
-      <div class="info">📝 ${r.message || ""}</div>
-      <div class="info">📍 ${r.address || "-"}</div>
-      <div class="info">🕒 Status: ${r.status || "-"}</div>
-      ${r.destination ? `<div class="info">📍 Naar: ${r.destination}</div>` : ""}
+      data.forEach((r) => {
+        const div = document.createElement("div");
+        div.className = "card";
 
-${r.appointment_time ? `<div class="info">🗓️ Afspraak: ${new Date(r.appointment_time).toLocaleString()}</div>` : ""}
+        const serviceLabel = r.service === "naar_afspraak"
+          ? "Zorgafspraak"
+          : (r.service || "-");
 
-${r.needs_support ? `<div class="info">👥 Begeleiding: ${r.needs_support}</div>` : ""}
+        const afspraakHtml = r.appointment_time
+          ? `<div class="info">🗓️ Afspraak: ${new Date(r.appointment_time).toLocaleString("nl-NL")}</div>`
+          : "";
 
-${r.preferred_daypart ? `<div class="info">📱 Terugbellen: ${r.preferred_daypart}</div>` : ""}
+        const destinationHtml = r.destination
+          ? `<div class="info">📍 Naar: ${r.destination}</div>`
+          : "";
 
-${r.message ? `<div class="info">📝 ${r.message}</div>` : ""}
+        const supportHtml = r.needs_support
+          ? `<div class="info">👥 Begeleiding: ${r.needs_support}</div>`
+          : "";
 
-      <div class="buttons">
-        <button class="btn btn-call" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
-        <button class="btn btn-plan" onclick="planRequest('${r.id}')">Inplannen</button>
-        <button class="btn btn-close" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
-      </div>
-    `;
+        const callbackHtml = r.preferred_daypart
+          ? `<div class="info">📱 Terugbellen: ${r.preferred_daypart}</div>`
+          : "";
 
-    list.appendChild(div);
-  });
-}
+        const messageHtml = r.message
+          ? `<div class="info">📝 ${r.message}</div>`
+          : "";
 
-async function updateStatus(id, status) {
-  const { error } = await supabaseClient
-    .from("requests")
-    .update({ status: status })
-    .eq("id", id)
-    .eq("org_id", MIJN_ORG_ID);
+        div.innerHTML = `
+          <div class="name">${r.full_name || "Onbekend"}</div>
+          <div class="info">📞 ${r.phone || "-"}</div>
+          <div class="info">🧾 Dienst: ${serviceLabel}</div>
+          <div class="info">📍 Adres: ${r.address || "-"}</div>
+          <div class="info">🕒 Status: ${r.status || "-"}</div>
+          ${destinationHtml}
+          ${afspraakHtml}
+          ${supportHtml}
+          ${callbackHtml}
+          ${messageHtml}
 
-  if (error) {
-    alert("Fout bij updaten: " + error.message);
-    console.error("Updatefout:", error);
-    return;
-  }
+          <div class="buttons">
+            <button class="btn btn-call" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
+            <button class="btn btn-plan" onclick="planRequest('${r.id}')">Inplannen</button>
+            <button class="btn btn-close" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
+          </div>
+        `;
 
-  loadRequests();
-}
-
-async function planRequest(id) {
-  const { data, error: readError } = await supabaseClient
-    .from("requests")
-    .select("service, appointment_time, planned_date, planned_time_block, preferred_daypart")
-    .eq("id", id)
-    .eq("org_id", MIJN_ORG_ID)
-    .single();
-
-  if (readError) {
-    alert("Fout bij ophalen van aanvraag: " + readError.message);
-    console.error("Leesfout:", readError);
-    return;
-  }
-
-  let afspraakTijd = null;
-
-  // 1. Echte afspraakdatum/tijd heeft altijd voorrang
-  if (data.appointment_time) {
-    afspraakTijd = data.appointment_time;
-  }
-
-  // 2. Alleen als er GEEN appointment_time is, kijken naar planned_date + planned_time_block
-  // Let op: preferred_daypart is callback-voorkeur en NIET de echte afspraak
-  if (!afspraakTijd && data.planned_date && data.planned_time_block) {
-    let tijd = null;
-
-    if (data.planned_time_block === "ochtend") tijd = "09:00:00";
-    if (data.planned_time_block === "middag") tijd = "13:00:00";
-    if (data.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
-    if (data.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
-
-    if (tijd) {
-      afspraakTijd = `${data.planned_date}T${tijd}`;
+        list.appendChild(div);
+      });
     }
-  }
 
-  const updatePayload = {
-    status: "ingepland"
-  };
+    async function updateStatus(id, status) {
+      const { error } = await supabaseClient
+        .from("requests")
+        .update({ status: status })
+        .eq("id", id)
+        .eq("org_id", MIJN_ORG_ID);
 
-  if (afspraakTijd) {
-    updatePayload.appointment_time = afspraakTijd;
-  }
+      if (error) {
+        alert("Fout bij updaten: " + error.message);
+        console.error("Updatefout:", error);
+        return;
+      }
 
-  const { error } = await supabaseClient
-    .from("requests")
-    .update(updatePayload)
-    .eq("id", id)
-    .eq("org_id", MIJN_ORG_ID);
+      loadRequests();
+    }
 
-  if (error) {
-    alert("Fout bij inplannen: " + error.message);
-    console.error("Planfout:", error);
-    return;
-  }
+    async function planRequest(id) {
+      const { data, error: readError } = await supabaseClient
+        .from("requests")
+        .select("service, appointment_time, planned_date, planned_time_block, preferred_daypart")
+        .eq("id", id)
+        .eq("org_id", MIJN_ORG_ID)
+        .single();
 
-  if (afspraakTijd) {
-    alert("De aanvraag is doorgezet naar de dagplanning.");
-  } else {
-    alert("De aanvraag is ingepland, maar er was nog geen echte afspraakdatum/tijd ingevuld.");
-  }
+      if (readError) {
+        alert("Fout bij ophalen van aanvraag: " + readError.message);
+        console.error("Leesfout:", readError);
+        return;
+      }
 
-loadRequests();
-}
+      let afspraakTijd = null;
 
-loadRequests();
-</script>
+      if (data.appointment_time) {
+        afspraakTijd = data.appointment_time;
+      }
+
+      if (!afspraakTijd && data.planned_date && data.planned_time_block) {
+        let tijd = null;
+
+        if (data.planned_time_block === "ochtend") tijd = "09:00:00";
+        if (data.planned_time_block === "middag") tijd = "13:00:00";
+        if (data.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
+        if (data.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
+
+        if (tijd) {
+          afspraakTijd = `${data.planned_date}T${tijd}`;
+        }
+      }
+
+      const updatePayload = {
+        status: "ingepland"
+      };
+
+      if (afspraakTijd) {
+        updatePayload.appointment_time = afspraakTijd;
+      }
+
+      const { error } = await supabaseClient
+        .from("requests")
+        .update(updatePayload)
+        .eq("id", id)
+        .eq("org_id", MIJN_ORG_ID);
+
+      if (error) {
+        alert("Fout bij inplannen: " + error.message);
+        console.error("Planfout:", error);
+        return;
+      }
+
+      if (afspraakTijd) {
+        alert("De aanvraag is doorgezet naar de dagplanning.");
+      } else {
+        alert("De aanvraag is ingepland, maar er was nog geen echte afspraakdatum/tijd ingevuld.");
+      }
+
+      loadRequests();
+    }
+
+    loadRequests();
+  </script>
 
 </body>
 </html>
