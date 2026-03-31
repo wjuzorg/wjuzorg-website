@@ -24,57 +24,32 @@
       text-decoration: none;
       color: #111;
       font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .top-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-      align-items: center;
-    }
-
-    .small-btn {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .status-box {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 15px;
-      font-size: 14px;
+      margin-bottom: 18px;
     }
 
     .card {
       background: white;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
+      padding: 18px;
+      border-radius: 14px;
+      margin-bottom: 16px;
       border: 1px solid #eee;
     }
 
     .name {
       font-weight: bold;
       font-size: 18px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .info {
-      font-size: 14px;
-      margin-bottom: 6px;
+      font-size: 15px;
+      margin-bottom: 7px;
       color: #222;
+      line-height: 1.4;
     }
 
     .buttons {
-      margin-top: 12px;
+      margin-top: 14px;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
@@ -82,7 +57,7 @@
 
     .btn {
       padding: 10px 14px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
       font-size: 14px;
@@ -104,14 +79,12 @@
       color: white;
     }
 
-    .muted {
+    .empty {
+      background: white;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid #eee;
       color: #666;
-      font-size: 13px;
-    }
-
-    .error {
-      color: #b00020;
-      font-weight: bold;
     }
   </style>
 </head>
@@ -120,12 +93,10 @@
   <div class="container">
     <h2>🆕 Nieuwe aanvragen</h2>
 
-    <div class="top-actions">
+    <div style="margin-bottom:15px;">
       <a href="today.html" class="toplink">← Terug naar Today</a>
-     
     </div>
 
-    <div id="statusBox" class="status-box">Pagina start...</div>
     <div id="list"><p>Laden...</p></div>
   </div>
 
@@ -136,17 +107,10 @@
     const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
     const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
 
-    let supabaseClient = null;
-
-    function setStatus(message, isError = false) {
-      const box = document.getElementById("statusBox");
-      box.innerHTML = isError
-        ? `<span class="error">${message}</span>`
-        : message;
-    }
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function formatDateTime(value) {
-      if (!value) return "-";
+      if (!value) return "";
       try {
         return new Date(value).toLocaleString("nl-NL");
       } catch (e) {
@@ -160,221 +124,160 @@
       return service;
     }
 
-    async function initSupabase() {
-      if (!window.supabase) {
-        throw new Error("Supabase script is niet geladen.");
-      }
-
-      if (!supabaseClient) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-
-      return supabaseClient;
-    }
-
     async function loadRequests() {
       const list = document.getElementById("list");
       list.innerHTML = "<p>Laden...</p>";
-      setStatus("Nieuwe aanvragen worden geladen...");
 
+      const { data, error } = await supabaseClient
+        .from("requests")
+        .select("*")
+        .eq("org_id", MIJN_ORG_ID)
+        .eq("status", "nieuw")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Laadfout:", error);
+        list.innerHTML = "<div class='empty' style='color:red;'>Fout bij laden: " + error.message + "</div>";
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        list.innerHTML = "<div class='empty'>Geen nieuwe aanvragen gevonden.</div>";
+        return;
+      }
+
+      list.innerHTML = "";
+
+      data.forEach((r) => {
+        const div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+          <div class="name">${r.full_name || "Onbekend"}</div>
+          <div class="info">📞 ${r.phone || "-"}</div>
+          <div class="info">🧾 Dienst: ${serviceLabel(r.service)}</div>
+          <div class="info">📍 Adres: ${r.address || "-"}</div>
+          <div class="info">🕒 Status: ${r.status || "-"}</div>
+          ${r.destination ? `<div class="info">📍 Naar: ${r.destination}</div>` : ""}
+          ${r.appointment_time ? `<div class="info">🗓️ Afspraak: ${formatDateTime(r.appointment_time)}</div>` : ""}
+          ${r.needs_support ? `<div class="info">👥 Begeleiding: ${r.needs_support}</div>` : ""}
+          ${r.preferred_daypart ? `<div class="info">📱 Terugbellen: ${r.preferred_daypart}</div>` : ""}
+          ${r.message ? `<div class="info">📝 ${r.message}</div>` : ""}
+
+          <div class="buttons">
+            <button class="btn btn-call" type="button" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
+            <button class="btn btn-plan" type="button" onclick="planRequest('${r.id}')">Inplannen</button>
+            <button class="btn btn-close" type="button" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
+          </div>
+        `;
+
+        list.appendChild(div);
+      });
+    }
+
+    async function updateStatus(id, status) {
       try {
-        const client = await initSupabase();
-
-        const { data, error } = await client
+        const { data, error } = await supabaseClient
           .from("requests")
-          .select("*")
+          .update({ status: status })
+          .eq("id", id)
           .eq("org_id", MIJN_ORG_ID)
-          .eq("status", "nieuw")
-          .order("created_at", { ascending: false });
+          .select();
 
         if (error) {
-          console.error("Laadfout:", error);
-          setStatus("Fout bij laden: " + error.message, true);
-          list.innerHTML = "<p class='error'>Er ging iets mis bij het ophalen.</p>";
+          alert("Fout bij updaten: " + error.message);
+          console.error("Updatefout:", error);
           return;
         }
-
-        setStatus("Laden gelukt. Aantal nieuwe aanvragen: " + (data ? data.length : 0));
 
         if (!data || data.length === 0) {
-          list.innerHTML = `
-            <div class="card">
-              <div class="name">Geen nieuwe aanvragen gevonden</div>
-              <div class="info">Er staan op dit moment geen records met status <strong>nieuw</strong> voor deze organisatie.</div>
-              <div class="muted">Als je wél aanvragen verwacht, dan hebben ze waarschijnlijk een andere status gekregen.</div>
-            </div>
-          `;
+          alert("De status is niet aangepast. De update wordt nu nog geblokkeerd in Supabase.");
+          console.error("Geen rijen aangepast", { id, status });
           return;
         }
 
-        list.innerHTML = "";
+        if (status === "terugbellen") {
+          alert("Doorgezet naar Nog terug te bellen.");
+        }
 
-        data.forEach((r) => {
-          const div = document.createElement("div");
-          div.className = "card";
+        if (status === "gesloten") {
+          alert("Aanvraag afgesloten.");
+        }
 
-          const destinationHtml = r.destination
-            ? `<div class="info">📍 Naar: ${r.destination}</div>`
-            : "";
-
-          const appointmentHtml = r.appointment_time
-            ? `<div class="info">🗓️ Afspraak: ${formatDateTime(r.appointment_time)}</div>`
-            : "";
-
-          const supportHtml = r.needs_support
-            ? `<div class="info">👥 Begeleiding: ${r.needs_support}</div>`
-            : "";
-
-          const callbackHtml = r.preferred_daypart
-            ? `<div class="info">📱 Terugbellen: ${r.preferred_daypart}</div>`
-            : "";
-
-          const messageHtml = r.message
-            ? `<div class="info">📝 ${r.message}</div>`
-            : "";
-
-          div.innerHTML = `
-            <div class="name">${r.full_name || "Onbekend"}</div>
-            <div class="info">📞 ${r.phone || "-"}</div>
-            <div class="info">🧾 Dienst: ${serviceLabel(r.service)}</div>
-            <div class="info">📍 Adres: ${r.address || "-"}</div>
-            <div class="info">🕒 Status: ${r.status || "-"}</div>
-            ${destinationHtml}
-            ${appointmentHtml}
-            ${supportHtml}
-            ${callbackHtml}
-            ${messageHtml}
-
-            <div class="buttons">
-              <button class="btn btn-call" type="button" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
-              <button class="btn btn-plan" type="button" onclick="planRequest('${r.id}')">Inplannen</button>
-              <button class="btn btn-close" type="button" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
-            </div>
-          `;
-
-          list.appendChild(div);
-        });
+        loadRequests();
       } catch (err) {
-        console.error("Onverwachte fout:", err);
-        setStatus("Onverwachte fout: " + err.message, true);
-        list.innerHTML = "<p class='error'>Pagina kon niet goed starten.</p>";
+        alert("Onverwachte fout bij updaten.");
+        console.error(err);
       }
     }
 
-   async function updateStatus(id, status) {
-  try {
-    const { data, error } = await supabaseClient
-      .from("requests")
-      .update({ status: status })
-      .eq("id", id)
-      .eq("org_id", MIJN_ORG_ID)
-      .select();
-
-    if (error) {
-      alert("Fout bij updaten: " + error.message);
-      console.error("Updatefout:", error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      alert("De status is niet aangepast. Waarschijnlijk blokkeert Supabase de update of matcht de rij niet.");
-      console.error("Geen rijen aangepast bij updateStatus", { id, status });
-      return;
-    }
-
-    if (status === "terugbellen") {
-      alert("Doorgezet naar Nog terug te bellen.");
-      window.location.href = "today.html?v=" + Date.now();
-      return;
-    }
-
-    if (status === "gesloten") {
-      alert("Aanvraag afgesloten.");
-    }
-
-    loadRequests();
-  } catch (err) {
-    alert("Onverwachte fout bij updaten.");
-    console.error(err);
-  }
-}
     async function planRequest(id) {
-      setStatus("Aanvraag wordt ingepland...");
-
       try {
-        const client = await initSupabase();
-
-        const { data, error: readError } = await client
+        const { data: row, error: readError } = await supabaseClient
           .from("requests")
-          .select("service, appointment_time, planned_date, planned_time_block, preferred_daypart")
+          .select("appointment_time, planned_date, planned_time_block")
           .eq("id", id)
           .eq("org_id", MIJN_ORG_ID)
           .single();
 
         if (readError) {
-          console.error("Leesfout:", readError);
           alert("Fout bij ophalen van aanvraag: " + readError.message);
-          setStatus("Fout bij ophalen: " + readError.message, true);
+          console.error("Leesfout:", readError);
           return;
         }
 
         let afspraakTijd = null;
 
-        if (data.appointment_time) {
-          afspraakTijd = data.appointment_time;
+        if (row.appointment_time) {
+          afspraakTijd = row.appointment_time;
         }
 
-        if (!afspraakTijd && data.planned_date && data.planned_time_block) {
+        if (!afspraakTijd && row.planned_date && row.planned_time_block) {
           let tijd = null;
 
-          if (data.planned_time_block === "ochtend") tijd = "09:00:00";
-          if (data.planned_time_block === "middag") tijd = "13:00:00";
-          if (data.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
-          if (data.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
+          if (row.planned_time_block === "ochtend") tijd = "09:00:00";
+          if (row.planned_time_block === "middag") tijd = "13:00:00";
+          if (row.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
+          if (row.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
 
           if (tijd) {
-            afspraakTijd = `${data.planned_date}T${tijd}`;
+            afspraakTijd = `${row.planned_date}T${tijd}`;
           }
         }
 
         const updatePayload = { status: "ingepland" };
-
         if (afspraakTijd) {
           updatePayload.appointment_time = afspraakTijd;
         }
 
-        const { error } = await client
+        const { data, error } = await supabaseClient
           .from("requests")
           .update(updatePayload)
           .eq("id", id)
-          .eq("org_id", MIJN_ORG_ID);
+          .eq("org_id", MIJN_ORG_ID)
+          .select();
 
         if (error) {
-          console.error("Planfout:", error);
           alert("Fout bij inplannen: " + error.message);
-          setStatus("Fout bij inplannen: " + error.message, true);
+          console.error("Planfout:", error);
           return;
         }
 
-        if (afspraakTijd) {
-          alert("De aanvraag is doorgezet naar de dagplanning.");
-          setStatus("Aanvraag ingepland met afspraakdatum/tijd.");
-        } else {
-          alert("De aanvraag is ingepland, maar er was nog geen echte afspraakdatum/tijd ingevuld.");
-          setStatus("Aanvraag ingepland zonder echte afspraakdatum/tijd.");
+        if (!data || data.length === 0) {
+          alert("Inplannen is niet gelukt. De update wordt nu nog geblokkeerd in Supabase.");
+          console.error("Geen rijen aangepast bij planRequest", { id });
+          return;
         }
 
-        await loadRequests();
+        alert("Aanvraag ingepland.");
+        loadRequests();
       } catch (err) {
-        console.error(err);
         alert("Onverwachte fout bij inplannen.");
-        setStatus("Onverwachte fout bij inplannen: " + err.message, true);
+        console.error(err);
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      loadRequests();
-    });
+    loadRequests();
   </script>
 </body>
 </html>
