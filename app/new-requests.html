@@ -7,72 +7,114 @@
 <link rel="stylesheet" href="app.css?v=2">
 
 <style>
-
 body{
-background:#f6f6f6;
-font-family:Arial;
-margin:0;
+  background:#f6f6f6;
+  font-family:Arial,sans-serif;
+  margin:0;
 }
 
 .container{
-max-width:900px;
-margin:auto;
-padding:20px;
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+.toplink{
+  display:inline-block;
+  margin-bottom:20px;
+  text-decoration:none;
+  font-weight:bold;
+  color:#111;
+}
+
+.intro{
+  color:#666;
+  margin-top:0;
+  margin-bottom:20px;
+  line-height:1.5;
 }
 
 .card{
-background:white;
-padding:18px;
-border-radius:14px;
-margin-bottom:15px;
-border:1px solid #eee;
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  margin-bottom:15px;
+  border:1px solid #eee;
+  box-shadow:0 2px 10px rgba(0,0,0,0.04);
 }
 
 .header{
-font-size:1.3rem;
-font-weight:bold;
-margin-bottom:6px;
+  font-size:1.3rem;
+  font-weight:bold;
+  margin-bottom:6px;
 }
 
 .info{
-color:#555;
-line-height:1.5;
-margin-bottom:15px;
+  color:#555;
+  line-height:1.6;
+  margin-bottom:15px;
 }
 
 .planbox{
-background:#f9fafb;
-padding:12px;
-border-radius:10px;
-margin-top:10px;
+  background:#f9fafb;
+  padding:12px;
+  border-radius:10px;
+  margin-top:10px;
 }
 
 .input{
-padding:8px;
-border-radius:6px;
-border:1px solid #ddd;
-margin-right:8px;
-margin-top:6px;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  margin-right:8px;
+  margin-top:8px;
+  box-sizing:border-box;
+}
+
+.input-note{
+  width:100%;
+  margin-top:10px;
+}
+
+.btnrow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
 }
 
 .btn{
-padding:10px 14px;
-border-radius:8px;
-border:none;
-cursor:pointer;
-font-weight:bold;
+  padding:12px 14px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
 }
 
 .btn-green{
-background:#28a745;
-color:white;
+  background:#28a745;
+  color:white;
 }
 
 .btn-grey{
-background:#999;
-color:white;
+  background:#999;
+  color:white;
 }
 
+.empty{
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  border:1px solid #eee;
+  color:#666;
+}
+
+@media (max-width:700px){
+  .input{
+    width:100%;
+    margin-right:0;
+  }
+}
 </style>
 </head>
 
@@ -80,157 +122,171 @@ color:white;
 
 <div class="container">
 
-<h2>Nieuwe aanvragen</h2>
+  <h2>Nieuwe aanvragen</h2>
+  <p class="intro">
+    Controleer naam, telefoon, adres, hulpvraag en wijk. Vul daarna datum en tijd in en klik op <strong>Opslaan + inplannen</strong>.
+  </p>
 
-<a href="today.html" style="display:inline-block;margin-bottom:20px;text-decoration:none;font-weight:bold;">
-← Terug naar Today
-</a>
+  <a href="today.html" class="toplink">← Terug naar Today</a>
 
-<div id="list"></div>
+  <div id="list" class="empty">Laden...</div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 
 <script>
-
 const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
 const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const params = new URLSearchParams(window.location.search);
+const selectedId = params.get("id");
+
+function esc(v){
+  return String(v || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 
 async function loadRequests(){
+  const list = document.getElementById("list");
+  list.className = "";
+  list.innerHTML = "Laden...";
 
-const list=document.getElementById("list")
+  try {
+    let query = supabase
+      .from("requests")
+      .select("*")
+      .eq("org_id", MIJN_ORG_ID)
+      .order("created_at", { ascending:false });
 
-const {data,error}=await supabase
-.from("requests")
-.select("*")
-.eq("org_id",MIJN_ORG_ID)
-.eq("status","nieuw")
-.order("created_at",{ascending:false})
+    if (selectedId) {
+      query = query.eq("id", selectedId);
+    } else {
+      query = query.in("status", ["nieuw", "terugbellen"]);
+    }
 
-if(error){
-list.innerHTML="Fout bij laden"
-return
-}
+    const { data, error } = await query;
 
-list.innerHTML=""
+    if (error) {
+      list.className = "empty";
+      list.innerHTML = "Fout bij laden: " + esc(error.message);
+      return;
+    }
 
-if(!data.length){
-list.innerHTML="Geen nieuwe aanvragen"
-return
-}
+    if (!data || !data.length) {
+      list.className = "empty";
+      list.innerHTML = "Geen aanvragen gevonden.";
+      return;
+    }
 
-data.forEach(item=>{
+    list.innerHTML = "";
 
-const card=document.createElement("div")
-card.className="card"
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
 
-card.innerHTML=`
+      card.innerHTML = `
+        <div class="header">${esc(item.full_name || "Onbekend")}</div>
 
-<div class="header">
-${item.full_name || "Onbekend"}
-</div>
+        <div class="info">
+          📞 ${esc(item.phone || "-")}<br>
+          📍 ${esc(item.address || "-")}<br>
+          🧰 ${esc(item.service || "-")}<br>
+          ${item.preferred_daypart ? `🗓️ Voorkeur dagdeel: ${esc(item.preferred_daypart)}<br>` : ""}
+          ${item.message ? `📝 ${esc(item.message)}<br>` : ""}
+          ${item.funding_type ? `💶 Financiering: ${esc(item.funding_type)}` : ""}
+        </div>
 
-<div class="info">
-📞 ${item.phone || "-"}<br>
-📍 ${item.address || "-"}<br>
-🧰 ${item.service || "-"}<br>
-${item.message ? "📝 "+item.message : ""}
-</div>
+        <div class="planbox">
+          <strong>Afspraak plannen</strong><br>
 
-<div class="planbox">
+          <input class="input" type="date" id="date-${item.id}">
+          <input class="input" type="time" id="time-${item.id}">
 
-<strong>Afspraak plannen</strong><br>
+          <select class="input" id="duration-${item.id}">
+            <option value="60">60 min</option>
+            <option value="90">90 min</option>
+            <option value="120">120 min</option>
+          </select>
 
-<input class="input" type="date" id="date-${item.id}">
-<input class="input" type="time" id="time-${item.id}">
+          <input class="input input-note" placeholder="Interne notitie" id="note-${item.id}">
 
-<select class="input" id="duration-${item.id}">
-<option value="60">60 min</option>
-<option value="90">90 min</option>
-<option value="120">120 min</option>
-</select>
+          <div class="btnrow">
+            <button class="btn btn-green" onclick="plan('${item.id}')">Opslaan + inplannen</button>
+            <button class="btn btn-grey" onclick="closeRequest('${item.id}')">Afsluiten</button>
+          </div>
+        </div>
+      `;
 
-<br><br>
+      list.appendChild(card);
+    });
 
-<input class="input" style="width:80%" placeholder="Interne notitie" id="note-${item.id}">
-
-<br><br>
-
-<button class="btn btn-green" onclick="plan('${item.id}')">
-Opslaan + inplannen
-</button>
-
-<button class="btn btn-grey" onclick="closeRequest('${item.id}')">
-Afsluiten
-</button>
-
-</div>
-`
-
-list.appendChild(card)
-
-})
-
+  } catch (err) {
+    list.className = "empty";
+    list.innerHTML = "Onverwachte fout bij laden.";
+    console.error(err);
+  }
 }
 
 async function plan(id){
+  const date = document.getElementById(`date-${id}`).value;
+  const time = document.getElementById(`time-${id}`).value;
+  const duration = document.getElementById(`duration-${id}`).value;
+  const note = document.getElementById(`note-${id}`).value;
 
-const date=document.getElementById(`date-${id}`).value
-const time=document.getElementById(`time-${id}`).value
-const duration=document.getElementById(`duration-${id}`).value
-const note=document.getElementById(`note-${id}`).value
+  if (!date || !time) {
+    alert("Datum en tijd invullen");
+    return;
+  }
 
-if(!date || !time){
-alert("Datum en tijd invullen")
-return
-}
+  const datetime = `${date}T${time}:00`;
 
-const datetime=`${date}T${time}:00`
+  const { error } = await supabase
+    .from("requests")
+    .update({
+      appointment_time: datetime,
+      duration_minutes: parseInt(duration, 10) || 60,
+      internal_notes: note || null,
+      status: "ingepland"
+    })
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID);
 
-const {error}=await supabase
-.from("requests")
-.update({
-appointment_time:datetime,
-duration_minutes:duration,
-internal_notes:note,
-status:"ingepland"
-})
-.eq("id",id)
-.eq("org_id",MIJN_ORG_ID)
+  if (error) {
+    alert("Fout bij inplannen: " + error.message);
+    return;
+  }
 
-if(error){
-alert(error.message)
-return
-}
-
-location.href="today.html"
-
+  window.location.href = "today.html?v=" + Date.now();
 }
 
 async function closeRequest(id){
+  const confirmClose = confirm("Aanvraag afsluiten?");
+  if (!confirmClose) return;
 
-const confirmClose=confirm("Aanvraag afsluiten?")
+  const { error } = await supabase
+    .from("requests")
+    .update({ status:"gesloten" })
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID);
 
-if(!confirmClose) return
+  if (error) {
+    alert("Fout bij afsluiten: " + error.message);
+    return;
+  }
 
-await supabase
-.from("requests")
-.update({
-status:"gesloten"
-})
-.eq("id",id)
-.eq("org_id",MIJN_ORG_ID)
-
-location.reload()
-
+  if (selectedId) {
+    window.location.href = "today.html?v=" + Date.now();
+  } else {
+    loadRequests();
+  }
 }
 
-loadRequests()
+window.plan = plan;
+window.closeRequest = closeRequest;
 
+loadRequests();
 </script>
 
 </body>
