@@ -109,13 +109,25 @@
 </div>
 
 <script>
-function openAdmin() {
+async function openAdmin() {
   const code = prompt("Voer admin code in");
   if (!code) return;
 
   if (code === "widjai2026") {
-    localStorage.setItem("wjuzorg_admin", "true");
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: "denise.harpal@gmail.com",
+      password: "HIER_JE_SUPABASE_WACHTWOORD"
+    });
+
+    if (error) {
+      alert("Login mislukt");
+      console.error(error);
+      return;
+    }
+
     window.location.href = "today.html";
+
   } else {
     alert("Onjuiste code");
   }
