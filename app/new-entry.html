@@ -203,7 +203,7 @@
 
     function openForm(bestandsnaam) {
       const naam = document.getElementById("custName").value.trim();
-      window.location.href = bestandsnaam + "?name=" + encodeURIComponent(naam);
+      window.location.href = bestandsnaam + "?name=" + encodeURIComponent(naam) + "&admin=1";
     }
 
     async function saveCallback() {

@@ -153,7 +153,14 @@ if (!data.status) {
           if (error) throw error;
 
           // Succes!
-          window.location.href = "bedankt.html";
+const params = new URLSearchParams(window.location.search);
+const isAdmin = params.get("admin") === "1";
+
+if (isAdmin) {
+  window.location.href = "today.html";
+} else {
+  window.location.href = "bedankt.html";
+}
 
         } catch (err) {
           console.error("Verzendfout:", err);
