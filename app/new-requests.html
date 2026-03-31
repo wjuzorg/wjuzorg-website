@@ -141,95 +141,72 @@ const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
 const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-const params = new URLSearchParams(window.location.search);
-const selectedId = params.get("id");
 
-function esc(v){
-  return String(v || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-
-async function loadRequests(){
+async function loadRequests() {
   const list = document.getElementById("list");
-  list.className = "";
   list.innerHTML = "Laden...";
 
-  try {
-    let query = supabase
-      .from("requests")
-      .select("*")
-      .eq("org_id", MIJN_ORG_ID)
-      .order("created_at", { ascending:false });
+  const { data, error } = await supabase
+    .from("requests")
+    .select("*")
+    .eq("org_id", MIJN_ORG_ID)
+    .in("status", ["nieuw", "terugbellen"])
+    .order("created_at", { ascending: false });
 
-    if (selectedId) {
-      query = query.eq("id", selectedId);
-    } else {
-      query = query.not("status","eq","ingepland");
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-      list.className = "empty";
-      list.innerHTML = "Fout bij laden: " + esc(error.message);
-      return;
-    }
-
-    if (!data || !data.length) {
-      list.className = "empty";
-      list.innerHTML = "Geen aanvragen gevonden.";
-      return;
-    }
-
-    list.innerHTML = "";
-
-    data.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      card.innerHTML = `
-        <div class="header">${esc(item.full_name || "Onbekend")}</div>
-
-        <div class="info">
-          📞 ${esc(item.phone || "-")}<br>
-          📍 ${esc(item.address || "-")}<br>
-          🧰 ${esc(item.service || "-")}<br>
-          ${item.preferred_daypart ? `🗓️ Voorkeur dagdeel: ${esc(item.preferred_daypart)}<br>` : ""}
-          ${item.message ? `📝 ${esc(item.message)}<br>` : ""}
-          ${item.funding_type ? `💶 Financiering: ${esc(item.funding_type)}` : ""}
-        </div>
-
-        <div class="planbox">
-          <strong>Afspraak plannen</strong><br>
-
-          <input class="input" type="date" id="date-${item.id}">
-          <input class="input" type="time" id="time-${item.id}">
-
-          <select class="input" id="duration-${item.id}">
-            <option value="60">60 min</option>
-            <option value="90">90 min</option>
-            <option value="120">120 min</option>
-          </select>
-
-          <input class="input input-note" placeholder="Interne notitie" id="note-${item.id}">
-
-          <div class="btnrow">
-            <button class="btn btn-green" onclick="plan('${item.id}')">Opslaan + inplannen</button>
-            <button class="btn btn-grey" onclick="closeRequest('${item.id}')">Afsluiten</button>
-          </div>
-        </div>
-      `;
-
-      list.appendChild(card);
-    });
-
-  } catch (err) {
-    list.className = "empty";
-    list.innerHTML = "Onverwachte fout bij laden.";
-    console.error(err);
+  if (error) {
+    console.error("Laadfout:", error);
+    list.innerHTML = "Fout bij laden: " + error.message;
+    return;
   }
+
+  if (!data || data.length === 0) {
+    list.innerHTML = "Geen aanvragen gevonden.";
+    return;
+  }
+
+  list.innerHTML = "";
+
+  data.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="header">${item.full_name || "Onbekend"}</div>
+
+      <div class="info">
+        📞 ${item.phone || "-"}<br>
+        📍 ${item.address || "-"}<br>
+        🧰 ${item.service || "-"}<br>
+        ${item.message ? "📝 " + item.message + "<br>" : ""}
+        ${item.preferred_daypart ? "🗓️ Voorkeur dagdeel: " + item.preferred_daypart : ""}
+      </div>
+
+      <div class="planbox">
+        <strong>Afspraak plannen</strong><br>
+
+        <input class="input" type="date" id="date-${item.id}">
+        <input class="input" type="time" id="time-${item.id}">
+
+        <select class="input" id="duration-${item.id}">
+          <option value="60">60 min</option>
+          <option value="90">90 min</option>
+          <option value="120">120 min</option>
+        </select>
+
+        <input class="input" style="width:80%; margin-top:10px;" placeholder="Interne notitie" id="note-${item.id}">
+
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn btn-green" onclick="planRequest('${item.id}')">Opslaan + inplannen</button>
+          <button class="btn btn-grey" onclick="closeRequest('${item.id}')">Afsluiten</button>
+        </div>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
 }
 
-async function plan(id){
+async function planRequest(id) {
   const date = document.getElementById(`date-${id}`).value;
   const time = document.getElementById(`time-${id}`).value;
   const duration = document.getElementById(`duration-${id}`).value;
@@ -240,14 +217,13 @@ async function plan(id){
     return;
   }
 
-  const datetime = `${date}T${time}:00`;
+  const appointmentTime = `${date}T${time}:00`;
 
   const { error } = await supabase
     .from("requests")
     .update({
-      appointment_time: datetime,
+      appointment_time: appointmentTime,
       duration_minutes: parseInt(duration, 10) || 60,
-      internal_notes: note || null,
       status: "ingepland"
     })
     .eq("id", id)
@@ -255,35 +231,33 @@ async function plan(id){
 
   if (error) {
     alert("Fout bij inplannen: " + error.message);
+    console.error(error);
     return;
   }
 
   window.location.href = "today.html?v=" + Date.now();
 }
 
-async function closeRequest(id){
-  const confirmClose = confirm("Aanvraag afsluiten?");
-  if (!confirmClose) return;
+async function closeRequest(id) {
+  const zeker = confirm("Aanvraag afsluiten?");
+  if (!zeker) return;
 
   const { error } = await supabase
     .from("requests")
-    .update({ status:"gesloten" })
+    .update({ status: "gesloten" })
     .eq("id", id)
     .eq("org_id", MIJN_ORG_ID);
 
   if (error) {
     alert("Fout bij afsluiten: " + error.message);
+    console.error(error);
     return;
   }
 
-  if (selectedId) {
-    window.location.href = "today.html?v=" + Date.now();
-  } else {
-    loadRequests();
-  }
+  loadRequests();
 }
 
-window.plan = plan;
+window.planRequest = planRequest;
 window.closeRequest = closeRequest;
 
 loadRequests();
