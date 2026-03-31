@@ -132,8 +132,13 @@ if (data.when && !data.appointment_time) {
          // Vaste velden toevoegen
 data.org_id = ORG_ID;
 
-// Laat bestaande status uit het formulier staan, anders standaard "nieuw"
-if (!data.status) {
+const params = new URLSearchParams(window.location.search);
+const isAdmin = params.get("admin") === "1";
+
+// Admin invoer mag direct ingepland worden
+if (isAdmin) {
+  data.status = "ingepland";
+} else if (!data.status) {
   data.status = "nieuw";
 }
 
