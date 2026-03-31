@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Nieuwe Invoer - WJU Zorg</title>
   <link rel="stylesheet" href="app.css?v=2"/>
+
   <style>
     .header-wju {
       background-color: #a71d2a;
@@ -52,6 +53,10 @@
       color: #333;
     }
 
+    .btn-choice:hover {
+      transform: translateY(-1px);
+    }
+
     .btn-red {
       background-color: #a71d2a !important;
       color: white !important;
@@ -71,8 +76,12 @@
       margin-top: 20px;
     }
 
+    .btn-green:hover {
+      opacity: 0.95;
+    }
+
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .form-control {
@@ -117,11 +126,11 @@
         "Fijn dat u belt. Weet u al waar u een afspraak voor wilt maken, of wilt u liever dat wij u later rustig terugbellen om eerst even kennis te maken of wat informatie te krijgen?"
       </div>
 
-      <button type="button" onclick="goToStep2('terugbellen')" class="btn-choice">
+      <button id="btnCallback" type="button" class="btn-choice">
         📞 Bel mij later terug voor informatie of kennismaking
       </button>
 
-      <button type="button" onclick="goToStep2('direct')" class="btn-choice btn-red">
+      <button id="btnDirect" type="button" class="btn-choice btn-red">
         📅 Ik weet al waar ik een afspraak voor wil maken
       </button>
     </div>
@@ -133,19 +142,19 @@
           "Dat is prima. Waar kunnen we u deze keer mee van dienst zijn? Ik vul het formulier nu samen met u telefonisch in om de afspraak direct te bevestigen. Als u iets niet begrijpt of u heeft vragen, dan kunnen we dat nu direct rustig bespreken."
         </div>
 
-        <button type="button" onclick="openForm('service-zorgafspraak.html')" class="btn-choice">
+        <button type="button" class="btn-choice service-btn" data-file="service-zorgafspraak.html">
           🚗 Vervoer naar een afspraak
         </button>
 
-        <button type="button" onclick="openForm('service-boodschappen.html')" class="btn-choice">
+        <button type="button" class="btn-choice service-btn" data-file="service-boodschappen.html">
           🛒 Samen boodschappen doen
         </button>
 
-        <button type="button" onclick="openForm('service-gezelschap.html')" class="btn-choice">
+        <button type="button" class="btn-choice service-btn" data-file="service-gezelschap.html">
           ☕ Gezelschap / Kopje koffie
         </button>
 
-        <button type="button" onclick="openForm('service-klusjes.html')" class="btn-choice">
+        <button type="button" class="btn-choice service-btn" data-file="service-klusjes.html">
           🛠️ Een klusje in of om het huis
         </button>
       </div>
@@ -161,7 +170,7 @@
         <label for="cbPhone">Telefoonnummer</label>
         <input type="tel" id="cbPhone" class="form-control" placeholder="Uw telefoonnummer">
 
-        <button type="button" onclick="saveCallback()" class="btn-green">
+        <button id="saveCallbackBtn" type="button" class="btn-green">
           ✅ Terugbelverzoek opslaan
         </button>
       </div>
@@ -181,67 +190,126 @@
     const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    function goToStep2(type) {
-      const name = document.getElementById("custName").value.trim();
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const serviceSelection = document.getElementById("serviceSelection");
+    const callbackFields = document.getElementById("callbackFields");
+
+    const custNameInput = document.getElementById("custName");
+    const cbDateTimeInput = document.getElementById("cbDateTime");
+    const cbPhoneInput = document.getElementById("cbPhone");
+
+    const btnCallback = document.getElementById("btnCallback");
+    const btnDirect = document.getElementById("btnDirect");
+    const saveCallbackBtn = document.getElementById("saveCallbackBtn");
+
+    function getClientName() {
+      return custNameInput.value.trim();
+    }
+
+    function showStep2(mode) {
+      const name = getClientName();
 
       if (!name) {
         alert("Vul eerst de naam van de cliënt in.");
+        custNameInput.focus();
         return;
       }
 
-      document.getElementById("step1").classList.add("hidden");
-      document.getElementById("step2").classList.remove("hidden");
-      document.getElementById("serviceSelection").classList.add("hidden");
-      document.getElementById("callbackFields").classList.add("hidden");
+      step1.classList.add("hidden");
+      step2.classList.remove("hidden");
 
-      if (type === "terugbellen") {
-        document.getElementById("callbackFields").classList.remove("hidden");
+      serviceSelection.classList.add("hidden");
+      callbackFields.classList.add("hidden");
+
+      if (mode === "terugbellen") {
+        callbackFields.classList.remove("hidden");
       } else {
-        document.getElementById("serviceSelection").classList.remove("hidden");
+        serviceSelection.classList.remove("hidden");
       }
     }
 
     function openForm(bestandsnaam) {
-      const naam = document.getElementById("custName").value.trim();
+      const naam = getClientName();
+
+      if (!naam) {
+        alert("Vul eerst de naam van de cliënt in.");
+        custNameInput.focus();
+        return;
+      }
+
       window.location.href = bestandsnaam + "?name=" + encodeURIComponent(naam);
     }
 
     async function saveCallback() {
-      const naam = document.getElementById("custName").value.trim();
-      const telefoon = document.getElementById("cbPhone").value.trim();
-      const scheduledTime = document.getElementById("cbDateTime").value;
+      const naam = getClientName();
+      const telefoon = cbPhoneInput.value.trim();
+      const scheduledTime = cbDateTimeInput.value;
 
       if (!naam) {
         alert("Vul eerst de naam van de cliënt in.");
+        custNameInput.focus();
         return;
       }
 
       if (!scheduledTime) {
-        alert("Kies a.u.b. een tijdstip.");
+        alert("Kies a.u.b. een datum en tijdstip.");
+        cbDateTimeInput.focus();
         return;
       }
 
-      const { error } = await supabaseClient
-        .from("requests")
-        .insert([{
+      saveCallbackBtn.disabled = true;
+      saveCallbackBtn.textContent = "Bezig met opslaan...";
+
+      try {
+        const payload = {
           full_name: naam,
           phone: telefoon || "",
           address: "N.v.t. (Terugbelverzoek)",
-          appointment_time: scheduledTime,
+          appointment_time: new Date(scheduledTime).toISOString(),
           service: "kennismaking",
           type: "kennismaken",
           status: "terugbellen",
           org_id: "4121dd3f-9d21-42b6-ab38-dccf791bfaaf"
-        }]);
+        };
 
-      if (!error) {
+        const { error } = await supabaseClient
+          .from("requests")
+          .insert([payload]);
+
+        if (error) {
+          console.error("Supabase fout:", error);
+          alert("Fout bij opslaan: " + error.message);
+          return;
+        }
+
         alert("Terugbelverzoek is opgeslagen!");
         window.location.href = "today.html";
-      } else {
-        console.error(error);
-        alert("Fout bij opslaan: " + error.message);
+      } catch (err) {
+        console.error("Onverwachte fout:", err);
+        alert("Er ging iets mis bij het opslaan.");
+      } finally {
+        saveCallbackBtn.disabled = false;
+        saveCallbackBtn.textContent = "✅ Terugbelverzoek opslaan";
       }
     }
+
+    btnCallback.addEventListener("click", function () {
+      showStep2("terugbellen");
+    });
+
+    btnDirect.addEventListener("click", function () {
+      showStep2("direct");
+    });
+
+    document.querySelectorAll(".service-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const file = this.getAttribute("data-file");
+        openForm(file);
+      });
+    });
+
+    saveCallbackBtn.addEventListener("click", saveCallback);
   </script>
 </body>
 </html>
