@@ -1,17 +1,15 @@
 /* =========================================================
-   WJU Zorg - app.js (VERSIE: STABLE + SUPABASE FIX)
+   WJU Zorg - app.js (STABIEL HERSTEL)
    ========================================================= */
 
 (() => {
   "use strict";
 
-  // 1. CONFIGURATIE
   const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
   const ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
   const FORM_IDS = ["serviceForm", "contactForm", "knownForm"];
 
-  // 2. TOEGANKELIJKHEID (Jouw werk - Volledig behouden)
   const FONT_KEY = "wju_font_scale";
   const CONTRAST_KEY = "wju_contrast";
 
@@ -25,51 +23,44 @@
     document.documentElement.classList.toggle("high-contrast", !!on);
   }
 
-  // Initialiseer direct bij laden (voorkomt flikkeren)
   const initialScale = parseFloat(localStorage.getItem(FONT_KEY) || "1.0");
-applyFontScale(clamp(initialScale, 0.9, 1.5));
-
-// Contrast NIET automatisch onthouden
-applyContrast(false);
+  applyFontScale(clamp(initialScale, 0.9, 1.5));
+  applyContrast(false);
 
   document.addEventListener("DOMContentLoaded", () => {
-    
-    // 3. KNOPPEN KOPPELEN (Accessibility)
     const btnRead = document.getElementById("btnRead");
-const btnAPlus = document.getElementById("btnAPlus");
-const btnAMinus = document.getElementById("btnAMinus");
-const btnContrast = document.getElementById("btnContrast");
+    const btnAPlus = document.getElementById("btnAPlus");
+    const btnAMinus = document.getElementById("btnAMinus");
+    const btnContrast = document.getElementById("btnContrast");
 
-let reading = false;
+    let reading = false;
 
-if (btnRead) {
-  btnRead.onclick = () => {
+    if (btnRead) {
+      btnRead.onclick = () => {
+        if (reading) {
+          window.speechSynthesis.cancel();
+          btnRead.textContent = "Voorlezen";
+          reading = false;
+          return;
+        }
 
-    if (reading) {
-      window.speechSynthesis.cancel();
-      btnRead.textContent = "Voorlezen";
-      reading = false;
-      return;
+        const tekst = document.body.innerText.trim();
+        if (!tekst) return;
+
+        const speech = new SpeechSynthesisUtterance(tekst);
+        speech.lang = "nl-NL";
+        speech.rate = 0.95;
+
+        speech.onend = () => {
+          btnRead.textContent = "Voorlezen";
+          reading = false;
+        };
+
+        window.speechSynthesis.speak(speech);
+        btnRead.textContent = "Stop";
+        reading = true;
+      };
     }
-
-    const tekst = document.body.innerText.trim();
-    if (!tekst) return;
-
-    const speech = new SpeechSynthesisUtterance(tekst);
-    speech.lang = "nl-NL";
-    speech.rate = 0.95;
-
-    speech.onend = () => {
-      btnRead.textContent = "Voorlezen";
-      reading = false;
-    };
-
-    window.speechSynthesis.speak(speech);
-
-    btnRead.textContent = "Stop";
-    reading = true;
-  };
-}
 
     if (btnAPlus) {
       btnAPlus.onclick = () => {
@@ -95,74 +86,88 @@ if (btnRead) {
       };
     }
 
-    // 4. FORMULIER LOGICA (Supabase)
-    const form = FORM_IDS.map(id => document.getElementById(id)).find(f => f !== null) || document.querySelector("form");
-    
-   if (form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+    const form =
+      FORM_IDS.map(id => document.getElementById(id)).find(f => f !== null) ||
+      document.querySelector("form");
 
-    if (!window.supabase) {
-      alert("Fout: Supabase library niet geladen. Controleer je HTML script tags.");
-      return;
-    }
+    if (!form) return;
 
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    const btn = form.querySelector('button[type="submit"]');
-    const oldBtnText = btn ? btn.textContent : "Versturen";
-    if (btn) {
-      btn.disabled = true;
-      btn.textContent = "Even geduld...";
-    }
-
-    try {
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      if (data.callback_reason && !data.message) {
-        data.message = data.callback_reason;
-        delete data.callback_reason;
+      if (!window.supabase) {
+        alert("Fout: Supabase library niet geladen.");
+        return;
       }
 
-      if (data.when && !data.appointment_time) {
-        data.appointment_time = data.when;
-        delete data.when;
-      }
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-      data.org_id = ORG_ID;
+      const btn = form.querySelector('button[type="submit"]');
+      const oldBtnText = btn ? btn.textContent : "Versturen";
 
-      const params = new URLSearchParams(window.location.search);
-      const isAdmin = params.get("admin") === "1";
-
-      if (!data.status) {
-        data.status = "nieuw";
-      }
-
-      const validTypes = ['kennismaken', 'bekend', 'mantelzorger', 'zondag', 'contact', 'belmijterug', 'service'];
-      if (!data.type || !validTypes.includes(data.type)) {
-        data.type = "kennismaken";
-      }
-
-      const { error } = await supabaseClient
-        .from("requests")
-        .insert([data]);
-
-      if (error) throw error;
-
-      if (isAdmin) {
-        window.location.href = "today.html";
-      } else {
-        window.location.href = "bedankt.html";
-      }
-
-    } catch (err) {
-      console.error("Verzendfout:", err);
-      alert("❌ Er ging iets mis bij het verzenden: " + (err.message || "Onbekende fout"));
       if (btn) {
-        btn.disabled = false;
-        btn.textContent = oldBtnText;
+        btn.disabled = true;
+        btn.textContent = "Even geduld...";
       }
-    }
+
+      try {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        if (data.callback_reason && !data.message) {
+          data.message = data.callback_reason;
+          delete data.callback_reason;
+        }
+
+        if (data.when && !data.appointment_time) {
+          data.appointment_time = data.when;
+          delete data.when;
+        }
+
+        data.org_id = ORG_ID;
+
+        if (!data.status) {
+          data.status = "nieuw";
+        }
+
+        const validTypes = [
+          "kennismaken",
+          "bekend",
+          "mantelzorger",
+          "zondag",
+          "contact",
+          "belmijterug",
+          "service"
+        ];
+
+        if (!data.type || !validTypes.includes(data.type)) {
+          data.type = "kennismaken";
+        }
+
+        const { error } = await supabaseClient
+          .from("requests")
+          .insert([data]);
+
+        if (error) throw error;
+
+        const params = new URLSearchParams(window.location.search);
+        const isAdmin = params.get("admin") === "1";
+
+        if (isAdmin) {
+          window.location.href = "today.html";
+        } else {
+          window.location.href = "bedankt.html";
+        }
+
+      } catch (err) {
+        console.error("Verzendfout:", err);
+        alert("❌ Er ging iets mis bij het verzenden: " + (err.message || "Onbekende fout"));
+
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = oldBtnText;
+        }
+      }
+    });
   });
-}
+})();
