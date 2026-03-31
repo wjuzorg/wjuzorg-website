@@ -112,7 +112,9 @@
 
       try {
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+const data = Object.fromEntries(formData);
+
+data.birthdate = data.birthdate || null;
 
         if (data.callback_reason && !data.message) {
           data.message = data.callback_reason;
