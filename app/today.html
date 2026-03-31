@@ -118,6 +118,46 @@ Maandrapportage facturen
   const MIJN_ORG_ID = "4121dd3f-9d21-42b6-ab38-dccf791bfaaf";
 
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  
+  function getLocalDateString(value) {
+  if (!value) return "";
+
+  if (typeof value === "string") {
+    const match = value.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (match) return match[1];
+  }
+
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return "";
+
+  const jaar = d.getFullYear();
+  const maand = String(d.getMonth() + 1).padStart(2, "0");
+  const dag = String(d.getDate()).padStart(2, "0");
+  return `${jaar}-${maand}-${dag}`;
+}
+
+function getTimeDisplay(item) {
+  if (item.appointment_time) {
+    const fullTime = String(item.appointment_time);
+
+    if (fullTime.includes("T")) {
+      return fullTime.split("T")[1].substring(0, 5);
+    }
+
+    if (fullTime.includes(" ")) {
+      return fullTime.split(" ")[1]?.substring(0, 5) || "Tijd onbekend";
+    }
+
+    return fullTime.substring(11, 16) || "Tijd onbekend";
+  }
+
+  if (item.planned_time_block === "ochtend") return "09:00";
+  if (item.planned_time_block === "middag") return "13:00";
+  if (item.planned_time_block === "avond_tot_1900") return "17:00";
+  if (item.planned_time_block === "maakt_niet_uit") return "10:00";
+
+  return "Tijd onbekend";
+}
 
   async function loadToday() {
   const listDiv = document.getElementById("appointmentsList");
@@ -152,9 +192,13 @@ Maandrapportage facturen
   const vandaagString = `${jaar}-${maand}-${dag}`;
 
   const todayItems = (data || []).filter(item => {
-    if (!item.appointment_time) return false;
-    return String(item.appointment_time).slice(0, 10) === vandaagString;
-  });
+  const datumVanAfspraak =
+    getLocalDateString(item.appointment_time) ||
+    item.planned_date ||
+    "";
+
+  return datumVanAfspraak === vandaagString;
+});
 
   if (todayCountEl) {
     todayCountEl.innerText = todayItems.length;
@@ -169,16 +213,7 @@ Maandrapportage facturen
   }
 
   todayItems.forEach(item => {
-    const fullTime = item.appointment_time || "";
-    let timeDisplay = "";
-
-    if (fullTime.includes("T")) {
-      timeDisplay = fullTime.split("T")[1].substring(0, 5);
-    } else if (fullTime.includes(" ")) {
-      timeDisplay = fullTime.split(" ")[1]?.substring(0, 5) || "";
-    } else {
-      timeDisplay = fullTime.substring(11, 16);
-    }
+    const timeDisplay = getTimeDisplay(item);
 
     const card = document.createElement("div");
     card.className = "card-wju";
