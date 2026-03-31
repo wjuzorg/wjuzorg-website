@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Nieuwe Invoer - WJU Zorg</title>
   <link rel="stylesheet" href="app.css?v=2"/>
-
   <style>
     .header-wju {
       background-color: #a71d2a;
@@ -49,6 +48,7 @@
       text-align: left;
       cursor: pointer;
       background: white;
+      transition: 0.2s;
       color: #333;
     }
 
@@ -72,7 +72,7 @@
     }
 
     .hidden {
-      display: none !important;
+      display: none;
     }
 
     .form-control {
@@ -161,7 +161,7 @@
         <label for="cbPhone">Telefoonnummer</label>
         <input type="tel" id="cbPhone" class="form-control" placeholder="Uw telefoonnummer">
 
-        <button id="saveBtn" type="button" onclick="saveCallback()" class="btn-green">
+        <button type="button" onclick="saveCallback()" class="btn-green">
           ✅ Terugbelverzoek opslaan
         </button>
       </div>
@@ -177,6 +177,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
+    const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     function goToStep2(type) {
       const name = document.getElementById("custName").value.trim();
 
@@ -199,12 +203,6 @@
 
     function openForm(bestandsnaam) {
       const naam = document.getElementById("custName").value.trim();
-
-      if (!naam) {
-        alert("Vul eerst de naam van de cliënt in.");
-        return;
-      }
-
       window.location.href = bestandsnaam + "?name=" + encodeURIComponent(naam);
     }
 
@@ -212,7 +210,6 @@
       const naam = document.getElementById("custName").value.trim();
       const telefoon = document.getElementById("cbPhone").value.trim();
       const scheduledTime = document.getElementById("cbDateTime").value;
-      const saveBtn = document.getElementById("saveBtn");
 
       if (!naam) {
         alert("Vul eerst de naam van de cliënt in.");
@@ -220,52 +217,29 @@
       }
 
       if (!scheduledTime) {
-        alert("Kies a.u.b. een datum en tijdstip.");
+        alert("Kies a.u.b. een tijdstip.");
         return;
       }
 
-      if (!window.supabase) {
-        alert("Supabase is niet geladen. Controleer internet of refresh de pagina.");
-        return;
-      }
+      const { error } = await supabaseClient
+        .from("requests")
+        .insert([{
+          full_name: naam,
+          phone: telefoon || "",
+          address: "N.v.t. (Terugbelverzoek)",
+          appointment_time: scheduledTime,
+          service: "kennismaking",
+          type: "kennismaken",
+          status: "terugbellen",
+          org_id: "4121dd3f-9d21-42b6-ab38-dccf791bfaaf"
+        }]);
 
-      saveBtn.disabled = true;
-      saveBtn.innerText = "Bezig met opslaan...";
-
-      try {
-        const supabaseClient = window.supabase.createClient(
-          "https://ligdgbdhreatsuejcinq.supabase.co",
-          "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j"
-        );
-
-        const { error } = await supabaseClient
-          .from("requests")
-          .insert([{
-            full_name: naam,
-            phone: telefoon || "",
-            address: "N.v.t. (Terugbelverzoek)",
-            appointment_time: scheduledTime,
-            service: "kennismaking",
-            type: "kennismaken",
-            status: "terugbellen",
-            org_id: "4121dd3f-9d21-42b6-ab38-dccf791bfaaf"
-          }]);
-
-        if (error) {
-          console.error(error);
-          alert("Fout bij opslaan: " + error.message);
-          saveBtn.disabled = false;
-          saveBtn.innerText = "✅ Terugbelverzoek opslaan";
-          return;
-        }
-
+      if (!error) {
         alert("Terugbelverzoek is opgeslagen!");
         window.location.href = "today.html";
-      } catch (err) {
-        console.error(err);
-        alert("Er ging iets mis bij het opslaan.");
-        saveBtn.disabled = false;
-        saveBtn.innerText = "✅ Terugbelverzoek opslaan";
+      } else {
+        console.error(error);
+        alert("Fout bij opslaan: " + error.message);
       }
     }
   </script>
