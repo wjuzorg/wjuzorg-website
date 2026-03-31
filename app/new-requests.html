@@ -14,9 +14,9 @@
     }
 
     .container {
+      max-width: 900px;
+      margin: 0 auto;
       padding: 20px;
-      max-width: 700px;
-      margin: auto;
     }
 
     .toplink {
@@ -27,41 +27,141 @@
       margin-bottom: 18px;
     }
 
-    .card {
+    .intro-card,
+    .filters-card,
+    .request-card {
       background: white;
-      padding: 18px;
-      border-radius: 14px;
-      margin-bottom: 16px;
       border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
     }
 
-    .name {
+    .intro-title {
+      font-size: 1.4rem;
       font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
-    .info {
-      font-size: 15px;
-      margin-bottom: 7px;
+    .intro-text {
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .filter-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .filter-btn {
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .filter-btn.active {
+      background: #a71d2a;
+      color: white;
+      border-color: #a71d2a;
+    }
+
+    .request-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .request-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .request-service {
+      display: inline-block;
+      background: #fff3f3;
+      color: #a71d2a;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .request-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .info-block {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #f0f0f0;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: #777;
+      font-weight: bold;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .info-value {
       color: #222;
-      line-height: 1.4;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .script-box {
+      margin-top: 14px;
+      background: #fff7f7;
+      border-left: 5px solid #a71d2a;
+      border-radius: 10px;
+      padding: 14px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .script-title {
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 6px;
     }
 
     .buttons {
-      margin-top: 14px;
+      margin-top: 16px;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
 
     .btn {
-      padding: 10px 14px;
-      border-radius: 10px;
       border: none;
+      border-radius: 10px;
+      padding: 12px 14px;
       cursor: pointer;
-      font-size: 14px;
       font-weight: bold;
+      font-size: 14px;
     }
 
     .btn-call {
@@ -81,27 +181,57 @@
 
     .empty {
       background: white;
-      padding: 18px;
-      border-radius: 14px;
       border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 20px;
       color: #666;
+      text-align: center;
+    }
+
+    .small-note {
+      color: #666;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 720px) {
+      .request-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h2>🆕 Nieuwe aanvragen</h2>
+    <a href="today.html" class="toplink">← Terug naar Today</a>
 
-    <div style="margin-bottom:15px;">
-      <a href="today.html" class="toplink">← Terug naar Today</a>
+    <div class="intro-card">
+      <div class="intro-title">Nieuwe aanvragen</div>
+      <div class="intro-text">
+        Dit is de intake- en belpagina van WJU Zorg. Hier zie je nieuwe hulpvragen,
+        terugbelverzoeken en eerste informatie van cliënten. Vanuit hier kun je rustig
+        bellen, gegevens controleren en daarna pas echt inplannen.
+      </div>
+    </div>
+
+    <div class="filters-card">
+      <div class="filter-title">Filter op hulpsoort</div>
+      <div class="filter-row" id="serviceFilters"></div>
+
+      <div class="filter-title">Filter op wijk / plaats</div>
+      <div class="filter-row" id="areaFilters"></div>
+
+      <div class="small-note">
+        Tip: gebruik deze pagina als belscript. Controleer naam, adres, telefoonnummer,
+        hulpvraag, wijk en spreek daarna pas datum en tijd af.
+      </div>
     </div>
 
     <div id="list"><p>Laden...</p></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-
   <script>
     const SUPABASE_URL = "https://ligdgbdhreatsuejcinq.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
@@ -109,8 +239,29 @@
 
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    let allRequests = [];
+    let selectedService = "alle";
+    let selectedArea = "alle";
+
+    function serviceLabel(service) {
+      if (!service) return "Onbekend";
+      if (service === "naar_afspraak") return "Zorgafspraak";
+      if (service === "zorgafspraak") return "Zorgafspraak";
+      if (service === "boodschappen") return "Boodschappen";
+      if (service === "klusjes") return "Klusjes";
+      if (service === "gezelschap") return "Gezelschap";
+      if (service === "kennismaking") return "Kennismaking";
+      return service;
+    }
+
+    function areaLabel(address, preferredArea) {
+      if (preferredArea && preferredArea.trim()) return preferredArea.trim();
+      if (address && address.trim()) return address.trim();
+      return "Niet opgegeven";
+    }
+
     function formatDateTime(value) {
-      if (!value) return "";
+      if (!value) return "-";
       try {
         return new Date(value).toLocaleString("nl-NL");
       } catch (e) {
@@ -118,10 +269,172 @@
       }
     }
 
-    function serviceLabel(service) {
-      if (!service) return "-";
-      if (service === "naar_afspraak") return "Zorgafspraak";
-      return service;
+    function buildServiceFilters() {
+      const wrap = document.getElementById("serviceFilters");
+
+      const counts = {
+        alle: allRequests.length
+      };
+
+      allRequests.forEach(r => {
+        const key = r.service || "onbekend";
+        counts[key] = (counts[key] || 0) + 1;
+      });
+
+      const order = ["alle", "boodschappen", "klusjes", "gezelschap", "zorgafspraak", "naar_afspraak", "kennismaking"];
+      const seen = new Set();
+
+      wrap.innerHTML = "";
+
+      order.forEach(key => {
+        if (!counts[key]) return;
+        if (seen.has(key)) return;
+        seen.add(key);
+
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (selectedService === key ? " active" : "");
+        btn.type = "button";
+        btn.textContent = `${serviceLabel(key)} (${counts[key]})`;
+        btn.onclick = () => {
+          selectedService = key;
+          buildServiceFilters();
+          renderRequests();
+        };
+        wrap.appendChild(btn);
+      });
+
+      Object.keys(counts).forEach(key => {
+        if (seen.has(key)) return;
+
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (selectedService === key ? " active" : "");
+        btn.type = "button";
+        btn.textContent = `${serviceLabel(key)} (${counts[key]})`;
+        btn.onclick = () => {
+          selectedService = key;
+          buildServiceFilters();
+          renderRequests();
+        };
+        wrap.appendChild(btn);
+      });
+    }
+
+    function buildAreaFilters() {
+      const wrap = document.getElementById("areaFilters");
+
+      const counts = {
+        alle: allRequests.length
+      };
+
+      allRequests.forEach(r => {
+        const key = areaLabel(r.address, r.preferred_area);
+        counts[key] = (counts[key] || 0) + 1;
+      });
+
+      wrap.innerHTML = "";
+
+      Object.keys(counts).forEach(key => {
+        const label = key === "alle" ? "Alle wijken" : key;
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (selectedArea === key ? " active" : "");
+        btn.type = "button";
+        btn.textContent = `${label} (${counts[key]})`;
+        btn.onclick = () => {
+          selectedArea = key;
+          buildAreaFilters();
+          renderRequests();
+        };
+        wrap.appendChild(btn);
+      });
+    }
+
+    function matchesFilters(r) {
+      const serviceOk =
+        selectedService === "alle" ||
+        (selectedService === "zorgafspraak" && (r.service === "zorgafspraak" || r.service === "naar_afspraak")) ||
+        r.service === selectedService;
+
+      const areaKey = areaLabel(r.address, r.preferred_area);
+      const areaOk = selectedArea === "alle" || areaKey === selectedArea;
+
+      return serviceOk && areaOk;
+    }
+
+    function renderRequests() {
+      const list = document.getElementById("list");
+      const filtered = allRequests.filter(matchesFilters);
+
+      if (!filtered.length) {
+        list.innerHTML = `<div class="empty">Geen aanvragen binnen deze filters gevonden.</div>`;
+        return;
+      }
+
+      list.innerHTML = "";
+
+      filtered.forEach((r) => {
+        const div = document.createElement("div");
+        div.className = "request-card";
+
+        const wijk = areaLabel(r.address, r.preferred_area);
+
+        div.innerHTML = `
+          <div class="request-head">
+            <div>
+              <div class="request-name">${r.full_name || "Onbekend"}</div>
+              <div class="small-note">Telefoon: ${r.phone || "-"}</div>
+            </div>
+            <div class="request-service">${serviceLabel(r.service)}</div>
+          </div>
+
+          <div class="request-grid">
+            <div class="info-block">
+              <div class="info-label">Adres / wijk</div>
+              <div class="info-value">${r.address || "-"}<br><strong>${wijk}</strong></div>
+            </div>
+
+            <div class="info-block">
+              <div class="info-label">Terugbellen / afspraak</div>
+              <div class="info-value">
+                ${r.appointment_time ? `Afspraak / voorkeur: ${formatDateTime(r.appointment_time)}` : "Nog geen echte afspraakdatum ingevuld"}
+                ${r.preferred_daypart ? `<br>Voorkeur dagdeel: ${r.preferred_daypart}` : ""}
+              </div>
+            </div>
+
+            <div class="info-block">
+              <div class="info-label">Hulpvraag</div>
+              <div class="info-value">
+                ${r.message || r.company_details || r.special_notes || "Geen extra toelichting"}
+              </div>
+            </div>
+
+            <div class="info-block">
+              <div class="info-label">Extra info</div>
+              <div class="info-value">
+                ${r.funding_type ? `Financiering: ${r.funding_type}<br>` : ""}
+                ${r.destination ? `Bestemming: ${r.destination}<br>` : ""}
+                ${r.contact_person_name ? `Contactpersoon: ${r.contact_person_name}<br>` : ""}
+                ${r.contact_person_phone ? `Telefoon contactpersoon: ${r.contact_person_phone}<br>` : ""}
+                ${r.contact_person_role ? `Rol contactpersoon: ${r.contact_person_role}` : ""}
+                ${!r.funding_type && !r.destination && !r.contact_person_name ? "Geen extra info" : ""}
+              </div>
+            </div>
+          </div>
+
+          <div class="script-box">
+            <div class="script-title">Belscript / intake</div>
+            Controleer rustig: naam, telefoonnummer, adres, hulpvraag, wijk en wat voor dag of tijd handig is.
+            Spreek daarna pas een echte afspraak af. Houd rekening met de wijk zodat je slim kunt plannen.
+          </div>
+
+          <div class="buttons">
+            <button class="btn btn-call" type="button" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
+            <button class="btn btn-plan" type="button" onclick="planRequest('${r.id}')">Inplannen</button>
+            <button class="btn btn-close" type="button" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
+          </div>
+        `;
+
+        list.appendChild(div);
+      });
     }
 
     async function loadRequests() {
@@ -137,148 +450,83 @@
 
       if (error) {
         console.error("Laadfout:", error);
-        list.innerHTML = "<div class='empty' style='color:red;'>Fout bij laden: " + error.message + "</div>";
+        list.innerHTML = `<div class="empty" style="color:red;">Fout bij laden: ${error.message}</div>`;
         return;
       }
 
-      if (!data || data.length === 0) {
-        list.innerHTML = "<div class='empty'>Geen nieuwe aanvragen gevonden.</div>";
-        return;
-      }
-
-      list.innerHTML = "";
-
-      data.forEach((r) => {
-        const div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-          <div class="name">${r.full_name || "Onbekend"}</div>
-          <div class="info">📞 ${r.phone || "-"}</div>
-          <div class="info">🧾 Dienst: ${serviceLabel(r.service)}</div>
-          <div class="info">📍 Adres: ${r.address || "-"}</div>
-          <div class="info">🕒 Status: ${r.status || "-"}</div>
-          ${r.destination ? `<div class="info">📍 Naar: ${r.destination}</div>` : ""}
-          ${r.appointment_time ? `<div class="info">🗓️ Afspraak: ${formatDateTime(r.appointment_time)}</div>` : ""}
-          ${r.needs_support ? `<div class="info">👥 Begeleiding: ${r.needs_support}</div>` : ""}
-          ${r.preferred_daypart ? `<div class="info">📱 Terugbellen: ${r.preferred_daypart}</div>` : ""}
-          ${r.message ? `<div class="info">📝 ${r.message}</div>` : ""}
-
-          <div class="buttons">
-            <button class="btn btn-call" type="button" onclick="updateStatus('${r.id}','terugbellen')">Terugbellen</button>
-            <button class="btn btn-plan" type="button" onclick="planRequest('${r.id}')">Inplannen</button>
-            <button class="btn btn-close" type="button" onclick="updateStatus('${r.id}','gesloten')">Afsluiten</button>
-          </div>
-        `;
-
-        list.appendChild(div);
-      });
+      allRequests = data || [];
+      buildServiceFilters();
+      buildAreaFilters();
+      renderRequests();
     }
 
     async function updateStatus(id, status) {
-      try {
-        const { data, error } = await supabaseClient
-          .from("requests")
-          .update({ status: status })
-          .eq("id", id)
-          .eq("org_id", MIJN_ORG_ID)
-          .select();
+      const { error } = await supabaseClient
+        .from("requests")
+        .update({ status: status })
+        .eq("id", id)
+        .eq("org_id", MIJN_ORG_ID);
 
-        if (error) {
-          alert("Fout bij updaten: " + error.message);
-          console.error("Updatefout:", error);
-          return;
-        }
-
-        if (!data || data.length === 0) {
-          alert("De status is niet aangepast. De update wordt nu nog geblokkeerd in Supabase.");
-          console.error("Geen rijen aangepast", { id, status });
-          return;
-        }
-
-        if (status === "terugbellen") {
-          alert("Doorgezet naar Nog terug te bellen.");
-        }
-
-        if (status === "gesloten") {
-          alert("Aanvraag afgesloten.");
-        }
-
-        loadRequests();
-      } catch (err) {
-        alert("Onverwachte fout bij updaten.");
-        console.error(err);
+      if (error) {
+        alert("Fout bij updaten: " + error.message);
+        console.error("Updatefout:", error);
+        return;
       }
+
+      if (status === "terugbellen") {
+        alert("Doorgezet naar Nog terug te bellen.");
+      }
+
+      if (status === "gesloten") {
+        alert("Aanvraag afgesloten.");
+      }
+
+      loadRequests();
     }
 
     async function planRequest(id) {
-  try {
-    const { data: row, error: readError } = await supabaseClient
-      .from("requests")
-      .select("appointment_time, planned_date, planned_time_block, full_name")
-      .eq("id", id)
-      .eq("org_id", MIJN_ORG_ID)
-      .single();
+      const datum = prompt("Welke datum? (bijv. 02-04-2026 of 2026-04-02)");
+      if (!datum) return;
 
-    if (readError) {
-      alert("Fout bij ophalen van aanvraag: " + readError.message);
-      console.error("Leesfout:", readError);
-      return;
-    }
+      const tijd = prompt("Welke tijd? (bijv. 14:30)");
+      if (!tijd) return;
 
-    let afspraakTijd = null;
+      const duur = prompt("Hoeveel minuten? (bijv. 60)");
+      if (!duur) return;
 
-    if (row.appointment_time) {
-      afspraakTijd = row.appointment_time;
-    }
+      let datumSchoon = datum.replace(/\./g, "-").replace(/\//g, "-");
+      let parts = datumSchoon.split("-");
+      let geformatteerdeDatum = datumSchoon;
 
-    if (!afspraakTijd && row.planned_date && row.planned_time_block) {
-      let tijd = null;
-
-      if (row.planned_time_block === "ochtend") tijd = "09:00:00";
-      if (row.planned_time_block === "middag") tijd = "13:00:00";
-      if (row.planned_time_block === "avond_tot_1900") tijd = "17:00:00";
-      if (row.planned_time_block === "maakt_niet_uit") tijd = "10:00:00";
-
-      if (tijd) {
-        afspraakTijd = `${row.planned_date}T${tijd}`;
+      if (parts.length === 3 && parts[0].length !== 4) {
+        geformatteerdeDatum = `${parts[2]}-${parts[1]}-${parts[0]}`;
       }
+
+      const appointmentTime = `${geformatteerdeDatum}T${tijd}:00`;
+
+      const { error } = await supabaseClient
+        .from("requests")
+        .update({
+          status: "ingepland",
+          appointment_time: appointmentTime,
+          duration_minutes: parseInt(duur, 10) || 60
+        })
+        .eq("id", id)
+        .eq("org_id", MIJN_ORG_ID);
+
+      if (error) {
+        alert("Fout bij inplannen: " + error.message);
+        console.error("Planfout:", error);
+        return;
+      }
+
+      alert("Aanvraag ingepland en doorgezet naar Planning vandaag.");
+      window.location.href = "today.html?v=" + Date.now();
     }
 
-    if (!afspraakTijd) {
-      alert("Deze aanvraag heeft nog geen echte datum en tijd. Kies eerst Terugbellen of vul eerst een afspraakmoment in.");
-      return;
-    }
-
-    const { data, error } = await supabaseClient
-      .from("requests")
-      .update({
-        status: "ingepland",
-        appointment_time: afspraakTijd
-      })
-      .eq("id", id)
-      .eq("org_id", MIJN_ORG_ID)
-      .select();
-
-    if (error) {
-      alert("Fout bij inplannen: " + error.message);
-      console.error("Planfout:", error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      alert("Inplannen is niet gelukt.");
-      return;
-    }
-
-    alert("Aanvraag ingepland.");
     loadRequests();
-  } catch (err) {
-    alert("Onverwachte fout bij inplannen.");
-    console.error(err);
-  }
-}
-    loadRequests();
+    window.updateStatus = updateStatus;
+    window.planRequest = planRequest;
   </script>
 </body>
 </html>
