@@ -93,14 +93,17 @@
             return;
         }
 
-        const { error } = await mijnDatabase
-            .from("requests")
-            .update({
-                appointment_time: date + "T" + time + ":00",
-                duration_minutes: parseInt(duration),
-                status: "ingepland"
-            })
-            .eq("id", id);
+        // Voeg 'Z' (voor UTC) NIET toe, maar stuur de lokale ISO string
+const localISO = date + "T" + time + ":00"; 
+
+const { error } = await mijnDatabase
+    .from("requests")
+    .update({
+        appointment_time: localISO, // De database snapt nu dat dit de bedoelde tijd is
+        duration_minutes: parseInt(duration),
+        status: "ingepland"
+    })
+    .eq("id", id);
 
         if (error) alert("Fout: " + error.message);
         else window.location.href = "today.html";

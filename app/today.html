@@ -429,12 +429,22 @@
 
       const nieuweTijd = `${geformatteerdeDatum}T${tijd}:00`;
 
-      const { data, error } = await supabaseClient
-        .from("requests")
-        .update({
-          appointment_time: nieuweTijd,
-          status: "terugbellen"
-        })
+      // We maken de tijd-string zonder tijdzone-informatie (ISO zonder Z)
+// Zodat 14:00 ook echt als 14:00 in de database komt.
+const jaar = new Date().getFullYear();
+const maand = String(new Date().getMonth() + 1).padStart(2, '0');
+const dag = String(new Date().getDate()).padStart(2, '0');
+
+// nieuweTijd is hier waarschijnlijk alleen de HH:mm uit je input
+const geformatteerdeTijd = `${jaar}-${maand}-${dag}T${nieuweTijd}:00`;
+
+const { data, error } = await supabaseClient
+    .from("requests")
+    .update({
+        appointment_time: geformatteerdeTijd,
+        status: "terugbellen"
+    })
+    .eq("id", id); // Vergeet de .eq("id", id) niet, anders update je alles!
         .eq("id", id)
         .eq("org_id", MIJN_ORG_ID)
         .select();
