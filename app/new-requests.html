@@ -262,32 +262,25 @@
     }
 
     async function updateStatus(id, status) {
-      setStatus("Status wordt aangepast...");
+  const { error } = await supabaseClient
+    .from("requests")
+    .update({ status: status })
+    .eq("id", id)
+    .eq("org_id", MIJN_ORG_ID);
 
-      try {
-        const client = await initSupabase();
+  if (error) {
+    alert("Fout bij updaten: " + error.message);
+    console.error("Updatefout:", error);
+    return;
+  }
 
-        const { error } = await client
-          .from("requests")
-          .update({ status: status })
-          .eq("id", id)
-          .eq("org_id", MIJN_ORG_ID);
+  if (status === "terugbellen") {
+    window.location.href = "today.html?v=" + Date.now();
+    return;
+  }
 
-        if (error) {
-          console.error("Updatefout:", error);
-          alert("Fout bij updaten: " + error.message);
-          setStatus("Fout bij updaten: " + error.message, true);
-          return;
-        }
-
-        setStatus("Status aangepast naar: " + status);
-        await loadRequests();
-      } catch (err) {
-        console.error(err);
-        alert("Onverwachte fout bij updaten.");
-        setStatus("Onverwachte fout bij updaten: " + err.message, true);
-      }
-    }
+  loadRequests();
+}
 
     async function planRequest(id) {
       setStatus("Aanvraag wordt ingepland...");
