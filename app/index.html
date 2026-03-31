@@ -119,7 +119,31 @@ function openAdmin() {
   } else {
     alert("Onjuiste code");
   }
+<script>
 
+let pressTimer;
+const logo = document.getElementById("logo");
+
+function startPress() {
+  pressTimer = setTimeout(function() {
+    openAdmin();
+  }, 5000);
+}
+
+function cancelPress() {
+  clearTimeout(pressTimer);
+}
+
+// Desktop
+logo.addEventListener("mousedown", startPress);
+logo.addEventListener("mouseup", cancelPress);
+logo.addEventListener("mouseleave", cancelPress);
+
+// Telefoon
+logo.addEventListener("touchstart", startPress);
+logo.addEventListener("touchend", cancelPress);
+
+</script>
 }
 </script>
   <script src="app.js?v=2"></script>
