@@ -108,48 +108,64 @@
   </div>
 </div>
 <script>
+<script>
 function openAdmin() {
-
   const code = prompt("Voer admin code in");
-
   if (!code) return;
 
   if (code === "widjai2026") {
+    localStorage.setItem("wjuzorg_admin", "true");
     window.location.href = "today.html";
   } else {
     alert("Onjuiste code");
   }
+}
+</script>
+
 <script>
-
-let pressTimer;
 const logo = document.getElementById("logo");
+let pressTimer = null;
+let longPressTriggered = false;
 
-function startPress() {
-  pressTimer = setTimeout(function() {
+function startPress(e) {
+  if (!logo) return;
+  longPressTriggered = false;
+
+  pressTimer = setTimeout(() => {
+    longPressTriggered = true;
     openAdmin();
-  }, 5000);
+  }, 2500);
 }
 
 function cancelPress() {
-  clearTimeout(pressTimer);
+  if (pressTimer) {
+    clearTimeout(pressTimer);
+    pressTimer = null;
+  }
 }
 
-// Desktop
-logo.addEventListener("mousedown", startPress);
-logo.addEventListener("mouseup", cancelPress);
-logo.addEventListener("mouseleave", cancelPress);
+if (logo) {
+  logo.addEventListener("mousedown", startPress);
+  logo.addEventListener("mouseup", cancelPress);
+  logo.addEventListener("mouseleave", cancelPress);
 
-// Telefoon
-logo.addEventListener("touchstart", startPress);
-logo.addEventListener("touchend", cancelPress);
+  logo.addEventListener("touchstart", startPress, { passive: true });
+  logo.addEventListener("touchend", cancelPress);
+  logo.addEventListener("touchcancel", cancelPress);
 
-logo.addEventListener("contextmenu", function(e) {
-  e.preventDefault();
-});
+  logo.addEventListener("contextmenu", function(e) {
+    e.preventDefault();
+  });
 
-</script>
+  logo.addEventListener("click", function(e) {
+    if (longPressTriggered) {
+      e.preventDefault();
+      longPressTriggered = false;
+    }
+  });
 }
 </script>
-  <script src="app.js?v=2"></script>
+
+<script src="app.js?v=2"></script>
 </body>
 </html>
