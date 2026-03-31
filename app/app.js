@@ -135,10 +135,8 @@ data.org_id = ORG_ID;
 const params = new URLSearchParams(window.location.search);
 const isAdmin = params.get("admin") === "1";
 
-// Admin invoer mag direct ingepland worden
-if (isAdmin) {
-  data.status = "ingepland";
-} else if (!data.status) {
+// Voor nu alles veilig en stabiel opslaan als nieuw
+if (!data.status) {
   data.status = "nieuw";
 }
 
