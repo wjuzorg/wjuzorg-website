@@ -163,7 +163,7 @@ async function loadRequests(){
     if (selectedId) {
       query = query.eq("id", selectedId);
     } else {
-      query = query.in("status", ["nieuw", "terugbellen"]);
+      query = query.not("status","eq","ingepland");
     }
 
     const { data, error } = await query;
