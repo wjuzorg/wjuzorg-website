@@ -122,48 +122,38 @@ function openAdmin() {
 }
 
 const logo = document.getElementById("logo");
-let pressTimer = null;
-let longPressTriggered = false;
-
-function startPress() {
-  if (!logo) return;
-  longPressTriggered = false;
-
-  pressTimer = setTimeout(() => {
-    longPressTriggered = true;
-    openAdmin();
-  }, 2500);
-}
-
-function cancelPress() {
-  if (pressTimer) {
-    clearTimeout(pressTimer);
-    pressTimer = null;
-  }
-}
+let tapCount = 0;
+let tapTimer = null;
 
 if (logo) {
-  logo.addEventListener("mousedown", startPress);
-  logo.addEventListener("mouseup", cancelPress);
-  logo.addEventListener("mouseleave", cancelPress);
+  logo.addEventListener("click", function(e) {
+    e.preventDefault();
 
-  logo.addEventListener("touchstart", startPress, { passive: true });
-  logo.addEventListener("touchend", cancelPress);
-  logo.addEventListener("touchcancel", cancelPress);
+    tapCount++;
+
+    if (tapTimer) {
+      clearTimeout(tapTimer);
+    }
+
+    tapTimer = setTimeout(() => {
+      tapCount = 0;
+    }, 2500);
+
+    if (tapCount >= 5) {
+      tapCount = 0;
+      clearTimeout(tapTimer);
+      openAdmin();
+    }
+  });
 
   logo.addEventListener("contextmenu", function(e) {
     e.preventDefault();
-  });
-
-  logo.addEventListener("click", function(e) {
-    if (longPressTriggered) {
-      e.preventDefault();
-      longPressTriggered = false;
-    }
   });
 }
 </script>
 
 <script src="app.js?v=2"></script>
+
+
 </body>
 </html>
