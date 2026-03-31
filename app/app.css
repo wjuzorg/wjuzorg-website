@@ -678,4 +678,20 @@ body.form-page .container{
     max-width:3.5rem !important;
     flex:0 0 3.5rem !important;
   }
+  /* HOOG CONTRAST - alle knoppen gelijk */
+
+html.high-contrast a,
+html.high-contrast button {
+  background: white !important;
+  color: black !important;
+  border: 3px solid black !important;
+}
+
+/* hover blijft zichtbaar */
+
+html.high-contrast a:hover,
+html.high-contrast button:hover {
+  background: #f2f2f2 !important;
+  color: black !important;
+
 }
