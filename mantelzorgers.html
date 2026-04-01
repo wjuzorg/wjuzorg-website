@@ -1,630 +1,721 @@
 <!doctype html>
 <html lang="nl">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K7V4HMW2NH"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-K7V4HMW2NH');
-</script>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>WJU Zorg - Mantelzorgers</title>
-
-<style>
-
-:root{
---wju-red:#c40000;
---text:#222;
---bg:#f3f3f3;
---card:#f7f7f7;
---border:#d8d8d8;
-}
-
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:var(--bg);
-color:var(--text);
-}
-
-/* HEADER */
-
-.topbar{
-background:var(--wju-red);
-color:white;
-padding:32px 36px 24px;
-}
-
-.topbar-inner{
-max-width:1200px;
-margin:auto;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.branding h1{
-margin:0;
-font-size:58px;
-font-weight:800;
-}
-
-.branding p{
-margin:8px 0 0;
-font-size:22px;
-font-weight:700;
-}
-
-.logo-box{
-background:white;
-padding:10px 14px;
-border-radius:14px;
-}
-
-.logo-box img{
-max-width:110px;
-}
-
-/* TOEGANKELIJKHEID */
-
-.accessibility-bar{
-background:var(--wju-red);
-padding:0 36px 26px;
-}
-
-.accessibility-inner{
-max-width:1200px;
-margin:auto;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.access-btn{
-background:transparent;
-color:white;
-border:1px solid rgba(255,255,255,0.5);
-border-radius:999px;
-padding:12px 18px;
-font-size:16px;
-font-weight:700;
-cursor:pointer;
-}
-
-/* NAVIGATIE */
-
-.top-nav{
-max-width:1040px;
-margin:22px auto;
-padding:0 20px;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
-}
-
-.top-nav a{
-display:block;
-text-align:center;
-text-decoration:none;
-color:#222;
-background:white;
-border:2px solid #444;
-border-radius:999px;
-padding:16px 10px;
-font-size:18px;
-font-weight:700;
-}
-
-.top-nav a.active{
-background:#333;
-color:white;
-border-color:#333;
-}
-
-/* PAGINA */
-
-.container{
-max-width:1040px;
-margin:auto;
-padding:0 20px 60px;
-}
-
-.card{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:24px;
-padding:28px 24px;
-margin-bottom:22px;
-}
-
-.card p{
-font-size:20px;
-line-height:1.7;
-}
-
-.section-title{
-font-size:32px;
-font-weight:800;
-margin-bottom:16px;
-}
-
-/* ACCORDION */
-
-.accordion{
-display:grid;
-gap:12px;
-}
-
-.accordion-button{
-width:100%;
-text-align:left;
-background:var(--wju-red);
-color:white;
-border:none;
-padding:20px;
-font-size:22px;
-font-weight:800;
-border-radius:18px;
-cursor:pointer;
-display:flex;
-justify-content:space-between;
-}
-
-.accordion-content{
-display:none;
-background:white;
-border:1px solid var(--border);
-border-top:none;
-padding:20px;
-border-radius:0 0 18px 18px;
-}
-
-.accordion-item.open .accordion-content{
-display:block;
-}
-
-/* FORMULIER */
-
-form{
-display:grid;
-gap:16px;
-}
-
-label{
-font-weight:700;
-}
-
-input,textarea{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #ccc;
-font-size:16px;
-}
-
-textarea{
-min-height:100px;
-}
-
-.submit-btn{
-background:var(--wju-red);
-color:white;
-border:none;
-border-radius:16px;
-padding:16px;
-font-size:20px;
-font-weight:800;
-cursor:pointer;
-}
-
-/* CONTRAST */
-
-.high-contrast{
-background:black !important;
-color:white !important;
-}
-
-.high-contrast .card{
-background:#111 !important;
-color:white !important;
-border-color:white;
-}
-
-@media (max-width: 900px){
-  .topbar{
-    padding:24px 18px 18px;
-  }
-
- .topbar-inner{
-  flex-direction:row;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-}
-
-  .branding h1{
-    font-size:42px;
-    line-height:1.1;
-  }
-
-  .branding p{
-    font-size:18px;
-  }
-
-  .logo-box{
-    padding:8px 10px;
-  }
-
-  .logo-box img{
-    max-width:100px;
-  }
-
-  .accessibility-bar{
-    padding:0 18px 18px;
-  }
-
-  .accessibility-inner{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-
-  .access-btn{
-    width:100%;
-    text-align:center;
-    padding:12px 10px;
-    font-size:15px;
-  }
-
-  .top-nav{
-    grid-template-columns:1fr;
-    gap:10px;
-    margin:18px auto;
-    padding:0 18px;
-  }
-
-  .top-nav a{
-    padding:14px 10px;
-    font-size:17px;
-  }
-
-  .container{
-    padding:0 18px 50px;
-  }
-
-  .card{
-    padding:22px 18px;
-    border-radius:20px;
-    margin-bottom:20px;
-  }
-
-  .card p{
-    font-size:18px;
-    line-height:1.7;
-  }
-
-  .section-title{
-    font-size:28px;
-    line-height:1.2;
-    margin-bottom:16px;
-  }
-
-  .accordion-button{
-    font-size:19px;
-    line-height:1.3;
-    padding:16px;
-    align-items:flex-start;
-  }
-
-  .accordion-content{
-    padding:16px;
-  }
-
-  .accordion-content p{
-    font-size:17px;
-    line-height:1.6;
-  }
-
-  label{
-    font-size:17px;
-  }
-
-  input,
-  textarea{
-    font-size:16px;
-    padding:13px;
-  }
-
-  .submit-btn,
-  .home-btn{
-    width:100%;
-    text-align:center;
-    font-size:19px;
-    padding:15px;
-  }
-
-  .example-title{
-    font-size:21px;
-    line-height:1.3;
-  }
-}
-@media (max-width: 480px){
-  .branding h1{
-    font-size:36px;
-  }
-
-  .branding p{
-    font-size:16px;
-  }
-
-  .accessibility-inner{
-    grid-template-columns:1fr;
-  }
-
-  .access-btn{
-    font-size:14px;
-  }
-
-  .top-nav a{
-    font-size:16px;
-  }
-
-  .section-title{
-    font-size:25px;
-  }
-
-  .card p,
-  .accordion-content p{
-    font-size:17px;
-  }
-
-  .accordion-button{
-    font-size:18px;
-  }
-
-  .logo-box img{
-    max-width:120px;
-  }
-}
-.call-wrap{
-  max-width:1040px;
-  margin:12px auto 0 auto;
-  padding:0 20px;
-}
-.call-nav{
-  display:block;
-  width:100%;
-  padding:16px 10px;
-  border-radius:999px;
-  border:2px solid #444;
-  background:#fff;
-  color:#222;
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-  text-decoration:none;
-  box-sizing:border-box;
-}
-
-.call-nav:hover{
-background:#f3f3f3;
-}
-</style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K7V4HMW2NH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K7V4HMW2NH');
+  </script>
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>WJU Zorg - Mantelzorgers</title>
+  <meta name="description" content="WJU Zorg ondersteunt mantelzorgers met praktische hulp aan huis, vervoer, boodschappen, klusjes en gezelschap in Utrecht."/>
+
+  <style>
+    :root{
+      --wju-red:#c40000;
+      --text:#222;
+      --bg:#f3f3f3;
+      --card:#f7f7f7;
+      --border:#d8d8d8;
+      --dark:#333;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding-bottom:130px;
+    }
+
+    /* HEADER */
+    .topbar{
+      background:var(--wju-red);
+      color:white;
+      padding:32px 36px 24px;
+    }
+
+    .topbar-inner{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+
+    .branding h1{
+      margin:0;
+      font-size:58px;
+      font-weight:800;
+    }
+
+    .branding p{
+      margin:8px 0 0;
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .logo-box{
+      background:white;
+      padding:10px 14px;
+      border-radius:14px;
+      flex-shrink:0;
+    }
+
+    .logo-box img{
+      max-width:180px;
+      height:auto;
+      display:block;
+    }
+
+    /* TOEGANKELIJKHEID */
+    .accessibility-bar{
+      background:var(--wju-red);
+      padding:0 36px 26px;
+    }
+
+    .accessibility-inner{
+      max-width:1200px;
+      margin:auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .access-btn{
+      background:transparent;
+      color:white;
+      border:1px solid rgba(255,255,255,0.5);
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    /* PAGINA */
+    .container{
+      max-width:1040px;
+      margin:auto;
+      padding:24px 20px 40px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:28px 24px;
+      margin-bottom:22px;
+    }
+
+    .card p{
+      font-size:20px;
+      line-height:1.8;
+      margin:0 0 18px;
+    }
+
+    .section-title{
+      font-size:32px;
+      font-weight:800;
+      margin:0 0 16px;
+    }
+
+    /* ACCORDION */
+    .accordion{
+      display:grid;
+      gap:12px;
+    }
+
+    .accordion-button{
+      width:100%;
+      text-align:left;
+      background:var(--wju-red);
+      color:white;
+      border:none;
+      padding:20px;
+      font-size:22px;
+      font-weight:800;
+      border-radius:18px;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+    }
+
+    .accordion-content{
+      display:none;
+      background:white;
+      border:1px solid var(--border);
+      border-top:none;
+      padding:20px;
+      border-radius:0 0 18px 18px;
+    }
+
+    .accordion-content p{
+      font-size:19px;
+      line-height:1.7;
+      margin:0 0 14px;
+    }
+
+    .accordion-item.open .accordion-content{
+      display:block;
+    }
+
+    /* APP */
+    .app-card{
+      background:linear-gradient(180deg, #fff 0%, #f7f7f7 100%);
+      border:3px solid var(--wju-red);
+      box-shadow:0 10px 30px rgba(196,0,0,0.08);
+    }
+
+    .app-title{
+      font-size:34px;
+      font-weight:900;
+      margin:0 0 18px;
+      color:var(--wju-red);
+    }
+
+    .app-subtitle{
+      font-size:22px;
+      font-weight:700;
+      margin:0 0 16px;
+    }
+
+    .app-steps{
+      list-style:none;
+      margin:0 0 18px;
+      padding:0;
+    }
+
+    .app-steps li{
+      font-size:21px;
+      line-height:1.8;
+      margin-bottom:8px;
+    }
+
+    .qr-wrap{
+      text-align:center;
+      margin-top:20px;
+      padding-top:12px;
+    }
+
+    .qr-wrap img{
+      width:100%;
+      max-width:280px;
+      height:auto;
+      background:white;
+      padding:14px;
+      border-radius:20px;
+      border:1px solid var(--border);
+      display:block;
+      margin:0 auto 18px;
+    }
+
+    .qr-helper{
+      font-size:19px;
+      line-height:1.7;
+      margin:0 0 12px;
+    }
+
+    .phone-box{
+      display:inline-block;
+      background:white;
+      border:2px solid #444;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:22px;
+      font-weight:800;
+      text-decoration:none;
+      color:#222;
+      margin-top:8px;
+    }
+
+    footer{
+      text-align:center;
+      margin:10px 0 0;
+      font-size:16px;
+      color:#555;
+    }
+
+    footer a{
+      color:#555;
+    }
+
+    /* ONDERBALK */
+    .bottom-nav{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#2f2f2f;
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+      box-shadow:0 -4px 14px rgba(0,0,0,0.18);
+      z-index:9999;
+    }
+
+    .bottom-nav-grid{
+      max-width:1040px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .bottom-nav a{
+      display:block;
+      text-align:center;
+      text-decoration:none;
+      background:#f3f3f3;
+      color:#222;
+      border:2px solid #555;
+      border-radius:14px;
+      padding:10px 8px;
+      font-size:15px;
+      font-weight:700;
+    }
+
+    .bottom-nav a.active{
+      background:#333;
+      color:white;
+      border-color:#333;
+    }
+
+    .bottom-nav a.call{
+      background:white;
+      border-color:var(--wju-red);
+      color:var(--wju-red);
+    }
+
+    /* CONTRAST */
+    .high-contrast{
+      background:black !important;
+      color:white !important;
+    }
+
+    .high-contrast .card{
+      background:#111 !important;
+      color:white !important;
+      border-color:white;
+    }
+
+    .high-contrast .accordion-content{
+      background:#111 !important;
+      color:white !important;
+      border-color:white !important;
+    }
+
+    .high-contrast .bottom-nav{
+      background:#000 !important;
+    }
+
+    .high-contrast .bottom-nav a,
+    .high-contrast .phone-box{
+      background:#111 !important;
+      color:white !important;
+      border-color:white !important;
+    }
+
+    .high-contrast .app-card{
+      border-color:white !important;
+      box-shadow:none !important;
+    }
+
+    @media (max-width: 900px){
+      body{
+        padding-bottom:150px;
+      }
+
+      .topbar{
+        padding:24px 18px 18px;
+      }
+
+      .topbar-inner{
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+        gap:14px;
+      }
+
+      .branding h1{
+        font-size:42px;
+        line-height:1.1;
+      }
+
+      .branding p{
+        font-size:18px;
+      }
+
+      .logo-box{
+        padding:8px 10px;
+      }
+
+      .logo-box img{
+        max-width:100px;
+      }
+
+      .accessibility-bar{
+        padding:0 18px 18px;
+      }
+
+      .accessibility-inner{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      }
+
+      .access-btn{
+        width:100%;
+        text-align:center;
+        padding:12px 10px;
+        font-size:15px;
+      }
+
+      .container{
+        padding:18px 18px 30px;
+      }
+
+      .card{
+        padding:22px 18px;
+        border-radius:20px;
+        margin-bottom:20px;
+      }
+
+      .card p{
+        font-size:18px;
+        line-height:1.7;
+      }
+
+      .section-title{
+        font-size:28px;
+        line-height:1.2;
+        margin-bottom:16px;
+      }
+
+      .accordion-button{
+        font-size:19px;
+        line-height:1.3;
+        padding:16px;
+      }
+
+      .accordion-content{
+        padding:16px;
+      }
+
+      .accordion-content p{
+        font-size:17px;
+        line-height:1.6;
+      }
+
+      .app-title{
+        font-size:30px;
+      }
+
+      .app-subtitle{
+        font-size:20px;
+      }
+
+      .app-steps li{
+        font-size:18px;
+        line-height:1.7;
+      }
+
+      .qr-helper{
+        font-size:17px;
+      }
+
+      .phone-box{
+        display:block;
+        text-align:center;
+        font-size:20px;
+      }
+
+      .bottom-nav a{
+        font-size:16px;
+        padding:13px 8px;
+      }
+    }
+
+    @media (max-width: 480px){
+      .branding h1{
+        font-size:36px;
+      }
+
+      .branding p{
+        font-size:16px;
+      }
+
+      .accessibility-inner{
+        grid-template-columns:1fr;
+      }
+
+      .access-btn{
+        font-size:14px;
+      }
+
+      .section-title{
+        font-size:25px;
+      }
+
+      .card p,
+      .app-steps li{
+        font-size:17px;
+      }
+
+      .accordion-content p{
+        font-size:17px;
+      }
+
+      .accordion-button{
+        font-size:18px;
+      }
+
+      .logo-box img{
+        max-width:90px;
+      }
+
+      .qr-wrap img{
+        max-width:230px;
+      }
+
+      .bottom-nav a{
+        font-size:15px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header class="topbar">
-<div class="topbar-inner">
+  <div class="topbar-inner">
 
-<div class="branding">
-<h1>WJU Zorg</h1>
-<p>Persoonlijke ondersteuning aan huis</p>
-</div>
+    <div class="branding">
+      <h1>WJU Zorg</h1>
+      <p>Persoonlijke ondersteuning aan huis</p>
+    </div>
 
-<div class="logo-box">
-<img src="logo-wjuzorg.png" alt="Logo WJU Zorg"></div>
+    <div class="logo-box">
+      <img src="logo-wjuzorg.png" alt="Logo WJU Zorg">
+    </div>
 
-</div>
+  </div>
 </header>
 
 <section class="accessibility-bar">
-<div class="accessibility-inner">
-<button class="access-btn" onclick="voorlezenPagina()">Voorlezen</button>
-<button class="access-btn" onclick="toggleContrast()">Hoog contrast</button>
-<button class="access-btn" onclick="veranderLettergrootte(1)">A+</button>
-<button class="access-btn" onclick="veranderLettergrootte(-1)">A-</button>
-</div>
+  <div class="accessibility-inner">
+    <button class="access-btn" onclick="voorlezenPagina()">Voorlezen</button>
+    <button class="access-btn" onclick="toggleContrast()">Hoog contrast</button>
+    <button class="access-btn" onclick="veranderLettergrootte(1)">A+</button>
+    <button class="access-btn" onclick="veranderLettergrootte(-1)">A-</button>
+  </div>
 </section>
 
-<nav class="top-nav">
-<a href="index.html">Wie is WJU Zorg</a>
-<a href="mantelzorgers.html" class="active">Mantelzorgers</a>
-<a href="tarieven.html">Tarieven</a>
-</nav>
-<div class="call-wrap">
-  <a href="tel:0638287648" class="call-nav">📞 Bel voor overleg</a>
-</div>
 <main class="container">
 
-<section class="card">
-<h2 class="section-title">Mantelzorgers</h2>
+  <section class="card">
+    <h2 class="section-title">Mantelzorgers</h2>
 
-<p>
-Mantelzorger zijn doe je meestal niet even erbij. Vaak ben je ondertussen ook nog bezig met werk, je eigen gezin, afspraken en alles wat thuis ook gewoon doorgaat.
-</p>
+    <p>
+      Mantelzorger zijn doe je meestal niet even erbij. Vaak bent u ondertussen ook nog bezig met werk, uw eigen gezin, afspraken en alles wat thuis ook gewoon doorgaat.
+    </p>
 
-<p>
-Juist daardoor kunnen de kleine praktische dingen soms te veel worden. Niet omdat u het niet wilt doen, maar omdat het simpelweg veel is om alles zelf te blijven dragen.
-</p>
+    <p>
+      Juist daardoor kunnen de kleine praktische dingen soms te veel worden. Niet omdat u het niet wilt doen, maar omdat het simpelweg veel is om alles zelf te blijven dragen.
+    </p>
 
-<p>
-Soms geeft het al rust als er iemand is die even iets overneemt of met iemand meegaat. Zodat u weer wat <strong>ademruimte</strong> krijgt.
-</p>
-</section>
+    <p>
+      Soms geeft het al rust als er iemand is die even iets overneemt of met iemand meegaat. Zodat u weer wat <strong>ademruimte</strong> krijgt.
+    </p>
+  </section>
 
-<section class="card">
-<h2 class="section-title">Waar het vaak op vastloopt</h2>
+  <section class="card">
+    <h2 class="section-title">Waar het vaak op vastloopt</h2>
 
-<p>
-In de praktijk gaat het meestal niet om zware zorg, maar om de dingen eromheen. Juist die dingen kosten vaak veel tijd en energie.
-</p>
+    <p>
+      In de praktijk gaat het meestal niet om zware zorg, maar om de dingen eromheen. Juist die dingen kosten vaak veel tijd en energie.
+    </p>
 
-<p>
-Denk aan een afspraak in het ziekenhuis, boodschappen die gedaan moeten worden, een klein hulpmiddel dat nog bevestigd moet worden of even langsgaan omdat iemand anders de hele dag alleen is.
-</p>
+    <p>
+      Denk aan een afspraak in het ziekenhuis, boodschappen die gedaan moeten worden, een klein hulpmiddel dat nog bevestigd moet worden of even langsgaan omdat iemand anders de hele dag alleen is.
+    </p>
 
-<p>
-Voor mantelzorgers zijn dat vaak precies de momenten waarop u denkt: <strong>ik wil het wel doen, maar het wordt me gewoon te veel.</strong>
-</p>
-</section>
+    <p>
+      Voor mantelzorgers zijn dat vaak precies de momenten waarop u denkt: <strong>ik wil het wel doen, maar het wordt me gewoon te veel.</strong>
+    </p>
+  </section>
 
-<section class="card">
-<h2 class="section-title">Hoe WJU Zorg kan helpen</h2>
+  <section class="card">
+    <h2 class="section-title">Hoe WJU Zorg kan helpen</h2>
 
-<p>
-WJU Zorg biedt <strong>praktische ondersteuning aan huis</strong>. Geen medische zorg, maar hulp bij gewone dagelijkse dingen die voor mantelzorgers vaak veel druk kunnen geven.
-</p>
+    <p>
+      WJU Zorg biedt <strong>praktische ondersteuning aan huis</strong>. Geen medische zorg, maar hulp bij gewone dagelijkse dingen die voor mantelzorgers vaak veel druk kunnen geven.
+    </p>
 
-<p>
-Het doel is niet om mantelzorg over te nemen, maar om juist op de momenten dat het veel wordt <strong>rust en ruimte te geven</strong>.
-</p>
-</section>
+    <p>
+      Het doel is niet om mantelzorg over te nemen, maar om juist op de momenten dat het veel wordt <strong>rust en ruimte te geven</strong>.
+    </p>
+  </section>
 
-<section class="card">
-<h2 class="section-title">Wanneer kan WJU Zorg iets betekenen?</h2>
+  <section class="card">
+    <h2 class="section-title">Wanneer kan WJU Zorg iets betekenen?</h2>
 
-<div class="accordion">
+    <div class="accordion">
 
-<div class="accordion-item">
-<button class="accordion-button">
-<span>U kunt niet altijd mee naar een afspraak</span>
-<span>+</span>
-</button>
-<div class="accordion-content">
-<p>
-Soms heeft iemand wel een afspraak, maar lukt het u niet om zelf mee te gaan. Bijvoorbeeld door werk, kinderen, afstand of omdat alles gewoon tegelijk komt.
-</p>
-<p>
-WJU Zorg kan dan ondersteunen met ophalen, meerijden, eventueel meelopen naar binnen en daarna weer veilig thuisbrengen. Dat kan u net even lucht geven.
-</p>
-</div>
-</div>
+      <div class="accordion-item">
+        <button class="accordion-button" type="button">
+          <span>U kunt niet altijd mee naar een afspraak</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content">
+          <p>
+            Soms heeft iemand wel een afspraak, maar lukt het u niet om zelf mee te gaan. Bijvoorbeeld door werk, kinderen, afstand of omdat alles gewoon tegelijk komt.
+          </p>
+          <p>
+            WJU Zorg kan dan ondersteunen met ophalen, meerijden, eventueel meelopen naar binnen en daarna weer veilig thuisbrengen. Dat kan u net even lucht geven.
+          </p>
+        </div>
+      </div>
 
-<div class="accordion-item">
-<button class="accordion-button">
-<span>Boodschappen of kleine dingen stapelen zich op</span>
-<span>+</span>
-</button>
-<div class="accordion-content">
-<p>
-Soms zijn het juist de gewone dingen die blijven liggen: boodschappen doen, iets halen of even helpen met wat geregeld moet worden.
-</p>
-<p>
-WJU Zorg kan daarbij helpen, samen of uit handen nemen. De boodschappen worden daarna netjes tot in de keuken gebracht.
-</p>
-</div>
-</div>
+      <div class="accordion-item">
+        <button class="accordion-button" type="button">
+          <span>Boodschappen of kleine dingen stapelen zich op</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content">
+          <p>
+            Soms zijn het juist de gewone dingen die blijven liggen: boodschappen doen, iets halen of even helpen met wat geregeld moet worden.
+          </p>
+          <p>
+            WJU Zorg kan daarbij helpen, samen of uit handen nemen. De boodschappen worden daarna netjes tot in de keuken gebracht.
+          </p>
+        </div>
+      </div>
 
-<div class="accordion-item">
-<button class="accordion-button">
-<span>Een klein klusje blijft maar liggen</span>
-<span>+</span>
-</button>
-<div class="accordion-content">
-<p>
-Soms zit de druk juist in een klein praktisch ding dat al te lang blijft liggen. Bijvoorbeeld een hulpmiddel bevestigen, iets ophangen of iets veilig en netjes in orde maken.
-</p>
-<p>
-Dat lijkt misschien klein, maar het zijn vaak precies dit soort dingen die mantelzorgers ook nog ergens tussendoor moeten doen. Dan is het fijn als iemand dat even oppakt.
-</p>
-</div>
-</div>
+      <div class="accordion-item">
+        <button class="accordion-button" type="button">
+          <span>Een klein klusje blijft maar liggen</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content">
+          <p>
+            Soms zit de druk juist in een klein praktisch ding dat al te lang blijft liggen. Bijvoorbeeld een hulpmiddel bevestigen, iets ophangen of iets veilig en netjes in orde maken.
+          </p>
+          <p>
+            Dat lijkt misschien klein, maar het zijn vaak precies dit soort dingen die mantelzorgers ook nog ergens tussendoor moeten doen. Dan is het fijn als iemand dat even oppakt.
+          </p>
+        </div>
+      </div>
 
-<div class="accordion-item">
-<button class="accordion-button">
-<span>U wilt dat er even iemand langsgaat</span>
-<span>+</span>
-</button>
-<div class="accordion-content">
-<p>
-Soms is het gewoon prettig om te weten dat er even iemand langsgaat. Voor een praatje, een kop koffie, een wandeling of gewoon even aanwezigheid.
-</p>
-<p>
-Dat kan iemand goed doen, en het kan u als mantelzorger ook rust geven om te weten dat iemand er niet steeds alleen voor staat.
-</p>
-</div>
-</div>
+      <div class="accordion-item">
+        <button class="accordion-button" type="button">
+          <span>U wilt dat er even iemand langsgaat</span>
+          <span>+</span>
+        </button>
+        <div class="accordion-content">
+          <p>
+            Soms is het gewoon prettig om te weten dat er even iemand langskomt. Voor een praatje, een kop koffie, een wandeling of gewoon even aanwezigheid.
+          </p>
+          <p>
+            Dat kan iemand goed doen, en het kan u als mantelzorger ook rust geven om te weten dat iemand er niet steeds alleen voor staat.
+          </p>
+        </div>
+      </div>
 
-</div>
-</section>
+    </div>
+  </section>
 
-<section class="card">
-<h2 class="section-title">Een vertrouwd gezicht en rustig kennismaken</h2>
+  <section class="card">
+    <h2 class="section-title">Een vertrouwd gezicht en rustig contact</h2>
 
-<p>
-Bij WJU Zorg heeft u altijd te maken met <strong>één vast en vertrouwd gezicht</strong>.
-</p>
+    <p>
+      Bij WJU Zorg heeft u altijd te maken met <strong>één vast en vertrouwd gezicht</strong>.
+    </p>
 
-<p>
-Dat geeft duidelijkheid en rust. Voor degene die ondersteuning ontvangt, maar ook voor u als mantelzorger.
-</p>
+    <p>
+      Dat geeft duidelijkheid en rust. Voor degene die ondersteuning ontvangt, maar ook voor u als mantelzorger.
+    </p>
 
-<p>
-Tijdens een eerste telefoongesprek of kennismaking nemen we rustig de tijd om te bespreken waar het in de praktijk op vastloopt en wat verlichting kan geven.
-</p>
+    <p>
+      Tijdens een eerste telefonisch contact nemen we rustig de tijd om te bespreken waar het in de praktijk op vastloopt en wat verlichting kan geven.
+    </p>
+  </section>
 
-<p>
-Een <strong>vrijblijvende kennismaking</strong> is altijd mogelijk.
-</p>
-</section>
+  <section class="card app-card">
+    <h2 class="app-title">De WJU Zorg app is er</h2>
+    <p class="app-subtitle">Hulp aanvragen gaat heel eenvoudig.</p>
 
-<section class="card">
-<h2 class="section-title">Kennismaken voor mantelzorgers</h2>
+    <ul class="app-steps">
+      <li>1️⃣ Open de WJU Zorg app</li>
+      <li>2️⃣ Kies waar u hulp bij nodig heeft</li>
+      <li>3️⃣ <strong>Vul uw gegevens in zodat wij contact met u kunnen opnemen</strong></li>
+    </ul>
 
-<p>
-Wilt u als mantelzorger eens overleggen of WJU Zorg iets kan betekenen? Laat dan uw gegevens achter. Ik neem daarna persoonlijk contact met u op.
-</p>
+    <p>
+      Daarna nemen wij persoonlijk contact met u op om rustig te bespreken wat nodig is.
+    </p>
 
-<form id="mantelzorg-form">
+    <p>
+      De app is bewust <strong>eenvoudig en duidelijk gemaakt</strong>, zodat hulp aanvragen snel en zonder gedoe kan.
+    </p>
 
-<input type="hidden" name="formulier_type" value="mantelzorgers">
+    <div class="qr-wrap">
+      <img src="QRcodeappWJUZorg.jpg" alt="QR-code voor de WJU Zorg app">
+      <p class="qr-helper">
+        Scan de QR-code met de camera van uw telefoon. De app opent daarna vanzelf.
+      </p>
+      <p class="qr-helper">
+        Lukt dat digitaal niet goed? Dan kunt u natuurlijk ook gewoon bellen.
+      </p>
+    </div>
+  </section>
 
-<label>Naam</label>
-<input type="text" name="naam" required>
+  <section class="card">
+    <h2 class="section-title">Bel voor overleg</h2>
 
-<label>Telefoonnummer</label>
-<input type="tel" name="telefoon" required>
+    <p>
+      Twijfelt u of WJU Zorg iets kan betekenen?
+    </p>
 
-<label>Email</label>
-<input type="email" name="email">
+    <p>
+      Bel gerust. Samen kijken we rustig wat mogelijk is.
+    </p>
 
-<label>Adres</label>
-<input type="text" name="adres">
-
-<label>Waar loopt u tegenaan?</label>
-<textarea name="bericht"></textarea>
-
-<button class="submit-btn">Kennismaken</button>
-
-</form>
-</section>
+    <a class="phone-box" href="tel:0638287648">06 38 28 76 48</a>
+  </section>
 
 </main>
 
-<script>
+<footer>
+  <p><a href="privacy.html">Privacy</a></p>
+  <p>KVK: 42018479</p>
+</footer>
 
-let synth = window.speechSynthesis
+<nav class="bottom-nav">
+  <div class="bottom-nav-grid">
+    <a href="index.html">Wie is WJU Zorg</a>
+    <a href="mantelzorgers.html" class="active">Mantelzorgers</a>
+    <a href="tarieven.html">Tarieven</a>
+    <a href="tel:0638287648" class="call">📞 Bel voor overleg</a>
+  </div>
+</nav>
+
+<script>
+let synth = window.speechSynthesis;
 let huidigeLettergrootte = 100;
-document.body.style.zoom = "100%";
-localStorage.removeItem("fontSize");
+document.body.style.zoom = huidigeLettergrootte + "%";
 
 function veranderLettergrootte(richting){
-
   huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
 
   if(huidigeLettergrootte < 80){
@@ -636,60 +727,30 @@ function veranderLettergrootte(richting){
   }
 
   document.body.style.zoom = huidigeLettergrootte + "%";
-
+  localStorage.setItem("fontSize", huidigeLettergrootte);
 }
 
 function toggleContrast(){
-document.body.classList.toggle("high-contrast")
+  document.body.classList.toggle("high-contrast");
 }
 
 function voorlezenPagina(){
-if(synth.speaking){synth.cancel();return}
-let tekst=document.body.innerText
-let utter=new SpeechSynthesisUtterance(tekst)
-utter.lang="nl-NL"
-synth.speak(utter)
+  if(synth.speaking){
+    synth.cancel();
+    return;
+  }
+  let tekst = document.body.innerText;
+  let utter = new SpeechSynthesisUtterance(tekst);
+  utter.lang = "nl-NL";
+  synth.speak(utter);
 }
 
 document.querySelectorAll(".accordion-button").forEach(btn=>{
-btn.addEventListener("click",()=>{
-let item=btn.parentElement
-item.classList.toggle("open")
-})
-})
-const mantelzorgForm = document.getElementById("mantelzorg-form");
-
-if (mantelzorgForm) {
-  mantelzorgForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const naam = mantelzorgForm.querySelector('input[name="naam"]').value.trim();
-    const telefoon = mantelzorgForm.querySelector('input[name="telefoon"]').value.trim();
-
-    if (!naam || !telefoon) {
-      alert("Vul alstublieft uw naam en telefoonnummer in.");
-      return;
-    }
-
-    const formData = new FormData(mantelzorgForm);
-
-    try {
-      const response = await fetch("https://formspree.io/f/mnjgnlpd", {
-        method: "POST",
-        body: formData,
-        headers: { "Accept": "application/json" }
-      });
-
-      if (response.ok) {
-        window.location.href = "bedankt.html";
-      } else {
-        alert("Er ging iets mis met verzenden.");
-      }
-    } catch (error) {
-      alert("Er ging iets mis met verzenden.");
-    }
+  btn.addEventListener("click",()=>{
+    let item = btn.parentElement;
+    item.classList.toggle("open");
   });
-}
+});
 </script>
 
 </body>
