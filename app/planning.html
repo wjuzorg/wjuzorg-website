@@ -295,11 +295,18 @@
         } else {
           dayItems.forEach(item => {
             inner += `
-              <div class="item">
-                <strong>${formatTime(item.appointment_time)}</strong> — ${item.full_name || "Onbekend"}<br>
-                <span class="muted">${item.service || "Onbekend"}${getArea(item) ? " — " + getArea(item) : ""}</span>
-              </div>
-            `;
+  <div class="item">
+    <strong>${formatTime(item.appointment_time)}</strong> — ${item.full_name || "Onbekend"}<br>
+    <span class="muted">${item.service || "Onbekend"}${getArea(item) ? " — " + getArea(item) : ""}</span>
+
+    <div style="margin-top:10px;">
+      <a href="new-requests.html?id=${item.id}" 
+         style="display:inline-block; background:#666; color:white; text-decoration:none; padding:8px 12px; border-radius:8px; font-weight:bold; font-size:0.9rem;">
+         Aanpassen
+      </a>
+    </div>
+  </div>
+`;
           });
         }
 
