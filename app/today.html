@@ -225,6 +225,14 @@
 
       return "Tijd onbekend";
     }
+    
+    async function safeRun(fn, naam) {
+  try {
+    await fn();
+  } catch (err) {
+    console.error("Fout in " + naam + ":", err);
+  }
+}
 
     async function loadToday() {
       const listDiv = document.getElementById("appointmentsList");
@@ -478,10 +486,10 @@
     window.snoozeCallback = snoozeCallback;
     window.closeCallback = closeCallback;
 
-    loadToday();
-    loadWeekCount();
-    loadStats();
-    loadCallbackList();
+   safeRun(loadToday, "loadToday");
+safeRun(loadWeekCount, "loadWeekCount");
+safeRun(loadStats, "loadStats");
+safeRun(loadCallbackList, "loadCallbackList");
   </script>
 </body>
 </html>
