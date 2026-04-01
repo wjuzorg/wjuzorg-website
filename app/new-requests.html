@@ -169,7 +169,7 @@ async function loadRequests() {
     const dateValue = formatDateForInput(item.appointment_time);
     const timeValue = formatTimeForInput(item.appointment_time);
     const durationValue = item.duration_minutes || 60;
-    const noteValue = item.internal_notes || "";
+   
 
     card.innerHTML = `
       <div class="wijk-badge">${item.district || item.preferred_area || "Geen wijk"}</div>
@@ -197,9 +197,6 @@ async function loadRequests() {
           <option value="120" ${String(durationValue) === "120" ? "selected" : ""}>120 min</option>
         </select>
 
-        <div style="margin-top:10px;">
-          <input class="input" type="text" id="note-${item.id}" placeholder="Interne notitie" value="${noteValue}" style="width:80%;">
-        </div>
 
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
           <button class="btn btn-green" onclick="planRequest('${item.id}')">
@@ -218,7 +215,6 @@ async function planRequest(id) {
   const date = document.getElementById('date-' + id).value;
   const time = document.getElementById('time-' + id).value;
   const duration = document.getElementById('duration-' + id).value;
-  const note = document.getElementById('note-' + id).value;
 
   if (!date || !time) {
     alert("Vul datum en tijd (HH:MM) in.");
@@ -230,7 +226,6 @@ async function planRequest(id) {
     .update({
       appointment_time: date + "T" + time + ":00",
       duration_minutes: parseInt(duration, 10),
-      internal_notes: note || null,
       status: "ingepland"
     })
     .eq("id", id)
