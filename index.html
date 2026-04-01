@@ -13,7 +13,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>WJU Zorg - Praktische ondersteuning aan huis</title>
-  <meta name="description" content="WJU Zorg biedt praktische ondersteuning aan huis in Utrecht. Hulp bij vervoer, boodschappen, kleine klusjes, gezelschap en ondersteuning voor mantelzorgers, ouderen en kwetsbaren."/>
+  <meta name="description" content="WJU Zorg biedt praktische ondersteuning aan huis in Utrecht. Hulp bij vervoer, boodschappen, kleine klusjes, gezelschap en ondersteuning voor mantelzorgers, ouderen, kwetsbaren en mensen met chronische klachten."/>
 
   <style>
     :root{
@@ -22,6 +22,11 @@
       --bg:#f3f3f3;
       --card:#f7f7f7;
       --border:#d8d8d8;
+      --dark:#333;
+    }
+
+    *{
+      box-sizing:border-box;
     }
 
     body{
@@ -29,6 +34,7 @@
       font-family:Arial, Helvetica, sans-serif;
       background:var(--bg);
       color:var(--text);
+      padding-bottom:130px;
     }
 
     /* HEADER */
@@ -63,6 +69,7 @@
       background:white;
       padding:10px 14px;
       border-radius:14px;
+      flex-shrink:0;
     }
 
     .logo-box img{
@@ -96,66 +103,11 @@
       cursor:pointer;
     }
 
-    /* NAVIGATIE */
-    .top-nav{
-      max-width:1040px;
-      margin:22px auto;
-      padding:0 20px;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-
-    .top-nav a{
-      display:block;
-      text-align:center;
-      text-decoration:none;
-      color:#222;
-      background:white;
-      border:2px solid #444;
-      border-radius:999px;
-      padding:16px 10px;
-      font-size:18px;
-      font-weight:700;
-    }
-
-    .top-nav a.active{
-      background:#333;
-      color:white;
-      border-color:#333;
-    }
-
-    /* BELKNOP */
-    .call-wrap{
-      max-width:1040px;
-      margin:12px auto 0 auto;
-      padding:0 20px;
-    }
-
-    .call-nav{
-      display:block;
-      width:100%;
-      padding:16px 10px;
-      border-radius:999px;
-      border:2px solid #444;
-      background:#fff;
-      color:#222;
-      text-align:center;
-      font-size:18px;
-      font-weight:700;
-      text-decoration:none;
-      box-sizing:border-box;
-    }
-
-    .call-nav:hover{
-      background:#f3f3f3;
-    }
-
     /* PAGINA */
     .container{
       max-width:1040px;
       margin:auto;
-      padding:0 20px 60px;
+      padding:24px 20px 40px;
     }
 
     .card{
@@ -163,26 +115,26 @@
       border:1px solid var(--border);
       border-radius:24px;
       padding:32px 28px;
-      margin-bottom:28px;
+      margin-bottom:24px;
     }
 
     .card p{
       font-size:20px;
       line-height:1.8;
-      margin-bottom:18px;
+      margin:0 0 18px;
     }
 
     .section-title{
       font-size:32px;
       font-weight:800;
-      margin-bottom:20px;
+      margin:0 0 20px;
     }
 
     .intro-strong{
-      font-size:24px;
+      font-size:26px;
       font-weight:800;
       line-height:1.5;
-      margin-bottom:18px;
+      margin:0 0 18px;
     }
 
     .bullet-list{
@@ -196,9 +148,64 @@
       margin-bottom:8px;
     }
 
+    .app-card{
+      background:linear-gradient(180deg, #fff 0%, #f7f7f7 100%);
+      border:3px solid var(--wju-red);
+      box-shadow:0 10px 30px rgba(196,0,0,0.08);
+    }
+
+    .app-title{
+      font-size:34px;
+      font-weight:900;
+      margin:0 0 18px;
+      color:var(--wju-red);
+    }
+
+    .app-subtitle{
+      font-size:22px;
+      font-weight:700;
+      margin:0 0 16px;
+    }
+
+    .app-steps{
+      list-style:none;
+      margin:0 0 18px;
+      padding:0;
+    }
+
+    .app-steps li{
+      font-size:21px;
+      line-height:1.8;
+      margin-bottom:8px;
+    }
+
+    .qr-wrap{
+      text-align:center;
+      margin-top:20px;
+      padding-top:12px;
+    }
+
+    .qr-wrap img{
+      width:100%;
+      max-width:280px;
+      height:auto;
+      background:white;
+      padding:14px;
+      border-radius:20px;
+      border:1px solid var(--border);
+      display:block;
+      margin:0 auto 18px;
+    }
+
+    .qr-helper{
+      font-size:19px;
+      line-height:1.7;
+      margin:0 0 12px;
+    }
+
     .phone-box{
       display:inline-block;
-      background:#fff;
+      background:white;
       border:2px solid #444;
       border-radius:999px;
       padding:14px 22px;
@@ -209,49 +216,54 @@
       margin-top:8px;
     }
 
-    .app-steps{
-      margin:0;
-      padding-left:0;
-      list-style:none;
-    }
-
-    .app-steps li{
-      font-size:20px;
-      line-height:1.8;
-      margin-bottom:10px;
-    }
-
-    .qr-wrap{
-      text-align:center;
-      margin-top:20px;
-    }
-
-    .qr-wrap img{
-      max-width:260px;
-      width:100%;
-      height:auto;
-      border-radius:18px;
-      background:white;
-      padding:12px;
-      border:1px solid var(--border);
-    }
-
-    .qr-helper{
-      font-size:18px;
-      line-height:1.7;
-      margin-top:14px;
-    }
-
     footer{
       text-align:center;
-      margin-top:30px;
-      margin-bottom:30px;
+      margin:10px 0 0;
       font-size:16px;
       color:#555;
     }
 
     footer a{
       color:#555;
+    }
+
+    /* ONDERBALK */
+    .bottom-nav{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#2f2f2f;
+      padding:12px 14px calc(12px + env(safe-area-inset-bottom));
+      box-shadow:0 -6px 20px rgba(0,0,0,0.18);
+      z-index:9999;
+    }
+
+    .bottom-nav-grid{
+      max-width:1040px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .bottom-nav a{
+      display:block;
+      text-align:center;
+      text-decoration:none;
+      background:#f3f3f3;
+      color:#222;
+      border:2px solid #555;
+      border-radius:18px;
+      padding:14px 10px;
+      font-size:17px;
+      font-weight:700;
+    }
+
+    .bottom-nav a.call{
+      background:white;
+      border-color:var(--wju-red);
+      color:var(--wju-red);
     }
 
     /* CONTRAST */
@@ -266,15 +278,27 @@
       border-color:white;
     }
 
-    .high-contrast .top-nav a,
-    .high-contrast .call-nav,
+    .high-contrast .bottom-nav{
+      background:#000 !important;
+    }
+
+    .high-contrast .bottom-nav a,
     .high-contrast .phone-box{
       background:#111 !important;
       color:white !important;
       border-color:white !important;
     }
 
+    .high-contrast .app-card{
+      border-color:white !important;
+      box-shadow:none !important;
+    }
+
     @media (max-width: 900px){
+      body{
+        padding-bottom:150px;
+      }
+
       .topbar{
         padding:24px 18px 18px;
       }
@@ -320,30 +344,8 @@
         font-size:15px;
       }
 
-      .top-nav{
-        grid-template-columns:1fr;
-        gap:10px;
-        margin:18px auto;
-        padding:0 18px;
-      }
-
-      .top-nav a{
-        padding:14px 10px;
-        font-size:17px;
-      }
-
-      .call-wrap{
-        padding:0 18px;
-        margin:10px auto 0 auto;
-      }
-
-      .call-nav{
-        font-size:17px;
-        padding:14px 10px;
-      }
-
       .container{
-        padding:0 18px 50px;
+        padding:18px 18px 30px;
       }
 
       .card{
@@ -368,16 +370,37 @@
         line-height:1.4;
       }
 
-      .bullet-list li,
+      .bullet-list li{
+        font-size:18px;
+        line-height:1.7;
+      }
+
+      .app-title{
+        font-size:30px;
+      }
+
+      .app-subtitle{
+        font-size:20px;
+      }
+
       .app-steps li{
         font-size:18px;
         line-height:1.7;
+      }
+
+      .qr-helper{
+        font-size:17px;
       }
 
       .phone-box{
         display:block;
         text-align:center;
         font-size:20px;
+      }
+
+      .bottom-nav a{
+        font-size:16px;
+        padding:13px 8px;
       }
     }
 
@@ -398,10 +421,6 @@
         font-size:14px;
       }
 
-      .top-nav a{
-        font-size:16px;
-      }
-
       .section-title{
         font-size:25px;
       }
@@ -413,11 +432,15 @@
       }
 
       .logo-box img{
-        max-width:120px;
+        max-width:90px;
       }
 
       .qr-wrap img{
-        max-width:220px;
+        max-width:230px;
+      }
+
+      .bottom-nav a{
+        font-size:15px;
       }
     }
   </style>
@@ -433,7 +456,7 @@
     </div>
 
     <div class="logo-box">
-      <img src="logo-wjuzorg.png" alt="Logo WJU Zorg">
+      <img src="QRcodeappWJUZorg.jpg" alt="Logo WJU Zorg">
     </div>
   </div>
 </header>
@@ -447,16 +470,6 @@
   </div>
 </section>
 
-<nav class="top-nav">
-  <a href="index.html" class="active">Wie is WJU Zorg</a>
-  <a href="mantelzorgers.html">Mantelzorgers</a>
-  <a href="tarieven.html">Tarieven</a>
-</nav>
-
-<div class="call-wrap">
-  <a href="tel:0638287648" class="call-nav">📞 Bel voor overleg</a>
-</div>
-
 <main class="container">
 
   <section class="card">
@@ -467,27 +480,7 @@
     </p>
 
     <p>
-      Veel mensen redden zich zelfstandig, maar soms is er net even <strong>extra hulp nodig</strong>.
-    </p>
-
-    <p>
-      <strong>Daarom bestaat WJU Zorg.</strong>
-    </p>
-
-    <p>
-      Praktische ondersteuning aan huis, een vertrouwd gezicht en rustig contact wanneer dat nodig is.
-    </p>
-  </section>
-
-  <section class="card">
-    <h2 class="section-title">Waarom WJU Zorg bestaat</h2>
-
-    <p>
-      Wij zagen dat steeds meer mensen er alleen voor staan.
-    </p>
-
-    <p>
-      Ouderen die zelfstandig wonen. Mantelzorgers die alles proberen te regelen. Mensen die door ziekte of vermoeidheid minder kunnen dan vroeger.
+      Wij zagen dat steeds meer mensen er alleen voor staan. Ouderen die zelfstandig wonen. Mantelzorgers die alles proberen te regelen. Mensen die door ziekte of vermoeidheid minder kunnen dan vroeger.
     </p>
 
     <p>
@@ -495,15 +488,15 @@
     </p>
 
     <p>
-      <strong>We voelden dat daar iets moest gebeuren.</strong>
-    </p>
-
-    <p>
-      Daarom <strong>beginnen</strong> wij WJU Zorg.
+      <strong>Daarom bestaat WJU Zorg.</strong>
     </p>
 
     <p>
       Niet als grote zorgorganisatie, maar als iemand die aanbelt, luistert en helpt waar dat nodig is.
+    </p>
+
+    <p>
+      Praktische ondersteuning aan huis, een vertrouwd gezicht en rustig contact wanneer dat nodig is.
     </p>
   </section>
 
@@ -541,12 +534,9 @@
     </p>
   </section>
 
-  <section class="card">
-    <h2 class="section-title">Hulp aanvragen via de WJU Zorg app</h2>
-
-    <p>
-      Hulp aanvragen gaat eenvoudig.
-    </p>
+  <section class="card app-card">
+    <h2 class="app-title">De WJU Zorg app is er</h2>
+    <p class="app-subtitle">Hulp aanvragen gaat heel eenvoudig.</p>
 
     <ul class="app-steps">
       <li>1️⃣ Open de WJU Zorg app</li>
@@ -563,7 +553,7 @@
     </p>
 
     <div class="qr-wrap">
-      <img src="qr-wjuzorg-app.png" alt="QR-code voor de WJU Zorg app">
+      <img src="QRcodeappWJUZorg.jpg" alt="QR-code voor de WJU Zorg app">
       <p class="qr-helper">
         Scan de QR-code met de camera van uw telefoon. De app opent daarna vanzelf.
       </p>
@@ -594,40 +584,49 @@
   <p>KVK: 42018479</p>
 </footer>
 
+<nav class="bottom-nav">
+  <div class="bottom-nav-grid">
+    <a href="index.html">Wie is WJU Zorg</a>
+    <a href="mantelzorgers.html">Mantelzorgers</a>
+    <a href="tarieven.html">Tarieven</a>
+    <a href="tel:0638287648" class="call">📞 Bel voor overleg</a>
+  </div>
+</nav>
+
 <script>
-let synth = window.speechSynthesis
-let huidigeLettergrootte = 100;
-document.body.style.zoom = huidigeLettergrootte + "%";
-
-function veranderLettergrootte(richting){
-  huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
-
-  if(huidigeLettergrootte < 80){
-    huidigeLettergrootte = 80;
-  }
-
-  if(huidigeLettergrootte > 160){
-    huidigeLettergrootte = 160;
-  }
-
+  let synth = window.speechSynthesis;
+  let huidigeLettergrootte = 100;
   document.body.style.zoom = huidigeLettergrootte + "%";
-  localStorage.setItem("fontSize", huidigeLettergrootte);
-}
 
-function toggleContrast(){
-  document.body.classList.toggle("high-contrast")
-}
+  function veranderLettergrootte(richting){
+    huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
 
-function voorlezenPagina(){
-  if(synth.speaking){
-    synth.cancel()
-    return
+    if(huidigeLettergrootte < 80){
+      huidigeLettergrootte = 80;
+    }
+
+    if(huidigeLettergrootte > 160){
+      huidigeLettergrootte = 160;
+    }
+
+    document.body.style.zoom = huidigeLettergrootte + "%";
+    localStorage.setItem("fontSize", huidigeLettergrootte);
   }
-  let tekst = document.body.innerText
-  let utter = new SpeechSynthesisUtterance(tekst)
-  utter.lang = "nl-NL"
-  synth.speak(utter)
-}
+
+  function toggleContrast(){
+    document.body.classList.toggle("high-contrast");
+  }
+
+  function voorlezenPagina(){
+    if(synth.speaking){
+      synth.cancel();
+      return;
+    }
+    let tekst = document.body.innerText;
+    let utter = new SpeechSynthesisUtterance(tekst);
+    utter.lang = "nl-NL";
+    synth.speak(utter);
+  }
 </script>
 
 </body>
