@@ -1,9 +1,13 @@
 <!doctype html>
 <html lang="nl">
 <head>
+
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
 <title>WJU Zorg - Privacy</title>
+
+<meta name="description" content="Privacyverklaring van WJU Zorg. Hier leest u hoe wij omgaan met persoonsgegevens en contactgegevens."/>
 
 <style>
 
@@ -15,11 +19,16 @@
 --border:#d8d8d8;
 }
 
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:Arial, Helvetica, sans-serif;
 background:var(--bg);
 color:var(--text);
+padding-bottom:130px;
 }
 
 /* HEADER */
@@ -40,13 +49,13 @@ align-items:center;
 
 .branding h1{
 margin:0;
-font-size:58px;
+font-size:52px;
 font-weight:800;
 }
 
 .branding p{
 margin:8px 0 0;
-font-size:22px;
+font-size:20px;
 font-weight:700;
 }
 
@@ -60,44 +69,52 @@ border-radius:14px;
 max-width:160px;
 }
 
-/* NAVIGATIE */
+/* TOEGANKELIJKHEID */
 
-.top-nav{
-max-width:1040px;
-margin:22px auto;
-padding:0 20px;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:12px;
+.accessibility-bar{
+background:var(--wju-red);
+padding:0 36px 26px;
 }
 
-.top-nav a{
-display:block;
-text-align:center;
-text-decoration:none;
-color:#222;
-background:white;
-border:2px solid #444;
+.accessibility-inner{
+max-width:1200px;
+margin:auto;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.access-btn{
+background:transparent;
+color:white;
+border:1px solid rgba(255,255,255,0.5);
 border-radius:999px;
-padding:16px 10px;
-font-size:18px;
+padding:12px 18px;
+font-size:16px;
 font-weight:700;
+cursor:pointer;
 }
 
-/* PAGINA */
+/* CONTENT */
 
 .container{
-max-width:1040px;
+max-width:1000px;
 margin:auto;
-padding:0 20px 60px;
+padding:24px 20px 40px;
 }
 
 .card{
 background:var(--card);
 border:1px solid var(--border);
 border-radius:24px;
-padding:32px 28px;
-margin-bottom:28px;
+padding:28px 24px;
+margin-bottom:22px;
+}
+
+.section-title{
+font-size:30px;
+font-weight:800;
+margin-bottom:16px;
 }
 
 .card p{
@@ -106,10 +123,58 @@ line-height:1.8;
 margin-bottom:18px;
 }
 
-.section-title{
-font-size:32px;
-font-weight:800;
-margin-bottom:20px;
+/* FOOTER */
+
+footer{
+text-align:center;
+margin:10px 0;
+font-size:16px;
+color:#555;
+}
+
+/* ONDERBALK */
+
+.bottom-nav{
+position:fixed;
+left:0;
+right:0;
+bottom:0;
+background:#2f2f2f;
+padding:8px 10px;
+z-index:9999;
+}
+
+.bottom-nav-grid{
+max-width:1040px;
+margin:auto;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.bottom-nav a{
+display:block;
+text-align:center;
+text-decoration:none;
+background:#f3f3f3;
+color:#222;
+border:2px solid #555;
+border-radius:14px;
+padding:10px 8px;
+font-size:15px;
+font-weight:700;
+}
+
+.bottom-nav a.active{
+background:#333;
+color:white;
+border-color:#333;
+}
+
+.bottom-nav a.call{
+background:white;
+border-color:var(--wju-red);
+color:var(--wju-red);
 }
 
 </style>
@@ -132,110 +197,204 @@ margin-bottom:20px;
 </div>
 </header>
 
-<nav class="top-nav">
-<a href="index.html">Wie is WJU Zorg</a>
-<a href="mantelzorgers.html">Mantelzorgers</a>
-<a href="tarieven.html">Tarieven</a>
-</nav>
+<section class="accessibility-bar">
+<div class="accessibility-inner">
+
+<button class="access-btn" onclick="voorlezenPagina()">Voorlezen</button>
+<button class="access-btn" onclick="toggleContrast()">Hoog contrast</button>
+<button class="access-btn" onclick="veranderLettergrootte(1)">A+</button>
+<button class="access-btn" onclick="veranderLettergrootte(-1)">A-</button>
+
+</div>
+</section>
 
 <main class="container">
 
 <section class="card">
 
-<h2 class="section-title">Privacyverklaring</h2>
+<h2 class="section-title">Privacy</h2>
 
 <p>
-WJU Zorg vindt het belangrijk dat uw persoonsgegevens zorgvuldig worden behandeld.
+WJU Zorg gaat zorgvuldig om met persoonlijke gegevens. Wanneer u contact met ons opneemt of ondersteuning ontvangt, worden alleen de gegevens gebruikt die nodig zijn om u goed te kunnen helpen.
 </p>
 
 <p>
-Via deze website kunt u uw gegevens achterlaten wanneer u interesse heeft in een kennismaking of wanneer u een vraag heeft.
+WJU Zorg verzamelt en gebruikt alleen informatie die nodig is voor contact, planning van afspraken en administratieve doeleinden zoals facturatie.
 </p>
 
 </section>
-
 
 <section class="card">
 
-<h2 class="section-title">Welke gegevens verzamelen wij?</h2>
+<h2 class="section-title">Welke gegevens kunnen worden gebruikt</h2>
 
 <p>
-Wanneer u het contactformulier invult op deze website kan WJU Zorg de volgende gegevens ontvangen:
+Wanneer u contact opneemt met WJU Zorg of ondersteuning ontvangt, kunnen de volgende gegevens worden verwerkt:
 </p>
 
 <p>
-Naam<br>
-Telefoonnummer<br>
-E-mailadres<br>
-Adres<br>
-Een korte omschrijving van uw vraag
+• Naam<br>
+• Telefoonnummer<br>
+• Adres (indien nodig voor ondersteuning of vervoer)<br>
+• Eventuele afspraakinformatie<br>
+</p>
+
+<p>
+Deze gegevens worden alleen gebruikt om ondersteuning te kunnen bieden en contact te onderhouden.
 </p>
 
 </section>
-
 
 <section class="card">
 
-<h2 class="section-title">Waarvoor gebruiken wij deze gegevens?</h2>
+<h2 class="section-title">Contact via telefoon of app</h2>
 
 <p>
-WJU Zorg gebruikt deze gegevens uitsluitend om:
+Contact met WJU Zorg kan plaatsvinden via telefoon, e-mail of via de WJU Zorg app. Wanneer u via de app een hulpvraag indient, worden de ingevulde gegevens alleen gebruikt om contact met u op te nemen en de hulpvraag te bespreken.
 </p>
 
 <p>
-Contact met u op te nemen<br>
-Een kennismakingsgesprek te plannen<br>
-Uw vraag te beantwoorden
-</p>
-
-<p>
-Uw gegevens worden niet verkocht of gedeeld met andere partijen.
+De gegevens worden niet gedeeld met derden en worden uitsluitend gebruikt binnen de dienstverlening van WJU Zorg.
 </p>
 
 </section>
-
 
 <section class="card">
 
 <h2 class="section-title">Bewaren van gegevens</h2>
 
 <p>
-Uw gegevens worden alleen bewaard zolang dat nodig is om contact met u te onderhouden of een afspraak te maken.
+Persoonsgegevens worden niet langer bewaard dan nodig is voor de uitvoering van de ondersteuning en de bijbehorende administratie.
+</p>
+
+<p>
+Factuurgegevens worden bewaard zolang dat wettelijk verplicht is voor de administratie.
 </p>
 
 </section>
 
-
 <section class="card">
 
-<h2 class="section-title">Beveiliging</h2>
+<h2 class="section-title">Vragen over privacy</h2>
 
 <p>
-WJU Zorg gaat zorgvuldig om met persoonsgegevens en neemt passende maatregelen om deze gegevens te beschermen.
-</p>
-
-</section>
-
-
-<section class="card">
-
-<h2 class="section-title">Contact</h2>
-
-<p>
-Heeft u vragen over uw persoonsgegevens of wilt u dat uw gegevens worden verwijderd?
+Heeft u vragen over privacy of over de gegevens die door WJU Zorg worden gebruikt? Dan kunt u altijd contact opnemen.
 </p>
 
 <p>
-Neem dan contact op via:
-</p>
-
-<p>
-<strong>wjuzorg@gmail.com</strong>
+WJU Zorg zal altijd zorgvuldig en respectvol omgaan met persoonlijke informatie.
 </p>
 
 </section>
 
 </main>
+
+<footer>
+
+<p>KVK: 42018479</p>
+
+</footer>
+
+<nav class="bottom-nav">
+<div class="bottom-nav-grid">
+
+<a href="index.html">Wie is WJU Zorg</a>
+<a href="mantelzorgers.html">Mantelzorgers</a>
+<a href="tarieven.html">Tarieven</a>
+<a href="tel:0638287648" class="call">📞 Bel voor overleg</a>
+
+</div>
+</nav>
+
+<script>
+
+let synth = window.speechSynthesis;
+let huidigeLettergrootte = 100;
+
+function veranderLettergrootte(richting){
+
+huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
+
+if(huidigeLettergrootte < 80){
+huidigeLettergrootte = 80;
+}
+
+if(huidigeLettergrootte > 160){
+huidigeLettergrootte = 160;
+}
+
+document.body.style.zoom = huidigeLettergrootte + "%";
+
+}
+
+function toggleContrast(){
+
+document.body.classList.toggle("high-contrast");
+
+}
+
+function voorlezenPagina(){
+
+if(synth.speaking){
+synth.cancel();
+return;
+}
+
+let tekst = document.body.innerText;
+
+let utter = new SpeechSynthesisUtterance(tekst);
+
+utter.lang = "nl-NL";
+
+synth.speak(utter);
+
+}
+
+</script>
+
+<div id="cookie-banner" class="cookie-banner">
+  Deze website gebruikt alleen anonieme statistieken om de website te verbeteren.
+  <button onclick="acceptCookies()">OK</button>
+</div>
+
+<style>
+.cookie-banner{
+position:fixed;
+bottom:90px;
+left:50%;
+transform:translateX(-50%);
+background:#333;
+color:white;
+padding:10px 16px;
+border-radius:8px;
+font-size:14px;
+z-index:9999;
+display:none;
+}
+
+.cookie-banner button{
+margin-left:10px;
+background:#c40000;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+}
+</style>
+
+<script>
+
+function acceptCookies(){
+localStorage.setItem("cookieConsent","true");
+document.getElementById("cookie-banner").style.display="none";
+}
+
+if(!localStorage.getItem("cookieConsent")){
+document.getElementById("cookie-banner").style.display="block";
+}
+
+</script>
 
 </body>
 </html>

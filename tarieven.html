@@ -660,5 +660,49 @@ function voorlezenPagina(){
 }
 </script>
 
+<div id="cookie-banner" class="cookie-banner">
+  Deze website gebruikt alleen anonieme statistieken om de website te verbeteren.
+  <button onclick="acceptCookies()">OK</button>
+</div>
+
+<style>
+.cookie-banner{
+position:fixed;
+bottom:90px;
+left:50%;
+transform:translateX(-50%);
+background:#333;
+color:white;
+padding:10px 16px;
+border-radius:8px;
+font-size:14px;
+z-index:9999;
+display:none;
+}
+
+.cookie-banner button{
+margin-left:10px;
+background:#c40000;
+color:white;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+}
+</style>
+
+<script>
+
+function acceptCookies(){
+localStorage.setItem("cookieConsent","true");
+document.getElementById("cookie-banner").style.display="none";
+}
+
+if(!localStorage.getItem("cookieConsent")){
+document.getElementById("cookie-banner").style.display="block";
+}
+
+</script>
+
 </body>
 </html>
