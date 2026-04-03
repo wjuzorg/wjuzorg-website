@@ -470,6 +470,8 @@
   </div>
 </section>
 
+
+
 <main class="container">
 
   <section class="card">
@@ -658,6 +660,33 @@ padding:6px 10px;
 border-radius:6px;
 cursor:pointer;
 }
+
+@media (max-width: 900px){
+  .poll-section{
+    padding:0 18px;
+  }
+
+  .poll-box{
+    padding:18px 16px;
+  }
+
+  .poll-title{
+    font-size:24px;
+  }
+
+  .poll-question{
+    font-size:18px;
+  }
+
+  .poll-buttons{
+    grid-template-columns:1fr;
+  }
+
+  .poll-buttons button{
+    font-size:17px;
+    padding:13px 10px;
+  }
+}
 </style>
 
 <script>
@@ -670,6 +699,7 @@ document.getElementById("cookie-banner").style.display="none";
 if(!localStorage.getItem("cookieConsent")){
 document.getElementById("cookie-banner").style.display="block";
 }
+
 
 </script>
 
