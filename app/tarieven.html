@@ -1,194 +1,208 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tarieven - WJU Zorg</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tarieven - WJU Zorg</title>
+  <link rel="stylesheet" href="app.css?v=2"/>
+  <style>
+    .page-title{
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 18px;
+      color:#111;
+    }
 
-<link rel="stylesheet" href="app.css">
+    .section{
+      margin-bottom: 24px;
+    }
 
-<style>
+    .card{
+      background:white;
+      border:1px solid #eee;
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.04);
+      margin-bottom:18px;
+    }
 
-.container{
-max-width:800px;
-margin:auto;
-padding:20px;
-}
+    .section-title{
+      font-size:1.6rem;
+      font-weight:bold;
+      margin:0 0 14px 0;
+      color:#111;
+    }
 
-h1{
-margin-top:0;
-}
+    .section p{
+      line-height:1.7;
+      color:#333;
+    }
 
-.section{
-margin-bottom:35px;
-}
+    .tarief-list{
+      padding-left:22px;
+      margin:16px 0;
+    }
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-border:1px solid #eee;
-margin-top:15px;
-}
+    .tarief-list li{
+      margin-bottom:12px;
+      line-height:1.6;
+      color:#333;
+    }
 
-ul{
-padding-left:20px;
-}
+    .highlight-box{
+      background:#f7f7f7;
+      border-radius:12px;
+      padding:16px;
+      margin-top:16px;
+      line-height:1.6;
+    }
 
-li{
-margin-bottom:10px;
-}
+    .call-box{
+      background:#fff4f4;
+      border:1px solid #f0dada;
+      border-radius:14px;
+      padding:18px;
+      line-height:1.7;
+    }
 
-.highlight{
-background:#f6f6f6;
-padding:15px;
-border-radius:10px;
-margin-top:15px;
-}
+    .example-list{
+      padding-left:22px;
+      margin:12px 0 0 0;
+    }
 
-.callbox{
-background:#fff4f4;
-padding:18px;
-border-radius:12px;
-margin-top:20px;
-border:1px solid #f0dada;
-}
-
-</style>
-
+    .example-list li{
+      margin-bottom:14px;
+      line-height:1.6;
+    }
+  </style>
 </head>
 
-<body>
+<body class="form-page">
+  <div class="header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-title">WJU Zorg</div>
+        <div class="brand-sub">Persoonlijke ondersteuning aan huis</div>
+      </div>
+      <img class="logo" src="logo.png" alt="WJU Zorg logo">
+    </div>
 
-<div class="container">
+    <div class="header-actions" aria-label="Toegankelijkheid">
+      <button id="btnRead" class="btn-top" type="button">Voorlezen</button>
+      <button id="btnContrast" class="btn-top" type="button">Hoog contrast</button>
+      <button id="btnAPlus" class="btn-top" type="button">A+</button>
+      <button id="btnAMinus" class="btn-top" type="button">A-</button>
+    </div>
+  </div>
 
-<h1>Tarieven</h1>
+  <main class="container">
+    <div class="page-title">Tarieven</div>
 
-<div class="section">
+    <div class="trust" style="margin-top:0; margin-bottom:14px;">
+      <a href="index.html"><strong>Terug naar Home</strong></a>
+    </div>
 
-<h2>Helder, eerlijk en zonder verrassingen</h2>
+    <div class="section">
+      <h2 class="section-title">Helder, eerlijk en zonder verrassingen</h2>
+      <div class="card">
+        <p>
+          Bij WJU Zorg houden we van duidelijkheid. Geen ingewikkelde contracten of onverwachte rekeningen achteraf, maar één eerlijk tarief voor oprechte hulp.
+        </p>
+      </div>
+    </div>
 
-<p>
-Bij WJU Zorg houden we van duidelijkheid. Geen ingewikkelde contracten of onverwachte rekeningen achteraf, maar één eerlijk tarief voor oprechte hulp.
-</p>
+    <div class="section">
+      <h2 class="section-title">Een compleet uur ondersteuning voor €30,-</h2>
+      <div class="card">
+        <p>
+          Voor de praktische ondersteuning aan huis rekenen wij een tarief van <strong>€30,- per uur</strong>.
+        </p>
 
-</div>
+        <p>
+          Dit lijkt misschien alleen een bedrag voor de hulp, maar het is een <strong>all-in tarief</strong>. Dat betekent dat u zich geen zorgen hoeft te maken over de kleine lettertjes. In dit bedrag is namelijk alles al inbegrepen:
+        </p>
 
+        <ul class="tarief-list">
+          <li><strong>De hulp zelf:</strong> Een vol uur volledige aandacht en inzet.</li>
+          <li><strong>Vervoer & brandstof:</strong> Geen kilometervergoeding binnen de regio.</li>
+          <li><strong>Parkeerkosten:</strong> Staat u bij het ziekenhuis of de huisarts? Ik regel de parkeermeter.</li>
+          <li><strong>Een vertrouwd gezicht:</strong> Geen wisselende mensen, maar altijd Widjai.</li>
+        </ul>
 
-<div class="section">
+        <div class="highlight-box">
+          <strong>Goed om te weten:</strong><br>
+          De minimale afname is slechts 1 uur. Zo blijft het voor iedereen laagdrempelig om eens te proberen of WJU Zorg bij u past.
+        </div>
+      </div>
+    </div>
 
-<h2>Een compleet uur ondersteuning voor €30,-</h2>
+    <div class="section">
+      <h2 class="section-title">Vergoeding via PGB of gemeente</h2>
+      <div class="card">
+        <p>
+          Heeft u (of uw naaste) een <strong>Persoonsgebonden Budget (PGB)</strong>? Dan kan de ondersteuning van WJU Zorg vaak vanuit dit budget worden betaald.
+        </p>
 
-<div class="card">
+        <ul class="tarief-list">
+          <li><strong>PGB vanuit de Wmo:</strong> Als u ondersteuning nodig heeft om zelfstandig te kunnen blijven wonen, kan de gemeente Utrecht u hierbij helpen.</li>
+          <li><strong>Hulp nodig bij de aanvraag?</strong> Neem contact op met de <strong>Buurtteams Utrecht</strong>. Zij kunnen u precies vertellen waar u recht op heeft.</li>
+        </ul>
 
-<p>
-Voor de praktische ondersteuning aan huis rekenen wij een tarief van <strong>€30,- per uur</strong>.
-</p>
+        <p>
+          Mocht de ondersteuning via een PGB gaan lopen, dan maken we daar in overleg een passende afspraak over. Ik denk hierin graag rustig met u mee.
+        </p>
+      </div>
+    </div>
 
-<p>
-Dit lijkt misschien alleen een bedrag voor de hulp, maar het is een <strong>all-in tarief</strong>. Dat betekent dat u zich geen zorgen hoeft te maken over de kleine lettertjes. In dit bedrag is namelijk alles al inbegrepen:
-</p>
+    <div class="section">
+      <h2 class="section-title">Voorbeelden uit de praktijk</h2>
+      <div class="card">
+        <ul class="example-list">
+          <li>
+            <strong>Bezoek aan de specialist:</strong><br>
+            Ik haal u op, rijd u naar het ziekenhuis, loop mee naar binnen en breng u weer veilig thuis. De parkeerkosten en benzine? Die zitten al in het uurtarief.
+          </li>
+          <li>
+            <strong>Boodschappen & keukenhulp:</strong><br>
+            We doen samen de wekelijkse boodschappen (of ik haal ze voor u) en ik zorg dat alles netjes op de plek staat waar u het wilt hebben.
+          </li>
+          <li>
+            <strong>Klusjes & gezelschap:</strong><br>
+            Een schilderijtje ophangen, de tablet instellen of gewoon een goed gesprek bij een kop koffie.
+          </li>
+        </ul>
+      </div>
+    </div>
 
-<ul>
+    <div class="section">
+      <div class="call-box">
+        <h2 style="margin-top:0; font-size:1.4rem;">Twijfelt u over de kosten?</h2>
+        <p>
+          Bel me gerust op <strong>06 38 28 76 48</strong>. We kunnen uw situatie vrijblijvend bespreken.
+        </p>
+        <p style="margin-bottom:0;">
+          Het belangrijkste is dat u zich gesteund voelt en dat de hulp passend is voor uw budget en uw behoeften.
+        </p>
+      </div>
+    </div>
 
-<li><strong>De hulp zelf:</strong> Een vol uur volledige aandacht en inzet.</li>
+    <p class="trust" style="margin-top:18px;">
+      U kunt altijd bellen voor informatie of een kennismaking.<br />
+      Ook wanneer u minder goed ziet of hoort bent u welkom. Een begeleidende hond kan altijd mee.
+      We kijken samen naar een manier van contact en hulp die voor u werkt.
+    </p>
+  </main>
 
-<li><strong>Vervoer & brandstof:</strong> Geen kilometervergoeding binnen de regio.</li>
+  <div class="footerbar">
+    <div class="footerbar-inner">
+      <a class="fbtn" href="mantelzorgers.html">Mantelzorgers</a>
+      <a class="fbtn" href="tarieven.html">Tarieven</a>
+      <a class="fbtn" href="privacy.html">Privacy</a>
+      <a class="fbtn" href="contact.html">Contact</a>
+    </div>
+  </div>
 
-<li><strong>Parkeerkosten:</strong> Staat u bij het ziekenhuis of de huisarts? Ik regel de parkeermeter.</li>
-
-<li><strong>Een vertrouwd gezicht:</strong> Geen wisselende mensen, maar altijd Widjai.</li>
-
-</ul>
-
-<div class="highlight">
-
-<strong>Goed om te weten:</strong><br>
-De minimale afname is slechts 1 uur. Zo blijft het voor iedereen laagdrempelig om eens te proberen of WJU Zorg bij u past.
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="section">
-
-<h2>Vergoeding via PGB of gemeente</h2>
-
-<div class="card">
-
-<p>
-Heeft u (of uw naaste) een <strong>Persoonsgebonden Budget (PGB)</strong>? Dan kan de ondersteuning van WJU Zorg vaak vanuit dit budget worden betaald.
-</p>
-
-<ul>
-
-<li><strong>PGB vanuit de Wmo:</strong> Als u ondersteuning nodig heeft om zelfstandig te kunnen blijven wonen, kan de gemeente Utrecht u hierbij helpen.</li>
-
-<li><strong>Hulp nodig bij de aanvraag?</strong> Neem contact op met de <strong>Buurtteams Utrecht</strong>. Zij kunnen u precies vertellen waar u recht op heeft.</li>
-
-</ul>
-
-<p>
-Mocht de ondersteuning via een PGB gaan lopen, dan maken we daar in overleg een passende afspraak over. Ik denk hierin graag rustig met u mee.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="section">
-
-<h2>Voorbeelden uit de praktijk</h2>
-
-<div class="card">
-
-<ul>
-
-<li>
-<strong>Bezoek aan de specialist:</strong><br>
-Ik haal u op, rijd u naar het ziekenhuis, loop mee naar binnen en breng u weer veilig thuis. De parkeerkosten en benzine? Die zitten al in het uurtarief.
-</li>
-
-<li>
-<strong>Boodschappen & keukenhulp:</strong><br>
-We doen samen de wekelijkse boodschappen (of ik haal ze voor u) en ik zorg dat alles netjes op de plek staat waar u het wilt hebben.
-</li>
-
-<li>
-<strong>Klusjes & gezelschap:</strong><br>
-Een schilderijtje ophangen, de tablet instellen of gewoon een goed gesprek bij een kop koffie.
-</li>
-
-</ul>
-
-</div>
-
-</div>
-
-
-<div class="section">
-
-<div class="callbox">
-
-<h3>Twijfelt u over de kosten?</h3>
-
-<p>
-Bel gerust op <strong>06 38 28 76 48</strong>. We kunnen uw situatie vrijblijvend bespreken.
-</p>
-
-<p>
-Het belangrijkste is dat u zich gesteund voelt en dat de hulp passend is voor uw budget en uw behoeften.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
