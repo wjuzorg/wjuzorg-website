@@ -13,7 +13,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>WJU Zorg - Tarieven</title>
-  <meta name="description" content="WJU Zorg werkt met een kennismakingstarief en biedt praktische ondersteuning aan huis in Utrecht. Meer informatie over tarieven, PGB en hulp aanvragen via de app."/>
+  <meta name="description" content="Heldere tarieven van WJU Zorg voor praktische ondersteuning aan huis in Utrecht. Eerlijk, duidelijk en zonder verrassingen."/>
 
   <style>
     :root{
@@ -114,8 +114,8 @@
       background:var(--card);
       border:1px solid var(--border);
       border-radius:24px;
-      padding:28px 24px;
-      margin-bottom:22px;
+      padding:32px 28px;
+      margin-bottom:24px;
     }
 
     .card p{
@@ -127,20 +127,41 @@
     .section-title{
       font-size:32px;
       font-weight:800;
-      margin:0 0 16px;
+      margin:0 0 20px;
     }
 
-    .example{
-      margin-top:34px;
-      margin-bottom:34px;
-    }
-
-    .example-title{
-      font-size:24px;
+    .sub-title{
+      font-size:25px;
       font-weight:800;
-      margin:0 0 10px;
+      margin:28px 0 14px;
+      color:var(--wju-red);
     }
 
+    .bullet-list{
+      margin:0 0 18px;
+      padding-left:24px;
+    }
+
+    .bullet-list li{
+      font-size:20px;
+      line-height:1.8;
+      margin-bottom:8px;
+    }
+
+    .phone-box{
+      display:inline-block;
+      background:white;
+      border:2px solid #444;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:22px;
+      font-weight:800;
+      text-decoration:none;
+      color:#222;
+      margin-top:8px;
+    }
+
+    /* APP BLOK */
     .app-card{
       background:linear-gradient(180deg, #fff 0%, #f7f7f7 100%);
       border:3px solid var(--wju-red);
@@ -194,19 +215,6 @@
       font-size:19px;
       line-height:1.7;
       margin:0 0 12px;
-    }
-
-    .phone-box{
-      display:inline-block;
-      background:white;
-      border:2px solid #444;
-      border-radius:999px;
-      padding:14px 22px;
-      font-size:22px;
-      font-weight:800;
-      text-decoration:none;
-      color:#222;
-      margin-top:8px;
     }
 
     footer{
@@ -364,9 +372,13 @@
         margin-bottom:16px;
       }
 
-      .example-title{
-        font-size:21px;
-        line-height:1.3;
+      .sub-title{
+        font-size:22px;
+      }
+
+      .bullet-list li{
+        font-size:18px;
+        line-height:1.7;
       }
 
       .app-title{
@@ -420,6 +432,7 @@
       }
 
       .card p,
+      .bullet-list li,
       .app-steps li{
         font-size:17px;
       }
@@ -466,103 +479,67 @@
 <main class="container">
 
   <section class="card">
-    <h2 class="section-title">Tarieven</h2>
+    <h2 class="section-title">Tarieven: Helder, eerlijk en zonder verrassingen</h2>
 
     <p>
-      WJU Zorg werkt op dit moment met een <strong>kennismakingstarief van €30 per uur</strong>.
+      Bij WJU Zorg houden we van duidelijkheid. Geen ingewikkelde contracten of onverwachte rekeningen achteraf, maar één eerlijk tarief voor oprechte hulp.
+    </p>
+
+    <h3 class="sub-title">Een compleet uur ondersteuning voor €30,-</h3>
+
+    <p>
+      Voor de praktische ondersteuning aan huis rekenen wij een tarief van <strong>€30,- per uur</strong>.
     </p>
 
     <p>
-      De minimale afname is <strong>1 uur</strong>.
+      Dit lijkt misschien alleen een bedrag voor de hulp, maar het is een <strong>all-in tarief</strong>. Dat betekent dat u zich geen zorgen hoeft te maken over kleine lettertjes. In dit bedrag is alles al inbegrepen.
+    </p>
+
+    <ul class="bullet-list">
+      <li><strong>De hulp zelf:</strong> een vol uur volledige aandacht en inzet.</li>
+      <li><strong>Vervoer en brandstof:</strong> geen kilometervergoeding binnen de regio.</li>
+      <li><strong>Parkeerkosten:</strong> staat u bij het ziekenhuis of de huisarts? Widjai regelt de parkeermeter.</li>
+      <li><strong>Een vertrouwd gezicht:</strong> geen wisselende mensen, maar altijd Widjai.</li>
+    </ul>
+
+    <p>
+      <strong>Goed om te weten:</strong> de minimale afname is 1 uur. Zo blijft het laagdrempelig om eens te proberen of WJU Zorg bij u past.
+    </p>
+
+    <h3 class="sub-title">Vergoeding via PGB of gemeente</h3>
+
+    <p>
+      Heeft u of uw naaste een <strong>Persoonsgebonden Budget (PGB)</strong>? Dan kan de ondersteuning van WJU Zorg vaak vanuit dit budget worden betaald.
+    </p>
+
+    <ul class="bullet-list">
+      <li><strong>PGB vanuit de Wmo:</strong> als u ondersteuning nodig heeft om zelfstandig te blijven wonen, kan de gemeente Utrecht hierbij helpen.</li>
+      <li><strong>Hulp nodig bij de aanvraag?</strong> Neem contact op met de <strong>Buurtteams Utrecht</strong>. Zij kunnen uitleggen waar u recht op heeft.</li>
+    </ul>
+
+    <p>
+      Mocht de ondersteuning via een PGB gaan lopen, dan maken we daar in overleg een passende afspraak over. Wij denken daarin graag rustig met u mee.
+    </p>
+
+    <h3 class="sub-title">Voorbeelden uit de praktijk</h3>
+
+    <ul class="bullet-list">
+      <li><strong>Bezoek aan de specialist:</strong> Widjai haalt u op, rijdt u naar het ziekenhuis, loopt mee naar binnen en brengt u weer veilig thuis. De parkeerkosten en benzine zitten al in het uurtarief.</li>
+      <li><strong>Boodschappen en keukenhulp:</strong> samen de wekelijkse boodschappen doen, of de boodschappen laten halen en netjes op de juiste plek laten zetten.</li>
+      <li><strong>Klusjes en gezelschap:</strong> een schilderijtje ophangen, een hulpmiddel bevestigen, de tablet instellen of gewoon een goed gesprek bij een kop koffie.</li>
+    </ul>
+
+    <h3 class="sub-title">Twijfelt u over de kosten?</h3>
+
+    <p>
+      Bel gerust op <strong>06 38 28 76 48</strong>. We kunnen uw situatie vrijblijvend bespreken.
     </p>
 
     <p>
-      Dit kennismakingstarief is bedoeld om op een laagdrempelige manier te kunnen beginnen met praktische ondersteuning aan huis.
+      Het belangrijkste is dat u zich gesteund voelt en dat de hulp passend is voor uw budget en uw behoeften.
     </p>
 
-    <p>
-      Het tarief kan later veranderen. Bijvoorbeeld wanneer ondersteuning via een <strong>PGB</strong> loopt, of wanneer er in de toekomst een vorm van <strong>subsidie of gemeentelijke steun</strong> mogelijk is.
-    </p>
-
-    <p>
-      Tijdens een eerste contact wordt dit altijd rustig en duidelijk besproken.
-    </p>
-  </section>
-
-  <section class="card">
-    <h2 class="section-title">Voorbeelden</h2>
-
-    <div class="example">
-      <h3 class="example-title">Meerijden naar een afspraak</h3>
-
-      <p>
-        Heeft u een afspraak bij het ziekenhuis, de huisarts of een andere zorgverlener?
-      </p>
-
-      <p>
-        WJU Zorg kan u ophalen, wachten terwijl u binnen bent en u daarna weer naar huis brengen.
-      </p>
-
-      <p>
-        Wanneer dat prettig is kan Widjai ook <strong>mee naar binnen gaan</strong>, even meeluisteren of een vervolgafspraak opschrijven.
-      </p>
-
-      <p>
-        Voor dit soort ondersteuning geldt op dit moment het <strong>kennismakingstarief van €30 per uur</strong>.
-      </p>
-    </div>
-
-    <div class="example">
-      <h3 class="example-title">Boodschappen doen</h3>
-
-      <p>
-        Samen boodschappen doen of boodschappen laten halen.
-      </p>
-
-      <p>
-        De boodschappen worden daarna netjes tot in de keuken gebracht.
-      </p>
-
-      <p>
-        Ook dit valt vaak binnen <strong>1 uur ondersteuning</strong>.
-      </p>
-    </div>
-
-    <div class="example">
-      <h3 class="example-title">Kleine praktische hulp of gezelschap</h3>
-
-      <p>
-        Soms zijn het juist de gewone dingen die blijven liggen. Een klein klusje, iets ophangen, een hulpmiddel bevestigen of even samen ergens naar kijken.
-      </p>
-
-      <p>
-        Ook een moment van gezelschap of een rustige afspraak thuis kan veel verschil maken.
-      </p>
-    </div>
-  </section>
-
-  <section class="card">
-    <h2 class="section-title">Mogelijk via PGB</h2>
-
-    <p>
-      Sommige mensen ontvangen ondersteuning via een <strong>Persoonsgebonden Budget (PGB)</strong>.
-    </p>
-
-    <p>
-      Dit is een budget vanuit de gemeente waarmee ondersteuning betaald kan worden.
-    </p>
-
-    <p>
-      Als u of uw familielid een PGB heeft, kan WJU Zorg mogelijk vanuit dat budget ondersteuning bieden.
-    </p>
-
-    <p>
-      Heeft u nog geen PGB maar denkt u dat dit passend kan zijn? Dan kunt u hierover informatie krijgen via de gemeente Utrecht.
-    </p>
-
-    <p>
-      In Utrecht kunt u hiervoor contact opnemen met <strong>Buurtteams Utrecht</strong>.
-    </p>
+    <a class="phone-box" href="tel:0638287648">06 38 28 76 48</a>
   </section>
 
   <section class="card app-card">
@@ -594,20 +571,6 @@
     </div>
   </section>
 
-  <section class="card">
-    <h2 class="section-title">Bel voor overleg</h2>
-
-    <p>
-      Twijfelt u over de tarieven of wilt u overleggen?
-    </p>
-
-    <p>
-      Bel gerust. Samen kijken we rustig wat passend is.
-    </p>
-
-    <a class="phone-box" href="tel:0638287648">06 38 28 76 48</a>
-  </section>
-
 </main>
 
 <footer>
@@ -625,83 +588,39 @@
 </nav>
 
 <script>
-let synth = window.speechSynthesis;
-let huidigeLettergrootte = 100;
-document.body.style.zoom = huidigeLettergrootte + "%";
-
-function veranderLettergrootte(richting){
-  huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
-
-  if(huidigeLettergrootte < 80){
-    huidigeLettergrootte = 80;
-  }
-
-  if(huidigeLettergrootte > 160){
-    huidigeLettergrootte = 160;
-  }
-
+  let synth = window.speechSynthesis;
+  let huidigeLettergrootte = 100;
   document.body.style.zoom = huidigeLettergrootte + "%";
-  localStorage.setItem("fontSize", huidigeLettergrootte);
-}
 
-function toggleContrast(){
-  document.body.classList.toggle("high-contrast");
-}
+  function veranderLettergrootte(richting){
+    huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
 
-function voorlezenPagina(){
-  if(synth.speaking){
-    synth.cancel();
-    return;
+    if(huidigeLettergrootte < 80){
+      huidigeLettergrootte = 80;
+    }
+
+    if(huidigeLettergrootte > 160){
+      huidigeLettergrootte = 160;
+    }
+
+    document.body.style.zoom = huidigeLettergrootte + "%";
+    localStorage.setItem("fontSize", huidigeLettergrootte);
   }
-  let tekst = document.body.innerText;
-  let utter = new SpeechSynthesisUtterance(tekst);
-  utter.lang = "nl-NL";
-  synth.speak(utter);
-}
-</script>
 
-<div id="cookie-banner" class="cookie-banner">
-  Deze website gebruikt alleen anonieme statistieken om de website te verbeteren.
-  <button onclick="acceptCookies()">OK</button>
-</div>
+  function toggleContrast(){
+    document.body.classList.toggle("high-contrast");
+  }
 
-<style>
-.cookie-banner{
-position:fixed;
-bottom:90px;
-left:50%;
-transform:translateX(-50%);
-background:#333;
-color:white;
-padding:10px 16px;
-border-radius:8px;
-font-size:14px;
-z-index:9999;
-display:none;
-}
-
-.cookie-banner button{
-margin-left:10px;
-background:#c40000;
-color:white;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-cursor:pointer;
-}
-</style>
-
-<script>
-
-function acceptCookies(){
-localStorage.setItem("cookieConsent","true");
-document.getElementById("cookie-banner").style.display="none";
-}
-
-if(!localStorage.getItem("cookieConsent")){
-document.getElementById("cookie-banner").style.display="block";
-}
-
+  function voorlezenPagina(){
+    if(synth.speaking){
+      synth.cancel();
+      return;
+    }
+    let tekst = document.body.innerText;
+    let utter = new SpeechSynthesisUtterance(tekst);
+    utter.lang = "nl-NL";
+    synth.speak(utter);
+  }
 </script>
 
 </body>
