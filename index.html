@@ -856,95 +856,69 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // --- CONFIGURATIE ---
-  const supabaseUrl = "https://ligdgbdhreatsuejcinq.supabase.co";
-  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpZ2RnYmRocmVhdHN1ZWpjaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjI3MjIsImV4cCI6MjA4Njg5ODcyMn0.WGrlWFgAZvNsrJMMkqpLAw1oiJq0kNpjYssbQZ66Uzo";
-  
-  // Initialiseer Supabase direct
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+  // Gebruik een globale variabele zodat de knop er altijd bij kan
+  var supabaseClient;
 
-  // --- TERUGBEL FUNCTIE ---
-  async function submitCallbackRequest() {
-    console.log("Functie gestart..."); // Dit kun je zien in F12 Console
+  // Wacht tot de pagina HELEMAAL klaar is
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const supabaseUrl = "https://ligdgbdhreatsuejcinq.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpZ2RnYmRocmVhdHN1ZWpjaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjI3MjIsImV4cCI6MjA4Njg5ODcyMn0.WGrlWFgAZvNsrJMMkqpLAw1oiJq0kNpjYssbQZ66Uzo";
     
+    // Maak de verbinding
+    supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+    console.log("Supabase is klaar voor gebruik");
+
+    // Cookie banner check
+    if(!localStorage.getItem("cookieConsent")){
+      const banner = document.getElementById("cookie-banner");
+      if (banner) banner.style.display = "block";
+    }
+  });
+
+  // De functie die aangeroepen wordt door de knop
+  async function submitCallbackRequest() {
     const phoneInput = document.getElementById("callbackPhone");
     const callbackMessage = document.getElementById("callbackMessage");
-
-    if (!phoneInput || !callbackMessage) {
-      alert("Fout: Velden niet gevonden in de HTML.");
-      return;
-    }
-
-    const phoneValue = phoneInput.value.trim();
-
-    if (!phoneValue) {
+    
+    if (!phoneInput.value.trim()) {
       callbackMessage.style.color = "red";
-      callbackMessage.textContent = "Vul eerst uw telefoonnummer in.";
+      callbackMessage.textContent = "Vul aub een nummer in.";
       return;
     }
 
     callbackMessage.style.color = "black";
-    callbackMessage.textContent = "Verzenden...";
+    callbackMessage.textContent = "Bezig met verzenden...";
 
     try {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('callback_requests')
         .insert([{ 
-          phone: phoneValue, 
+          phone: phoneInput.value.trim(), 
           page: "index", 
           status: "nieuw" 
         }]);
 
       if (error) {
-        console.error("Supabase Error:", error);
         callbackMessage.style.color = "red";
-        callbackMessage.textContent = "Database fout: " + error.message;
+        callbackMessage.textContent = "Fout: " + error.message;
       } else {
         callbackMessage.style.color = "green";
         callbackMessage.textContent = "Bedankt! Ik bel u binnen 24 uur terug.";
-        phoneInput.value = ""; 
+        phoneInput.value = "";
       }
     } catch (err) {
-      console.error("Systeem fout:", err);
       callbackMessage.style.color = "red";
-      callbackMessage.textContent = "Verbindingsfout. Bel mij gerust.";
+      callbackMessage.textContent = "Er ging iets mis. Bel aub 06 38 28 76 48";
     }
   }
 
-  // --- TOEGANKELIJKHEID & COOKIES ---
-  let synth = window.speechSynthesis;
-  let huidigeLettergrootte = 100;
-
-  function veranderLettergrootte(richting){
-    huidigeLettergrootte += (richting * 10);
-    if(huidigeLettergrootte < 80) huidigeLettergrootte = 80;
-    if(huidigeLettergrootte > 160) huidigeLettergrootte = 160;
-    document.body.style.zoom = huidigeLettergrootte + "%";
-  }
-
-  function toggleContrast(){
-    document.body.classList.toggle("high-contrast");
-  }
-
-  function voorlezenPagina(){
-    if(synth.speaking){ synth.cancel(); return; }
-    let utter = new SpeechSynthesisUtterance(document.body.innerText);
-    utter.lang = "nl-NL";
-    synth.speak(utter);
-  }
-
+  // De rest van je functies (voorlezen etc) mogen hieronder
+  function toggleContrast(){ document.body.classList.toggle("high-contrast"); }
+  function veranderLettergrootte(r){ /* je zoom code */ }
   function acceptCookies(){
     localStorage.setItem("cookieConsent","true");
-    const banner = document.getElementById("cookie-banner");
-    if (banner) banner.style.display = "none";
+    document.getElementById("cookie-banner").style.display = "none";
   }
-
-  window.onload = function() {
-    if(!localStorage.getItem("cookieConsent")){
-      const banner = document.getElementById("cookie-banner");
-      if (banner) banner.style.display = "block";
-    }
-  };
 </script>
 
 </body>
