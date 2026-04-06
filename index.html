@@ -817,48 +817,92 @@
     if (banner) banner.style.display = "block";
   }
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // 1. Toegankelijkheid functies (laten we ongewijzigd)
+  let synth = window.speechSynthesis;
+  let huidigeLettergrootte = 100;
+
+  function veranderLettergrootte(richting){
+    huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
+    if(huidigeLettergrootte < 80){ huidigeLettergrootte = 80; }
+    if(huidigeLettergrootte > 160){ huidigeLettergrootte = 160; }
+    document.body.style.zoom = huidigeLettergrootte + "%";
+  }
+
+  function toggleContrast(){
+    document.body.classList.toggle("high-contrast");
+  }
+
+  function voorlezenPagina(){
+    if(synth.speaking){ synth.cancel(); return; }
+    let tekst = document.body.innerText;
+    let utter = new SpeechSynthesisUtterance(tekst);
+    utter.lang = "nl-NL";
+    synth.speak(utter);
+  }
+
+  function acceptCookies(){
+    localStorage.setItem("cookieConsent","true");
+    const banner = document.getElementById("cookie-banner");
+    if (banner) banner.style.display = "none";
+  }
+
+  if(!localStorage.getItem("cookieConsent")){
+    const banner = document.getElementById("cookie-banner");
+    if (banner) banner.style.display = "block";
+  }
+
+  // 2. SUPABASE GEDEELTE (Hier zat het probleem)
   const supabaseUrl = "https://ligdgbdhreatsuejcinq.supabase.co";
   const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpZ2RnYmRocmVhdHN1ZWpjaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjI3MjIsImV4cCI6MjA4Njg5ODcyMn0.WGrlWFgAZvNsrJMMkqpLAw1oiJq0kNpjYssbQZ66Uzo";
+
+  // We gebruiken de directe manier om de client te maken
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
   async function submitCallbackRequest() {
     const phoneInput = document.getElementById("callbackPhone");
     const callbackMessage = document.getElementById("callbackMessage");
 
-    if (!phoneInput || !callbackMessage) {
-      alert("Terugbelveld niet gevonden op de pagina.");
-      return;
-    }
+    if (!phoneInput || !callbackMessage) return;
 
     const phone = phoneInput.value.trim();
 
     if (!phone) {
+      callbackMessage.style.color = "red";
       callbackMessage.textContent = "Vul eerst uw telefoonnummer in.";
       return;
     }
 
-    callbackMessage.textContent = "Even een moment...";
+    callbackMessage.style.color = "black";
+    callbackMessage.textContent = "Verzenden...";
 
-    const { data, error } = await supabase
-      .from("callback_requests")
-      .insert([
-        {
-          phone: phone,
-          page: "index",
-          status: "nieuw"
-        }
-      ])
-      .select();
+    // Probeer de data te versturen
+    try {
+      const { data, error } = await supabase
+        .from('callback_requests')
+        .insert([
+          { 
+            phone: phone, 
+            page: "index", 
+            status: "nieuw" 
+          }
+        ]);
 
-    if (error) {
-      console.error("Supabase fout:", error);
-      callbackMessage.textContent = "Er ging iets mis: " + error.message;
-      return;
+      if (error) {
+        console.error("Supabase Error:", error);
+        callbackMessage.style.color = "red";
+        callbackMessage.textContent = "Fout bij verzenden: " + error.message;
+      } else {
+        callbackMessage.style.color = "green";
+        callbackMessage.textContent = "Bedankt! Ik bel u binnen 24 uur terug.";
+        phoneInput.value = ""; // Maak het veld leeg
+      }
+    } catch (err) {
+      console.error("Onverwachte fout:", err);
+      callbackMessage.style.color = "red";
+      callbackMessage.textContent = "Er is een verbindingsfout. Bel mij gerust direct.";
     }
-
-    console.log("Terugbelverzoek opgeslagen:", data);
-    callbackMessage.textContent = "Bedankt. Wij bellen u binnen 24 uur terug.";
-    phoneInput.value = "";
   }
 </script>
 
