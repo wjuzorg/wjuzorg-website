@@ -856,33 +856,30 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Gebruik een globale variabele zodat de knop er altijd bij kan
-  var supabaseClient;
+  // Gebruik een globale variabele voor de verbinding
+  var supabase;
 
-  // Wacht tot de pagina HELEMAAL klaar is
-  window.addEventListener('DOMContentLoaded', (event) => {
+  window.onload = function() {
     const supabaseUrl = "https://ligdgbdhreatsuejcinq.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpZ2RnYmRocmVhdHN1ZWpjaW5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzMjI3MjIsImV4cCI6MjA4Njg5ODcyMn0.WGrlWFgAZvNsrJMMkqpLAw1oiJq0kNpjYssbQZ66Uzo";
     
-    // Maak de verbinding
-    supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-    console.log("Supabase is klaar voor gebruik");
+    // Maak de verbinding aan
+    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Cookie banner check
+    // Cookie banner tonen indien nodig
     if(!localStorage.getItem("cookieConsent")){
       const banner = document.getElementById("cookie-banner");
       if (banner) banner.style.display = "block";
     }
-  });
+  };
 
-  // De functie die aangeroepen wordt door de knop
   async function submitCallbackRequest() {
     const phoneInput = document.getElementById("callbackPhone");
     const callbackMessage = document.getElementById("callbackMessage");
     
-    if (!phoneInput.value.trim()) {
+    if (!phoneInput || !phoneInput.value.trim()) {
       callbackMessage.style.color = "red";
-      callbackMessage.textContent = "Vul aub een nummer in.";
+      callbackMessage.textContent = "Vul eerst een nummer in.";
       return;
     }
 
@@ -890,7 +887,7 @@
     callbackMessage.textContent = "Bezig met verzenden...";
 
     try {
-      const { error } = await supabaseClient
+      const { error } = await supabase
         .from('callback_requests')
         .insert([{ 
           phone: phoneInput.value.trim(), 
@@ -908,13 +905,12 @@
       }
     } catch (err) {
       callbackMessage.style.color = "red";
-      callbackMessage.textContent = "Er ging iets mis. Bel aub 06 38 28 76 48";
+      callbackMessage.textContent = "Verbindingsfout. Bel gerust: 06 38 28 76 48";
     }
   }
 
-  // De rest van je functies (voorlezen etc) mogen hieronder
+  // Toegankelijkheid functies
   function toggleContrast(){ document.body.classList.toggle("high-contrast"); }
-  function veranderLettergrootte(r){ /* je zoom code */ }
   function acceptCookies(){
     localStorage.setItem("cookieConsent","true");
     document.getElementById("cookie-banner").style.display = "none";
