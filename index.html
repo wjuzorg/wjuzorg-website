@@ -148,6 +148,98 @@
       margin-bottom:8px;
     }
 
+    .phone-box{
+      display:inline-block;
+      background:white;
+      border:2px solid #444;
+      border-radius:999px;
+      padding:14px 22px;
+      font-size:22px;
+      font-weight:800;
+      text-decoration:none;
+      color:#222;
+      margin-top:8px;
+    }
+
+    /* KEUZE BLOK */
+    .help-choice-box{
+      background:#fff;
+      border:2px solid var(--wju-red);
+      border-radius:20px;
+      padding:22px 20px;
+      text-align:center;
+    }
+
+    .help-choice-title{
+      margin:0 0 16px;
+      font-size:30px;
+      font-weight:800;
+      color:var(--wju-red);
+    }
+
+    .help-choice-buttons{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .help-choice-btn{
+      display:block;
+      width:100%;
+      background:var(--wju-red);
+      color:white;
+      border:none;
+      border-radius:14px;
+      padding:15px 14px;
+      font-size:18px;
+      font-weight:700;
+      text-decoration:none;
+      cursor:pointer;
+      text-align:center;
+    }
+
+    .callback-box{
+      margin-top:6px;
+      padding-top:6px;
+      background:#fff;
+    }
+
+    .callback-text{
+      font-size:18px;
+      line-height:1.6;
+      margin:0 0 12px;
+    }
+
+    .callback-input{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #ccc;
+      font-size:18px;
+      margin-bottom:12px;
+    }
+
+    .callback-send-btn{
+      width:100%;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:12px;
+      padding:14px;
+      font-size:17px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .callback-message{
+      margin-top:12px;
+      font-size:16px;
+      font-weight:700;
+      min-height:22px;
+    }
+
+    /* APP BLOK */
     .app-card{
       background:linear-gradient(180deg, #fff 0%, #f7f7f7 100%);
       border:3px solid var(--wju-red);
@@ -203,19 +295,6 @@
       margin:0 0 12px;
     }
 
-    .phone-box{
-      display:inline-block;
-      background:white;
-      border:2px solid #444;
-      border-radius:999px;
-      padding:14px 22px;
-      font-size:22px;
-      font-weight:800;
-      text-decoration:none;
-      color:#222;
-      margin-top:8px;
-    }
-
     footer{
       text-align:center;
       margin:10px 0 0;
@@ -229,15 +308,15 @@
 
     /* ONDERBALK */
     .bottom-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  background:#2f2f2f;
-  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
-  box-shadow:0 -4px 14px rgba(0,0,0,0.18);
-  z-index:9999;
-}
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#2f2f2f;
+      padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+      box-shadow:0 -4px 14px rgba(0,0,0,0.18);
+      z-index:9999;
+    }
 
     .bottom-nav-grid{
       max-width:1040px;
@@ -248,22 +327,53 @@
     }
 
     .bottom-nav a{
-  display:block;
-  text-align:center;
-  text-decoration:none;
-  background:#f3f3f3;
-  color:#222;
-  border:2px solid #555;
-  border-radius:14px;
-  padding:10px 8px;
-  font-size:15px;
-  font-weight:700;
-}
+      display:block;
+      text-align:center;
+      text-decoration:none;
+      background:#f3f3f3;
+      color:#222;
+      border:2px solid #555;
+      border-radius:14px;
+      padding:10px 8px;
+      font-size:15px;
+      font-weight:700;
+    }
+
+    .bottom-nav a.active{
+      background:#333;
+      color:white;
+      border-color:#333;
+    }
 
     .bottom-nav a.call{
       background:white;
       border-color:var(--wju-red);
       color:var(--wju-red);
+    }
+
+    /* COOKIE */
+    .cookie-banner{
+      position:fixed;
+      bottom:90px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#333;
+      color:white;
+      padding:10px 16px;
+      border-radius:8px;
+      font-size:14px;
+      z-index:9999;
+      display:none;
+    }
+
+    .cookie-banner button{
+      margin-left:10px;
+      background:#c40000;
+      color:white;
+      border:none;
+      padding:6px 10px;
+      border-radius:6px;
+      cursor:pointer;
     }
 
     /* CONTRAST */
@@ -276,6 +386,19 @@
       background:#111 !important;
       color:white !important;
       border-color:white;
+    }
+
+    .high-contrast .help-choice-box,
+    .high-contrast .callback-box{
+      background:#111 !important;
+      color:white !important;
+      border-color:white !important;
+    }
+
+    .high-contrast .callback-input{
+      background:#111 !important;
+      color:white !important;
+      border-color:white !important;
     }
 
     .high-contrast .bottom-nav{
@@ -375,6 +498,24 @@
         line-height:1.7;
       }
 
+      .help-choice-title{
+        font-size:24px;
+        line-height:1.3;
+      }
+
+      .help-choice-btn{
+        font-size:17px;
+        padding:14px 12px;
+      }
+
+      .callback-text{
+        font-size:17px;
+      }
+
+      .callback-input{
+        font-size:16px;
+      }
+
       .app-title{
         font-size:30px;
       }
@@ -470,36 +611,65 @@
   </div>
 </section>
 
-
-
 <main class="container">
 
   <section class="card">
-    <div class="intro-strong">Soms zijn het de kleine dingen die lastig worden.</div>
+    <div class="intro-strong">De dagelijkse dingen, weer gewoon even makkelijk.</div>
 
     <p>
-      Een afspraak waar iemand niet alleen naartoe wil. Boodschappen die steeds zwaarder worden. Een klusje in huis dat maar blijft liggen.
+      Soms zit het hem niet in de grote vragen, maar in de kleine momenten. Die net iets te zware tas met boodschappen, die ene afspraak waar u liever niet alleen naartoe gaat, of dat klusje in huis dat al maanden op aandacht wacht.
     </p>
 
     <p>
-      Wij zagen dat steeds meer mensen er alleen voor staan. Ouderen die zelfstandig wonen. Mantelzorgers die alles proberen te regelen. Mensen die door ziekte of vermoeidheid minder kunnen dan vroeger.
+      Bij WJU Zorg geloven we dat een beetje extra hulp een wereld van verschil maakt. We zijn er voor de zelfstandige ouderen, de onvermoeibare mantelzorgers en voor iedereen die door ziekte of vermoeidheid even een stapje terug moet doen.
     </p>
 
     <p>
-      En we zagen dat het vaak niet om zorg gaat, maar om <strong>praktische hulp in het dagelijks leven</strong>.
+      Geen ingewikkelde zorgplannen, maar een vertrouwd gezicht dat aanbelt, écht luistert en even aanpakt waar dat nodig is. Wij zijn die extra buurman die u even ontzorgt.
     </p>
 
     <p>
-      <strong>Daarom bestaat WJU Zorg.</strong>
+      We bieden praktische ondersteuning aan huis met rust, aandacht en een glimlach.
     </p>
+  </section>
 
-    <p>
-      Niet als grote zorgorganisatie, maar als iemand die aanbelt, luistert en helpt waar dat nodig is.
-    </p>
+  <section class="card">
+    <div class="help-choice-box">
+      <h2 class="help-choice-title">Waarmee kunnen wij u het beste helpen?</h2>
 
-    <p>
-      Praktische ondersteuning aan huis, een vertrouwd gezicht en rustig contact wanneer dat nodig is.
-    </p>
+      <div class="help-choice-buttons">
+        <a class="help-choice-btn" href="tel:0638287648">
+          Ik zoek hulp voor mijzelf, maar wil eerst kennismaken
+        </a>
+
+        <a class="help-choice-btn" href="#callbackBox">
+          Ik wil graag teruggebeld worden
+        </a>
+
+        <a class="help-choice-btn" href="mantelzorgers.html">
+          Ik zoek ondersteuning voor een ouder of familielid
+        </a>
+      </div>
+
+      <div id="callbackBox" class="callback-box">
+        <p class="callback-text">
+          Laat hieronder uw telefoonnummer achter. Wij bellen u binnen 24 uur terug.
+        </p>
+
+        <input
+          type="tel"
+          id="callbackPhone"
+          class="callback-input"
+          placeholder="Uw telefoonnummer"
+        >
+
+        <button type="button" class="callback-send-btn" onclick="submitCallbackRequest()">
+          Verstuur terugbelverzoek
+        </button>
+
+        <p id="callbackMessage" class="callback-message"></p>
+      </div>
+    </div>
   </section>
 
   <section class="card">
@@ -522,17 +692,22 @@
   </section>
 
   <section class="card">
-    <h2 class="section-title">Waar kan WJU Zorg bij helpen?</h2>
-
-    <ul class="bullet-list">
-      <li>vervoer naar een (zorg)afspraak</li>
-      <li>boodschappen doen</li>
-      <li>kleine klusjes in huis</li>
-      <li>een moment van gezelschap</li>
-    </ul>
+    <h2 class="section-title">Wie is WJU Zorg?</h2>
 
     <p>
-      Altijd rustig, duidelijk en met <strong>één vertrouwd gezicht</strong>.
+      Mijn naam is Widjai, en ik geloof dat een glimlach de kracht heeft om alles lichter te maken. Als inwoner van Utrecht Oost zie ik dagelijks dat kleine dingen een groot verschil maken in het leven van anderen.
+    </p>
+
+    <p>
+      Ik ben een sociaal en empathisch mens, maar bovenal een aanpakker die van vele markten thuis is. Of het nu gaat om een klusje in huis, een rit naar een afspraak of een goed gesprek; ik sta voor u klaar.
+    </p>
+
+    <p>
+      Het leven is niet altijd makkelijk, maar met een zonnig moment of een fijn contact ziet de wereld er direct anders uit. Dat is precies waarom ik WJU Zorg ben gestart: om ouderen en kwetsbaren de ondersteuning te bieden die zij verdienen.
+    </p>
+
+    <p>
+      Met rust, aandacht en een helpende hand.
     </p>
   </section>
 
@@ -595,6 +770,12 @@
   </div>
 </nav>
 
+<div id="cookie-banner" class="cookie-banner">
+  Deze website gebruikt alleen anonieme statistieken om de website te verbeteren.
+  <button onclick="acceptCookies()">OK</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   let synth = window.speechSynthesis;
   let huidigeLettergrootte = 100;
@@ -629,78 +810,55 @@
     utter.lang = "nl-NL";
     synth.speak(utter);
   }
-</script>
 
-<div id="cookie-banner" class="cookie-banner">
-  Deze website gebruikt alleen anonieme statistieken om de website te verbeteren.
-  <button onclick="acceptCookies()">OK</button>
-</div>
-
-<style>
-.cookie-banner{
-position:fixed;
-bottom:90px;
-left:50%;
-transform:translateX(-50%);
-background:#333;
-color:white;
-padding:10px 16px;
-border-radius:8px;
-font-size:14px;
-z-index:9999;
-display:none;
-}
-
-.cookie-banner button{
-margin-left:10px;
-background:#c40000;
-color:white;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-cursor:pointer;
-}
-
-@media (max-width: 900px){
-  .poll-section{
-    padding:0 18px;
+  function acceptCookies(){
+    localStorage.setItem("cookieConsent","true");
+    document.getElementById("cookie-banner").style.display="none";
   }
 
-  .poll-box{
-    padding:18px 16px;
+  if(!localStorage.getItem("cookieConsent")){
+    document.getElementById("cookie-banner").style.display="block";
   }
 
-  .poll-title{
-    font-size:24px;
+  const supabaseUrl = "https://ligdgbdhreatsuejcinq.supabase.co";
+  const supabaseKey = "sb_publishable_sGbFKRRB3YzizqbEiz3wQg_Vkxt54_j";
+  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function submitCallbackRequest() {
+    const phoneInput = document.getElementById("callbackPhone");
+    const callbackMessage = document.getElementById("callbackMessage");
+
+    if (!phoneInput || !callbackMessage) {
+      return;
+    }
+
+    const phone = phoneInput.value.trim();
+
+    if (!phone) {
+      callbackMessage.textContent = "Vul eerst uw telefoonnummer in.";
+      return;
+    }
+
+    callbackMessage.textContent = "Even een moment...";
+
+    const { error } = await supabase
+      .from("callback_requests")
+      .insert([
+        {
+          phone: phone,
+          page: "index",
+          status: "nieuw"
+        }
+      ]);
+
+    if (error) {
+      callbackMessage.textContent = "Er ging iets mis: " + error.message;
+      return;
+    }
+
+    callbackMessage.textContent = "Bedankt. Wij bellen u binnen 24 uur terug.";
+    phoneInput.value = "";
   }
-
-  .poll-question{
-    font-size:18px;
-  }
-
-  .poll-buttons{
-    grid-template-columns:1fr;
-  }
-
-  .poll-buttons button{
-    font-size:17px;
-    padding:13px 10px;
-  }
-}
-</style>
-
-<script>
-
-function acceptCookies(){
-localStorage.setItem("cookieConsent","true");
-document.getElementById("cookie-banner").style.display="none";
-}
-
-if(!localStorage.getItem("cookieConsent")){
-document.getElementById("cookie-banner").style.display="block";
-}
-
-
 </script>
 
 </body>
