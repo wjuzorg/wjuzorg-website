@@ -784,13 +784,8 @@
   function veranderLettergrootte(richting){
     huidigeLettergrootte = huidigeLettergrootte + (richting * 10);
 
-    if(huidigeLettergrootte < 80){
-      huidigeLettergrootte = 80;
-    }
-
-    if(huidigeLettergrootte > 160){
-      huidigeLettergrootte = 160;
-    }
+    if(huidigeLettergrootte < 80){ huidigeLettergrootte = 80; }
+    if(huidigeLettergrootte > 160){ huidigeLettergrootte = 160; }
 
     document.body.style.zoom = huidigeLettergrootte + "%";
     localStorage.setItem("fontSize", huidigeLettergrootte);
@@ -813,11 +808,13 @@
 
   function acceptCookies(){
     localStorage.setItem("cookieConsent","true");
-    document.getElementById("cookie-banner").style.display="none";
+    const banner = document.getElementById("cookie-banner");
+    if (banner) banner.style.display = "none";
   }
 
   if(!localStorage.getItem("cookieConsent")){
-    document.getElementById("cookie-banner").style.display="block";
+    const banner = document.getElementById("cookie-banner");
+    if (banner) banner.style.display = "block";
   }
 
   const supabaseUrl = "https://ligdgbdhreatsuejcinq.supabase.co";
@@ -829,6 +826,7 @@
     const callbackMessage = document.getElementById("callbackMessage");
 
     if (!phoneInput || !callbackMessage) {
+      alert("Terugbelveld niet gevonden op de pagina.");
       return;
     }
 
@@ -841,7 +839,7 @@
 
     callbackMessage.textContent = "Even een moment...";
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("callback_requests")
       .insert([
         {
@@ -849,13 +847,16 @@
           page: "index",
           status: "nieuw"
         }
-      ]);
+      ])
+      .select();
 
     if (error) {
+      console.error("Supabase fout:", error);
       callbackMessage.textContent = "Er ging iets mis: " + error.message;
       return;
     }
 
+    console.log("Terugbelverzoek opgeslagen:", data);
     callbackMessage.textContent = "Bedankt. Wij bellen u binnen 24 uur terug.";
     phoneInput.value = "";
   }
